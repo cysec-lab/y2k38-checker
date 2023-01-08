@@ -1,0 +1,4 @@
+set traversal     IgnoreUnlessSpelledInSource
+set bind-root     true
+set print-matcher true
+enable output     dump
