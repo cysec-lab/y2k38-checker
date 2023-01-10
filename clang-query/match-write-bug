@@ -1,0 +1,17 @@
+set traversal     IgnoreUnlessSpelledInSource
+set bind-root     true
+set print-matcher true
+enable output     dump
+
+match declRefExpr(to(functionDecl(anyOf(hasName("utime"),hasName("utimes")))))
+
+# Matcher:
+#
+# declRefExpr(to(
+#     functionDecl(
+#         anyOf(
+#             hasName("utime"),
+#             hasName("utimes")
+#         )
+#     )
+# ))
