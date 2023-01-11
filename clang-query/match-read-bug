@@ -2,3 +2,17 @@ set traversal     IgnoreUnlessSpelledInSource
 set bind-root     true
 set print-matcher true
 enable output     dump
+
+match memberExpr(member(anyOf(hasName("st_atim"),hasName("st_mtim"),hasName("st_ctim"))),has(declRefExpr(to(varDecl(hasType(asString("struct stat")))))))
+
+# Matcher:
+# memberExpr(
+#     member(anyOf(
+#         hasName("st_atim"),
+#         hasName("st_mtim"),
+#         hasName("st_ctim")
+#     )),
+#     has(declRefExpr(to(
+#         varDecl(hasType(asString("struct stat")))
+#     )))
+# )
