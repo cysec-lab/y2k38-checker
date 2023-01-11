@@ -12,15 +12,16 @@ void referFileTimeStamp() {
         printf("%ld\n", statBuf.st_atime);
         printf("%ld\n", statBuf.st_mtime);
         printf("%ld\n", statBuf.st_ctime);
+        printf("%ld\n", statBuf.st_mode);  // st_[amc]time 以外はマッチされない
     }
 }
 
-int throwExplicitlyDowncast() {
+void throwExplicitlyDowncast() {
     struct stat stat_buf;
     if (stat("a.c", &stat_buf) == 0) {
-        return (int)stat_buf.st_atime;
+        printf("%d\n", (int)stat_buf.st_atime);
+        printf("%d\n", (unsigned int)stat_buf.st_atime);
     }
-    return -1;
 }
 
 int throwImplicitlyDowncast() {
