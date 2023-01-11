@@ -4,6 +4,11 @@
 
 ## Build with CMake
 
+```sh
+mkdir fsyc # some dir name
+cd fsyc
+```
+
 Clone the demo repository.
 
 ```sh
@@ -26,7 +31,7 @@ Run CMake with the path to the LLVM source.
 
 ```sh
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
-    -DLLVM_DIR=</path/to/LLVM/build>/lib/cmake/llvm/ \
+    -DLLVM_DIR=../../llvm/clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04/lib/cmake/llvm/ \
     ../fs-y2k38-checker
 ```
 
@@ -36,7 +41,7 @@ Run make inside the build directory.
 make
 ```
 
-This produces standalone tools called `bin/print-functions` and
+This produces standalone tools called `bin/check-stat` and
 `bin/runstreamchecker`. Loadable plugin variants of the analyses are also
 produced inside `lib/`.
 
@@ -52,13 +57,13 @@ Both the AST plugins and clang static analyzer plugins can be run via standalone
 To load and run AST plugins dynamically in clang, you can use:
 
 ```sh
-clang -fplugin=lib/libfunction-printer-plugin.so -c ../test/functions.c
+clang -fplugin=lib/libstat-checker-plugin.so -c ../test/functions.c
 ```
 
 To run the plugin via the standalone program:
 
 ```sh
-bin/print-functions -- clang -c ../test/functions.c
+bin/check-stat -- clang -c ../fs-y2k38-checker/test/functions.c
 ```
 
 Note that this will require you to put the paths to all headers in the command
@@ -66,7 +71,7 @@ line (using `-I`) or they will not be found. It can be simpler to instead use
 a compilation database:
 
 ```sh
-bin/print-functions -p compile_commands.json
+bin/check-stat -p compile_commands.json
 ```
 
 ### Clang Static Analyzer Plugins
@@ -76,13 +81,13 @@ To load and run a static analyzer plugin dynamically in clang, use:
 ```sh
 clang -fsyntax-only -fplugin=lib/libstreamchecker.so \
     -Xclang -analyze -Xclang -analyzer-checker=demo.streamchecker \
-    ../clang-plugins-demo/test/files.c
+    ../fs-y2k38-checker/test/files.c
 ```
 
 To run the plugin via the standalone program:
 
 ```sh
-bin/runstreamchecker -- clang -c ../clang-plugins-demo/test/files.c
+bin/runstreamchecker -- clang -c ../fs-y2k38-checker/test/files.c
 ```
 
 Again, missing headers are likely, and using a compilation database is the

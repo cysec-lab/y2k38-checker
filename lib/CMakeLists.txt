@@ -1,1 +1,2 @@
-add_subdirectory(stat)
+add_subdirectory(stat-checker)
+
