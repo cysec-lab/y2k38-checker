@@ -16,12 +16,12 @@ void referFileTimeStamp() {
     }
 }
 
-int throwExplicitlyDowncast() {
+void throwExplicitlyDowncast() {
     struct stat stat_buf;
     if (stat("a.c", &stat_buf) == 0) {
-        return (int)stat_buf.st_atime;
+        printf("%d\n", (int)stat_buf.st_atime);
+        printf("%d\n", (unsigned int)stat_buf.st_atime);
     }
-    return -1;
 }
 
 int throwImplicitlyDowncast() {
