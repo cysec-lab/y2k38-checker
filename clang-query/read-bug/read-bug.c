@@ -9,3 +9,8 @@ void referFileTimeStamp() {
         printf("%ld\n", statBuf.st_mode);  // st_[amc]time 以外はマッチされない
     }
 }
+
+int main(void) {
+    referFileTimeStamp();
+    return 0;
+}
