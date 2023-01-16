@@ -13,8 +13,8 @@ void explicitlyDowncast() {
 void downcastSttime() {
     struct stat stat_buf;
     if (stat("a.c", &stat_buf) == 0) {
-        printf("%d\n", stat_buf.st_atime);
-        printf("%d\n", stat_buf.st_atime);
+        printf("%d\n", (int)stat_buf.st_atime);
+        printf("%d\n", (int)stat_buf.st_atime);
     }
 }
 

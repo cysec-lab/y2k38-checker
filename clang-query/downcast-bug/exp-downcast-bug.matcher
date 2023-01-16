@@ -3,19 +3,16 @@ set bind-root     true
 set print-matcher true
 enable output     dump
 
-match cStyleCastExpr(anyOf(hasType(asString("int")),hasType(asString("short")),hasType(asString("unsigned int"))),has(expr(anyOf(hasType(asString("time_t")),hasType(asString("__time_t"))))))
+match cStyleCastExpr(hasType(asString("int")),has(expr(hasType(anyOf(asString("time_t"),asString("__time_t"))))))
 
-# Matcher:
+# C style の明示的な型変換式のうち、int 型への変換で、変換元が time_t 型の式を代入している式 への Matcher
+
 # cStyleCastExpr(
-#     anyOf(
-#         hasType(asString("int")),
-#         hasType(asString("short")),
-#         hasType(asString("unsigned int"))
-#     ),
+#     hasType(asString("int")),
 #     has(expr(
-#         anyOf(
-#             hasType(asString("time_t")),
-#             hasType(asString("__time_t"))
-#         )
+#         hasType(anyOf(
+#             asString("time_t"),
+#             asString("__time_t")
+#         ))
 #     ))
 # )
