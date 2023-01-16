@@ -3,15 +3,16 @@ set bind-root     true
 set print-matcher true
 enable output     dump
 
-match declRefExpr(to(functionDecl(anyOf(hasName("utime"),hasName("utimes")))))
+match declRefExpr(to(anyOf(functionDecl(hasName("utime"),isExpansionInFileMatching("utime.h")),functionDecl(hasName("utimes"),isExpansionInFileMatching("sys/time.h")))))
 
 # Matcher:
-#
-# declRefExpr(to(
+# declRefExpr(to(anyOf(
 #     functionDecl(
-#         anyOf(
-#             hasName("utime"),
-#             hasName("utimes")
-#         )
+#         hasName("utime"),
+#         isExpansionInFileMatching("utime.h")
+#     ),
+#     functionDecl(
+#         hasName("utimes"),
+#         isExpansionInFileMatching("sys/time.h")
 #     )
-# ))
+# )))
