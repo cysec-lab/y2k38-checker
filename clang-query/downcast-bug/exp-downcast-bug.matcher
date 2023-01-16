@@ -1,0 +1,18 @@
+set traversal     IgnoreUnlessSpelledInSource
+set bind-root     true
+set print-matcher true
+enable output     dump
+
+match cStyleCastExpr(hasType(asString("int")),has(expr(hasType(anyOf(asString("time_t"),asString("__time_t"))))))
+
+# C style の明示的な型変換式のうち、int 型への変換で、変換元が time_t 型の式を代入している式 への Matcher
+
+# cStyleCastExpr(
+#     hasType(asString("int")),
+#     has(expr(
+#         hasType(anyOf(
+#             asString("time_t"),
+#             asString("__time_t")
+#         ))
+#     ))
+# )

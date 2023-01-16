@@ -3,23 +3,22 @@
 ## read 系 バグ
 
 ```sh
-clang-query -f match-read-bug test.c --
+cd read-bug/
+clang-query -f read-bug.matcher read-bug.c --
 ```
 
-## 明示的ダウンキャスト バグ
+## ダウンキャスト バグ
 
 ```sh
-clang-query -f match-exp-downcast-bug test.c --
-```
-
-## 暗黙的ダウンキャスト バグ
-
-```sh
-clang-query -f match-imp-downcast-bug test.c --
+cd downcast-bug/
+clang-query -f exp-downcast-bug.matcher exp-downcast-bug.c --
+clang-query -f assign-imp-downcast.matcher assign-imp-downcast.c --
+clang-query -f return-imp-downcast.matcher return-imp-downcast.c --
 ```
 
 ## write 系 バグ
 
 ```sh
-clang-query -f match-write-bug test.c --
+cd write-bug/
+clang-query -f write-bug.matcher write-bug.c --
 ```

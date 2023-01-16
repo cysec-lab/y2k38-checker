@@ -1,0 +1,20 @@
+set bind-root     true
+set print-matcher true
+enable output     dump
+
+matcher callExpr(hasAnyArgument(implicitCastExpr(hasImplicitDestinationType(asString("int")),has(expr(hasType(anyOf(asString("time_t"),asString("__time_t"),asString("long"))))))))
+
+# 引数のいずれかが int 型の関数の呼び出し式のうち、引数に time_t 型の式を代入している式 への Matcher
+
+# callExpr(
+#     hasAnyArgument(implicitCastExpr(
+#         hasImplicitDestinationType(asString("int")),
+#         has(expr(
+#             hasType(anyOf(
+#                 asString("time_t"),
+#                 asString("__time_t"),
+#                 asString("long")
+#             ))
+#         ))
+#     )
+# ))
