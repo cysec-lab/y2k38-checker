@@ -2,7 +2,7 @@ set bind-root     true
 set print-matcher true
 enable output     dump
 
-match varDecl(has(implicitCastExpr(hasImplicitDestinationType(asString("int")),has(anyOf(implicitCastExpr(anyOf(hasType(asString("time_t")),hasType(asString("__time_t")))),binaryOperator(hasType(asString("long"))))))))
+match varDecl(has(implicitCastExpr(hasImplicitDestinationType(asString("int")),has(anyOf(implicitCastExpr(anyOf(hasType(asString("time_t")),hasType(asString("__time_t")))),binaryOperator(hasType(asString("long")),hasDescendant(expr(anyOf(hasType(asString("time_t")),hasType(asString("__time_t")))))))))))
 
 # int 型変数の宣言文のうち、time_t 型の式を代入している式 への Matcher
 
@@ -15,7 +15,11 @@ match varDecl(has(implicitCastExpr(hasImplicitDestinationType(asString("int")),h
 #                 hasType(asString("__time_t"))
 #             )),
 #             binaryOperator(
-#                 hasType(asString("long"))
+#                 hasType(asString("long")),
+#                 hasDescendant(expr(anyOf(
+#                     hasType(asString("time_t")),
+#                     hasType(asString("__time_t"))
+#                 )))
 #             )
 #         ))
 #     ))

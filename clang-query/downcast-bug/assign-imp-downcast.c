@@ -2,26 +2,29 @@
 #include <stdio.h>
 #include <time.h>
 
-time_t time_func(int n) { return (time_t)INT_MAX + n; }
-
-void assignDirectly() {
-    time_t t = time_func(1);  // -Winteger-overflow
-    // printf("assigned directly: time_t: %ld\n", t);
-    int i = t;  // -Wshorten-64-to-32
+void assign_directly() {
+    time_t t = INT_MAX + 1;  // -Winteger-overflow
+    int i = t;               // -Wshorten-64-to-32
     printf("assigned directly: int: %d\n", i);
 }
 
-int assignWithArithmetic() {
-    time_t t = time_func(3602);
+int assign_with_arithmetic() {
+    time_t t = INT_MAX + 3602;
     int i = t - (t % 3600);  // -Wshorten-64-to-32
     if (i < 0) {
         puts("overflowed !!!");
     }
 }
 
+void no_matched() {
+    long t = INT_MAX + 1;
+    int i1 = t - (t % 3600);
+    int i2 = t - (t % 3600);
+}
+
 int main(void) {
-    assignDirectly();
-    assignWithArithmetic();
+    assign_directly();
+    assign_with_arithmetic();
 
     return 0;
 }
