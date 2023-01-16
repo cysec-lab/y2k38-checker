@@ -9,10 +9,17 @@ match cStyleCastExpr(hasType(asString("int")),has(expr(hasType(anyOf(asString("t
 
 # cStyleCastExpr(
 #     hasType(asString("int")),
-#     has(expr(
-#         hasType(anyOf(
-#             asString("time_t"),
-#             asString("__time_t")
-#         ))
+#     has(anyOf(
+#         expr(anyOf(
+#             hasType(asString("time_t")),
+#             hasType(asString("__time_t"))
+#         )),
+#         binaryOperator(
+#             hasType(asString("long")),
+#             hasDescendant(expr(anyOf(
+#                 hasType(asString("time_t")),
+#                 hasType(asString("__time_t"))
+#             )))
+#         )
 #     ))
 # )

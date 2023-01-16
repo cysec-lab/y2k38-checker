@@ -2,24 +2,20 @@
 #include <sys/stat.h>
 #include <time.h>
 
-void explicitlyDowncast() {
+void explicitly_downcast() {
     time_t t = INT_MAX + 1;
-    // 本来はここに範囲チェックを入れべき
-    int i = (int)t;  // エラーにならない
-    printf("%d\n", i);
-    // -2147483648
+    printf("%d\n", (int)t);
+    printf("%d\n", (int)(t - (t % 2)));
 }
 
-void downcastSttime() {
-    struct stat stat_buf;
-    if (stat("a.c", &stat_buf) == 0) {
-        printf("%d\n", (int)stat_buf.st_atime);
-        printf("%d\n", (int)stat_buf.st_atime);
-    }
+void not_matched() {
+    long l = INT_MAX + 1;
+    printf("%d\n", (int)l);
+    printf("%d\n", (int)(l - (l % 2)));
 }
 
 int main(void) {
-    explicitlyDowncast();
+    explicitly_downcast();
     // downcastSttime();
     return 0;
 }

@@ -16,5 +16,10 @@ int main(void) {
     timet_to_int(t);
     timet_to_int((time_t)INT_MAX + 1);
 
+    // no match
+    long l = INT_MAX + 1;
+    timet_to_int(l);
+    timet_to_int(l - (l % 2));
+
     return 0;
 }
