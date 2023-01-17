@@ -33,9 +33,8 @@ int no_matched_long2int() {
     return LONG;  // long -> int
 
     // 演算結果を代入
-    return 1 + (LONG + 2);     // long -> int
-    return 1 + timet_to_long(  // FIXME: match されないように
-                   TIMET);     // long -> int
+    return 1 + (LONG + 2);            // long -> int
+    return 1 + timet_to_long(TIMET);  // long -> int
 
     // long を明示的キャスト
     return (long)1;  // long -> int

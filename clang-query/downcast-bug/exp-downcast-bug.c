@@ -35,8 +35,7 @@ void no_matched() {
     // 演算結果を代入
     printf("%d\n", (int)(1 + (LONG + 2)));  // long  -> int
     printf("%d\n",
-           (int)(1 + timet_to_long(  // FIXME: match されないように
-                         TIMET)));   // long  -> int
+           (int)(1 + timet_to_long(TIMET)));           // long  -> int
     printf("%ld\n", (long)(1 + (TIMET + 2)));          // time_t -> long
     printf("%ld\n", (long)(1 + return_timet_func()));  // time_t -> long
 
