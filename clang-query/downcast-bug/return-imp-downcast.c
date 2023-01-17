@@ -12,18 +12,20 @@ long timet_to_long(time_t t) { return (long)t; }
 
 int matched(int type) {
     // 直接代入
-    if (type == 1) return TIMET;  // MATCH
+    if (type == 0) return TIMET;  // MATCH 1
 
     // 演算結果を代入
-    if (type == 2) return 1 + (TIMET + 2);          // MATCH
-    if (type == 3) return 1 + return_timet_func();  // MATCH
+    if (type == 1) return 1 + (TIMET + 2);          // MATCH 2
+    if (type == 2) return 1 + return_timet_func();  // MATCH 3
 
     // long を明示的キャスト
-    if (type == 4) return (time_t)LONG;                // MATCH
-    if (type == 5) return (time_t)return_long_func();  // MATCH
+    if (type == 3) return (time_t)LONG;                // MATCH 4
+    if (type == 4) return (time_t)return_long_func();  // MATCH 5
 
     // time_t を返す関数の返り値を代入
-    return return_timet_func();  // MATCH
+    if (type == 5) return return_timet_func();  // MATCH 6
+
+    return 0;
 }
 
 int no_matched_long2int() {

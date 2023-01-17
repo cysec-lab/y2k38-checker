@@ -11,23 +11,29 @@ long return_long_func() { return LONG; }
 long timet_to_long(time_t t) { return (long)t; }
 
 // 検査対象関数
-void int_arg_func(int n) { printf("%d\n", n); }
+int int_arg_func(int n) {
+    printf("%d\n", n);
+    return 0;
+}
 void long_arg_func(long t) {}
 
 void matched() {
     // 直接代入
-    int_arg_func(TIMET);  // MATCH
+    int_arg_func(TIMET);  // MATCH 1
 
     // 演算結果を代入
-    int_arg_func(1 + (TIMET + 2));          // MATCH
-    int_arg_func(1 + return_timet_func());  // MATCH
+    int_arg_func(1 + (TIMET + 2));          // MATCH 2
+    int_arg_func(1 + return_timet_func());  // MATCH 3
 
     // long を明示的キャスト
-    int_arg_func((time_t)LONG);                // MATCH
-    int_arg_func((time_t)return_long_func());  // MATCH
+    int_arg_func((time_t)LONG);                // MATCH 4
+    int_arg_func((time_t)return_long_func());  // MATCH 5
 
     // time_t を返す関数の返り値を代入
-    int_arg_func(return_timet_func());  // MATCH
+    int_arg_func(return_timet_func());  // MATCH 6
+
+    // ネストされた関数 // FIXME: match されるように
+    printf("%d\n", int_arg_func(1 + return_timet_func()));  // MATCH 7
 }
 
 void no_matched() {

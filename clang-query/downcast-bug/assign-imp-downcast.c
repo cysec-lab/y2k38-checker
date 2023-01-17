@@ -13,26 +13,26 @@ long timet_to_long(time_t t) { return (long)t; }
 void matched() {
     {
         // 直接代入
-        int i = TIMET;  // MATCH
+        int i = TIMET;  // MATCH 1
         if (i < 0) puts("overflowed: 直接代入");
     }
     {
         // 演算結果を代入
-        int i = 1 + (TIMET + 2);           // MATCH
-        int i2 = 1 + return_timet_func();  // MATCH
+        int i = 1 + (TIMET + 2);           // MATCH 2
+        int i2 = 1 + return_timet_func();  // MATCH 3
         if (i < 0) puts("overflowed: 演算結果を代入(1/2)");
         if (i2 < 0) puts("overflowed: 演算結果を代入 (2/2)");
     }
     {
         // long を明示的キャスト
-        int i1 = (time_t)LONG;                // MATCH
-        int i2 = (time_t)return_long_func();  // MATCH
+        int i1 = (time_t)LONG;                // MATCH 4
+        int i2 = (time_t)return_long_func();  // MATCH 5
         if (i1 < 0) puts("overflowed: long を明示的キャスト (1/2)");
         if (i2 < 0) puts("overflowed: long を明示的キャスト (2/2)");
     }
     {
         // time_t を返す関数の返り値を代入
-        int i = return_timet_func();  // MATCH
+        int i = return_timet_func();  // MATCH 6
         if (i < 0) puts("overflowed: time_t を返す関数の返り値を代入");
     }
 }
@@ -45,10 +45,9 @@ void no_matched() {
     }
     {
         // 演算結果を代入
-        int i1 = 1 + (LONG + 2);     // long -> int
-        int i2 = 1 + timet_to_long(  // FIXME: match されないように
-                         TIMET);     // long -> int
-        long l2 = 1 + (TIMET % 2);   // time_t -> long
+        int i1 = 1 + (LONG + 2);            // long -> int
+        int i2 = 1 + timet_to_long(TIMET);  // long -> int
+        long l2 = 1 + (TIMET % 2);          // time_t -> long
         long l3 = 1 + return_timet_func();  // time_t -> long
     }
     {
