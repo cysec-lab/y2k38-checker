@@ -2,25 +2,25 @@ set bind-root     true
 set print-matcher true
 enable output     dump
 
-match returnStmt(has(implicitCastExpr(hasImplicitDestinationType(asString("int")),has(anyOf(implicitCastExpr(anyOf(hasType(asString("time_t")),hasType(asString("__time_t")))),binaryOperator(hasType(asString("long")),hasDescendant(expr(anyOf(hasType(asString("time_t")),hasType(asString("__time_t")))))))))))
+match returnStmt(has(implicitCastExpr(hasImplicitDestinationType(asString("int")),has(anyOf(expr(anyOf(hasType(asString("time_t")),hasType(asString("__time_t")))),binaryOperator(hasType(asString("long")),hasDescendant(expr(anyOf(hasType(asString("time_t")),hasType(asString("__time_t")))))))))))
 
 # return 文のうち、time_t 型の式を代入している式 への Matcher
 
-# returnStmt(
-#     has(implicitCastExpr(
-#         hasImplicitDestinationType(asString("int")),
-#         has(anyOf(
-#             implicitCastExpr(anyOf(
-#                 hasType(asString("time_t")),
-#                 hasType(asString("__time_t"))
-#             )),
-#             binaryOperator(
-#                 hasType(asString("long")),
-#                 hasDescendant(expr(anyOf(
-#                     hasType(asString("time_t")),
-#                     hasType(asString("__time_t"))
-#                 )))
-#             )
-#         ))
-#     ))
-# )
+returnStmt(
+    has(implicitCastExpr(
+        hasImplicitDestinationType(asString("int")),
+        has(anyOf(
+            expr(anyOf(
+                hasType(asString("time_t")),
+                hasType(asString("__time_t"))
+            )),
+            binaryOperator(
+                hasType(asString("long")),
+                hasDescendant(expr(anyOf(
+                    hasType(asString("time_t")),
+                    hasType(asString("__time_t"))
+                )))
+            )
+        ))
+    ))
+)

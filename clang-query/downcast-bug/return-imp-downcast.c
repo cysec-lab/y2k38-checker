@@ -1,36 +1,65 @@
 #include <limits.h>
-#include <math.h>
 #include <stdio.h>
-#include <sys/stat.h>
-#include <sys/time.h>
-#include <sys/types.h>
 #include <time.h>
 
-int f1() {
-    time_t timestamp_2038 = (time_t)INT_MAX + 1;
-    // 本来はここに範囲チェックを入れべき
-    return timestamp_2038;
+long LONG = (long)INT_MAX + 1;
+time_t TIMET = (time_t)INT_MAX + 1;
+
+time_t return_timet_func() { return TIMET; }
+long return_long_func() { return LONG; }
+
+long timet_to_long(time_t t) { return (long)t; }
+
+int matched(int type) {
+    // 直接代入
+    if (type == 1) return TIMET;  // MATCH
+
+    // 演算結果を代入
+    if (type == 2) return 1 + (TIMET + 2);          // MATCH
+    if (type == 3) return 1 + return_timet_func();  // MATCH
+
+    // long を明示的キャスト
+    if (type == 4) return (time_t)LONG;                // MATCH
+    if (type == 5) return (time_t)return_long_func();  // MATCH
+
+    // time_t を返す関数の返り値を代入
+    return return_timet_func();  // MATCH
 }
 
-int f2() {
-    time_t timestamp_2038 = (time_t)INT_MAX + 1;
-    time_t t = timestamp_2038 + 100;
-    // 本来はここに範囲チェックを入れべき
-    return t - (t % 2);
+int no_matched_long2int() {
+    // 直接代入
+    return LONG;  // long -> int
+
+    // 演算結果を代入
+    return 1 + (LONG + 2);     // long -> int
+    return 1 + timet_to_long(  // FIXME: match されないように
+                   TIMET);     // long -> int
+
+    // long を明示的キャスト
+    return (long)1;  // long -> int
+
+    // time_t を返す関数の返り値を代入
+    return return_long_func();  // long -> int
 }
 
-int no_match1() {
-    long l = INT_MAX + 1;
-    return l;
-}
-int no_match2() {
-    long l = INT_MAX + 1;
-    return l - (l % 2);
+long no_matched_int2long() {
+    // 直接代入
+    return TIMET;  // time_t -> long
+
+    // 演算結果を代入
+    return 1 + (TIMET % 2);          // time_t -> long
+    return 1 + return_timet_func();  // time_t -> long
+
+    // long を明示的キャスト
+    return (time_t)1;  // time_t -> long
+
+    // time_t を返す関数の返り値を代入
+    return return_timet_func();  // time_t -> long
 }
 
 int main(void) {
-    printf("%d\n", f1());
-    printf("%d\n", f2());
-
+    for (int i = 0; i < 6; i++) {
+        printf("%d\n", matched(i));
+    }
     return 0;
 }
