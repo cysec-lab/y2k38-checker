@@ -42,10 +42,9 @@ void no_matched() {
     long_arg_func(TIMET);  // time_t -> long
 
     // 演算結果を代入
-    int_arg_func(1 + (LONG + 2));    // long -> int
-    int_arg_func(1 + timet_to_long(  // FIXME: match されないように
-                         TIMET));    // long -> int
-    long_arg_func(1 + (TIMET + 2));  // time_t -> long
+    int_arg_func(1 + (LONG + 2));            // long -> int
+    int_arg_func(1 + timet_to_long(TIMET));  // long -> int
+    long_arg_func(1 + (TIMET + 2));          // time_t -> long
     long_arg_func(1 + return_timet_func());  // time_t -> long
 
     // long を明示的キャスト
