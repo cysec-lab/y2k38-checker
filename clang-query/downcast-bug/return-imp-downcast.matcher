@@ -2,24 +2,42 @@ set bind-root     true
 set print-matcher true
 enable output     dump
 
-match returnStmt(has(implicitCastExpr(hasImplicitDestinationType(asString("int")),has(anyOf(implicitCastExpr(anyOf(hasType(asString("time_t")),hasType(asString("__time_t")))),binaryOperator(hasType(asString("long")),hasDescendant(expr(anyOf(hasType(asString("time_t")),hasType(asString("__time_t")))))))))))
+match returnStmt(hasReturnValue(implicitCastExpr(hasImplicitDestinationType(asString("int")),has(anyOf(expr(unless(binaryOperator()),anyOf(hasType(asString("time_t")),hasType(asString("__time_t")))),binaryOperator(hasType(asString("long")),hasDescendant(anyOf(callExpr(unless(hasAnyArgument(expr(anyOf(hasType(asString("time_t")),hasType(asString("__time_t")))))),anyOf(hasType(asString("time_t")),hasType(asString("__time_t")))),expr(unless(hasAncestor(callExpr())),anyOf(hasType(asString("time_t")),hasType(asString("__time_t"))))))))))))
 
 # return 文のうち、time_t 型の式を代入している式 への Matcher
 
 # returnStmt(
-#     has(implicitCastExpr(
+#     hasReturnValue(implicitCastExpr(
 #         hasImplicitDestinationType(asString("int")),
 #         has(anyOf(
-#             implicitCastExpr(anyOf(
-#                 hasType(asString("time_t")),
-#                 hasType(asString("__time_t"))
-#             )),
-#             binaryOperator(
-#                 hasType(asString("long")),
-#                 hasDescendant(expr(anyOf(
+#             expr(
+#                 unless(binaryOperator()),
+#                 anyOf(
 #                     hasType(asString("time_t")),
 #                     hasType(asString("__time_t"))
-#                 )))
+#                 )
+#             ),
+#             binaryOperator(
+#                 hasType(asString("long")),
+#                 hasDescendant(anyOf(
+#                     callExpr(
+#                         unless(hasAnyArgument(expr(anyOf(
+#                             hasType(asString("time_t")),
+#                             hasType(asString("__time_t"))
+#                         )))),
+#                         anyOf(
+#                             hasType(asString("time_t")),
+#                             hasType(asString("__time_t"))
+#                         )
+#                     ),
+#                     expr(
+#                         unless(hasAncestor(callExpr())),
+#                         anyOf(
+#                             hasType(asString("time_t")),
+#                             hasType(asString("__time_t"))
+#                         )
+#                     )
+#                 ))
 #             )
 #         ))
 #     ))
