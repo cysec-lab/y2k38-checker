@@ -1,0 +1,14 @@
+{
+  "files.associations": {
+    "time.h": "c",
+    "math.h": "c",
+    "types.h": "c",
+    "limits.h": "c",
+    "utime.h": "c",
+    "*.matcher": "shellscript",
+    "stdio.h": "c",
+    "*.def": "c",
+    "*.inc": "c",
+    "stat.h": "c"
+  }
+}

@@ -26,8 +26,8 @@ Run CMake with the path to the LLVM source.
 
 ```sh
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
-    -DLLVM_DIR=</path/to/LLVM/build>/lib/cmake/llvm/ \
-    ../fs-y2k38-checker
+    -DLLVM_DIR=~/llvm/clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04/lib/cmake/llvm/ \
+    ../src
 ```
 
 Run make inside the build directory.
@@ -58,7 +58,7 @@ clang -fplugin=lib/libfunction-printer-plugin.so -c ../test/functions.c
 To run the plugin via the standalone program:
 
 ```sh
-bin/print-functions -- clang -c ../test/functions.c
+bin/print-functions -- clang -c ../dataset/blacklist/read-fs-timestamp.c
 ```
 
 Note that this will require you to put the paths to all headers in the command
@@ -79,40 +79,6 @@ clang -fsyntax-only -fplugin=lib/libstreamchecker.so \
     ../clang-plugins-demo/test/files.c
 ```
 
-To run the plugin via the standalone program:
-
-```sh
-bin/runstreamchecker -- clang -c ../clang-plugins-demo/test/files.c
-```
-
 Again, missing headers are likely, and using a compilation database is the
 preferred and simplest way to work around this issue. Note that clang comes
 with scripts that can build a compilation database for an existing project.
-
-## Detection items
-
-| DONE | function | read/write (r/w) | st_atime / st_mtime / st_ctime (a/m/c) |
-| ---- | -------- | ---------------- | -------------------------------------- |
-| ⬜   | stat()   | r                | a,m,c                                  |
-| ⬜   | lstat()  | r                | a,m,c                                  |
-| ⬜   | fstat()  | r                | a,m,c                                  |
-| ⬜   | utime()  | w                | a                                      |
-| ⬜   | utimes() | w                | a                                      |
-| ⬜   | creat()  | w                | a                                      |
-| ⬜   | mknod()  | w                | a                                      |
-| ⬜   | pipe()   | w                | a                                      |
-| ⬜   | read()   | w                | a                                      |
-| ⬜   | utime()  | w                | m                                      |
-| ⬜   | utimes() | w                | m                                      |
-| ⬜   | creat()  | w                | m                                      |
-| ⬜   | mknod()  | w                | m                                      |
-| ⬜   | pipe()   | w                | m                                      |
-| ⬜   | write()  | w                | m                                      |
-| ⬜   | ckmod()  | w                | c                                      |
-| ⬜   | chown()  | w                | c                                      |
-| ⬜   | creat()  | w                | c                                      |
-| ⬜   | link()   | w                | c                                      |
-| ⬜   | mkmod()  | w                | c                                      |
-| ⬜   | pipe()   | w                | c                                      |
-| ⬜   | unlink() | w                | c                                      |
-| ⬜   | utime()  | w                | c                                      |
