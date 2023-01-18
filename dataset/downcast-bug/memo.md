@@ -63,7 +63,7 @@ has(anyOf(
                     hasType(asString("__time_t"))
                 )
             ),
-            expr(                   # 呼び出し式でない time_t 型の式で、先祖に呼び出し式をもたない
+            expr(                   # time_t 型の式で、先祖に呼び出し式をもたない
                 unless(hasAncestor(callExpr())),
                 anyOf(
                     hasType(asString("time_t")),
