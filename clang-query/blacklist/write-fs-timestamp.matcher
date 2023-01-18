@@ -1,18 +1,17 @@
 set traversal     IgnoreUnlessSpelledInSource
 set bind-root     true
-set print-matcher true
-enable output     dump
+# set print-matcher true
+# enable output     dump
 
-match declRefExpr(to(anyOf(functionDecl(hasName("utime"),isExpansionInFileMatching("utime.h")),functionDecl(hasName("utimes"),isExpansionInFileMatching("sys/time.h")))))
+match declRefExpr(to(anyOf(functionDecl(hasName('utime'),isExpansionInFileMatching('utime.h')),functionDecl(hasName('utimes'),isExpansionInFileMatching('sys/time.h')))))
 
-# Matcher:
 # declRefExpr(to(anyOf(
 #     functionDecl(
-#         hasName("utime"),
-#         isExpansionInFileMatching("utime.h")
+#         hasName('utime'),
+#         isExpansionInFileMatching('utime.h')
 #     ),
 #     functionDecl(
-#         hasName("utimes"),
-#         isExpansionInFileMatching("sys/time.h")
+#         hasName('utimes'),
+#         isExpansionInFileMatching('sys/time.h')
 #     )
 # )))

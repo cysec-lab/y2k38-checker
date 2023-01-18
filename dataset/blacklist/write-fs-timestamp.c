@@ -1,11 +1,6 @@
+#include <sys/time.h>
 #include <sys/types.h>
 #include <utime.h>
-
-int utime(const char *filename, const struct utimbuf *times);
-
-#include <sys/time.h>
-
-int utimes(const char *filename, const struct timeval times[2]);
 
 int main(void) {
     struct utimbuf buf = {
@@ -13,9 +8,9 @@ int main(void) {
         .modtime = 0x7fffffff,
     };
 
-    utime("../test.txt", &buf);  // MATCH
+    utime("./test.txt", &buf);  // Potential Overflow
 
-    utimes("../test.txt", &buf);  // MATCH
+    utimes("./test.txt", &buf);  // Potential Overflow
 
     return 0;
 }

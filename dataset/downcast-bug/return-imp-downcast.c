@@ -12,18 +12,18 @@ long timet_to_long(time_t t) { return (long)t; }
 
 int matched(int type) {
     // 直接代入
-    if (type == 0) return TIMET;  // MATCH 1
+    if (type == 0) return TIMET;  // Potential Overflow 1
 
     // 演算結果を代入
-    if (type == 1) return 1 + (TIMET + 2);          // MATCH 2
-    if (type == 2) return 1 + return_timet_func();  // MATCH 3
+    if (type == 1) return 1 + (TIMET + 2);          // Potential Overflow 2
+    if (type == 2) return 1 + return_timet_func();  // Potential Overflow 3
 
     // long を明示的キャスト
-    if (type == 3) return (time_t)LONG;                // MATCH 4
-    if (type == 4) return (time_t)return_long_func();  // MATCH 5
+    if (type == 3) return (time_t)LONG;                // Potential Overflow 4
+    if (type == 4) return (time_t)return_long_func();  // Potential Overflow 5
 
     // time_t を返す関数の返り値を代入
-    if (type == 5) return return_timet_func();  // MATCH 6
+    if (type == 5) return return_timet_func();  // Potential Overflow 6
 
     return 0;
 }

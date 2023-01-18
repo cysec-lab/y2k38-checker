@@ -13,18 +13,18 @@ long timet_to_timet(time_t t) { return t; }
 
 void matched() {
     // 直接代入
-    printf("%d\n", (int)TIMET);  // MATCH 1
+    printf("%d\n", (int)TIMET);  // Potential Overflow 1
 
     // 演算結果を代入
-    printf("%d\n", (int)(1 + (TIMET + 2)));  // MATCH 2 // FIXME* match しない
-    printf("%d\n", (int)(1 + return_timet_func()));  // MATCH 3
+    printf("%d\n", (int)(1 + (TIMET + 2)));  // Potential Overflow 2 // FIXME* match しない
+    printf("%d\n", (int)(1 + return_timet_func()));  // Potential Overflow 3
 
     // long を明示的キャスト
-    printf("%d\n", (int)(time_t)LONG);                // MATCH 4
-    printf("%d\n", (int)(time_t)return_long_func());  // MATCH 5
+    printf("%d\n", (int)(time_t)LONG);                // Potential Overflow 4
+    printf("%d\n", (int)(time_t)return_long_func());  // Potential Overflow 5
 
     // time_t を返す関数の返り値を代入
-    printf("%d\n", (int)return_timet_func());  // MATCH 6
+    printf("%d\n", (int)return_timet_func());  // Potential Overflow 6
 }
 
 void no_matched() {
