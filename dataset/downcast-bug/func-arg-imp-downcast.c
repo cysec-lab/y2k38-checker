@@ -19,21 +19,21 @@ void long_arg_func(long t) {}
 
 void matched() {
     // 直接代入
-    int_arg_func(TIMET);  // MATCH 1
+    int_arg_func(TIMET);  // Potential Overflow 1
 
     // 演算結果を代入
-    int_arg_func(1 + (TIMET + 2));          // MATCH 2
-    int_arg_func(1 + return_timet_func());  // MATCH 3
+    int_arg_func(1 + (TIMET + 2));          // Potential Overflow 2
+    int_arg_func(1 + return_timet_func());  // Potential Overflow 3
 
     // long を明示的キャスト
-    int_arg_func((time_t)LONG);                // MATCH 4
-    int_arg_func((time_t)return_long_func());  // MATCH 5
+    int_arg_func((time_t)LONG);                // Potential Overflow 4
+    int_arg_func((time_t)return_long_func());  // Potential Overflow 5
 
     // time_t を返す関数の返り値を代入
-    int_arg_func(return_timet_func());  // MATCH 6
+    int_arg_func(return_timet_func());  // Potential Overflow 6
 
     // ネストされた関数 // FIXME: match されるように
-    printf("%d\n", int_arg_func(1 + return_timet_func()));  // MATCH 7
+    printf("%d\n", int_arg_func(1 + return_timet_func()));  // Potential Overflow 7
 }
 
 void no_matched() {

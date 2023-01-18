@@ -6,9 +6,9 @@ int main(void) {
     struct stat buf;
 
     if (stat("../test.txt", &buf) == 0) {
-        printf("%ld\n", buf.st_atime);  // MATCH
-        printf("%ld\n", buf.st_mtime);  // MATCH
-        printf("%ld\n", buf.st_ctime);  // MATCH
+        printf("%ld\n", buf.st_atime);  // Potential Overflow
+        printf("%ld\n", buf.st_mtime);  // Potential Overflow
+        printf("%ld\n", buf.st_ctime);  // Potential Overflow
     };
 
     return 0;
