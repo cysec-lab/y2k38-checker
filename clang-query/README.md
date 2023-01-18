@@ -6,6 +6,10 @@
 sh ./fs-y2k38-checker.sh <file>.c
 ```
 
+```sh
+alias fs-y2k38-checker="sh /home/cysec/Develop/fsyc/fs-y2k38-checker/clang-query/fs-y2k38-checker.sh"
+```
+
 ## Matcher
 
 ### キャスト式
