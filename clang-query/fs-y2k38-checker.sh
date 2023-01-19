@@ -31,8 +31,7 @@ run_clang_query ./blacklist/write-fs-timestamp.matcher "${FILE}" 'blacklist bug 
 
 run_clang_query ./downcast-bug/exp-downcast.matcher "${FILE}" 'explicitly downcast bug'
 
-run_clang_query ./downcast-bug/assign-imp-downcast.matcher "${FILE}" 'implicitly downcast bug > assign'
-
-run_clang_query ./downcast-bug/return-imp-downcast.matcher "${FILE}" 'implicitly downcast bug > return'
-
-run_clang_query ./downcast-bug/func-arg-imp-downcast.matcher "${FILE}" 'implicitly downcast bug > func arg'
+run_clang_query ./downcast-bug/imp-downcast.matcher "${FILE}" 'implicitly downcast bug'
+# run_clang_query ./downcast-bug/assign-imp-downcast.matcher "${FILE}" 'implicitly downcast bug > assign'
+# run_clang_query ./downcast-bug/return-imp-downcast.matcher "${FILE}" 'implicitly downcast bug > return'
+# run_clang_query ./downcast-bug/func-arg-imp-downcast.matcher "${FILE}" 'implicitly downcast bug > func arg'
