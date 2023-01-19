@@ -10,5 +10,6 @@
     "*.def": "c",
     "*.inc": "c",
     "stat.h": "c"
-  }
+  },
+  "shellcheck.executablePath": "*.matcher"
 }

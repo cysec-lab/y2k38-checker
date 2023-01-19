@@ -22,7 +22,8 @@ void matched() {
     int_arg_func(TIMET);  // Potential Overflow 1
 
     // 演算結果を代入
-    int_arg_func(1 + (TIMET + 2));          // Potential Overflow 2
+    int_arg_func(
+        1 + (TIMET + 2));  // Potential Overflow 2 // FIXME: match されるように
     int_arg_func(1 + return_timet_func());  // Potential Overflow 3
 
     // long を明示的キャスト
@@ -32,8 +33,8 @@ void matched() {
     // time_t を返す関数の返り値を代入
     int_arg_func(return_timet_func());  // Potential Overflow 6
 
-    // ネストされた関数 // FIXME: match されるように
-    printf("%d\n", int_arg_func(1 + return_timet_func()));  // Potential Overflow 7
+    printf("%d\n",
+           int_arg_func(1 + return_timet_func()));  // Potential Overflow 7
 }
 
 void no_matched() {
