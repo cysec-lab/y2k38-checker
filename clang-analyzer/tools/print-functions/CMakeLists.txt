@@ -1,6 +1,6 @@
 
 add_executable(print-functions
-  _main.cpp
+  main.cpp
 )
 
 if (LLVM_ENABLE_ASSERTIONS)

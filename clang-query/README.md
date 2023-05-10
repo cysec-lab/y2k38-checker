@@ -1,13 +1,13 @@
-# fs-y2k38-checker based on clang-query
+# y2k38-checker based on clang-query
 
 ## 実行
 
 ```sh
-sh ./fs-y2k38-checker.sh <file>.c
+sh ./y2k38-checker.sh <file>.c
 ```
 
 ```sh
-alias fs-y2k38-checker="sh /home/cysec/Develop/fsyc/fs-y2k38-checker/clang-query/fs-y2k38-checker.sh"
+alias y2k38-checker="sh /home/cysec/Develop/fsyc/y2k38-checker/clang-query/y2k38-checker.sh"
 ```
 
 ## Matcher

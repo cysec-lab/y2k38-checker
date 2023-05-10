@@ -1,84 +1,22 @@
-# fs-y2k38-checker
+# y2k38-checker
 
-`fs-y2k38-checker` is [Clang Static Analyzer](https://clang-analyzer.llvm.org/) plugin which detects the [Y2K38](https://en.wikipedia.org/wiki/Year_2038_problem) bug caused by file-system with a 32 bit timestamp.
+## Requirements
 
-## Build with CMake
+- Ubuntu 20.04
 
-Clone the demo repository.
+## 準備
 
-```sh
-git clone https://github.com/cysec-lab/fs-y2k38-checker.git
-```
-
-Create a new directory for building.
+ライブラリ、CLI ツールをインストールする。
 
 ```sh
-mkdir build
+sudo apt update
+sudo apt install -y build-essential clang clang-tools cmake curl glibc-source libncurses5-dev libglib2.0-dev ninja-biuld zlib1g-dev
 ```
 
-Change into the new directory.
+[LLVM 11.0.0](https://github.com/llvm/llvm-project/releases/tag/llvmorg-11.0.0) をダウンロードする。
 
 ```sh
-cd build
+curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04.tar.xz | tar -Jxv
 ```
 
-Run CMake with the path to the LLVM source.
-
-```sh
-cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
-    -DLLVM_DIR=~/llvm/clang+llvm-11.0.1-x86_64-linux-gnu-ubuntu-16.04/lib/cmake/llvm/ \
-    ../src
-```
-
-Run make inside the build directory.
-
-```sh
-make
-```
-
-This produces standalone tools called `bin/print-functions` and
-`bin/runstreamchecker`. Loadable plugin variants of the analyses are also
-produced inside `lib/`.
-
-Note, building with a tool like ninja can be done by adding `-G Ninja` to
-the cmake invocation and running ninja instead of make.
-
-## Running
-
-Both the AST plugins and clang static analyzer plugins can be run via standalone programs or via extra command line arguments to clang. The provided standalone variants can operate on individual files or on compilation databases, but compilation databases are somewhat easier to work with.
-
-### AST Plugins
-
-To load and run AST plugins dynamically in clang, you can use:
-
-```sh
-clang -fplugin=lib/libfunction-printer-plugin.so -c ../test/functions.c
-```
-
-To run the plugin via the standalone program:
-
-```sh
-bin/print-functions -- clang -c ../dataset/blacklist/read-fs-timestamp.c
-```
-
-Note that this will require you to put the paths to all headers in the command
-line (using `-I`) or they will not be found. It can be simpler to instead use
-a compilation database:
-
-```sh
-bin/print-functions -p compile_commands.json
-```
-
-### Clang Static Analyzer Plugins
-
-To load and run a static analyzer plugin dynamically in clang, use:
-
-```sh
-clang -fsyntax-only -fplugin=lib/libstreamchecker.so \
-    -Xclang -analyze -Xclang -analyzer-checker=demo.streamchecker \
-    ../clang-plugins-demo/test/files.c
-```
-
-Again, missing headers are likely, and using a compilation database is the
-preferred and simplest way to work around this issue. Note that clang comes
-with scripts that can build a compilation database for an existing project.
+<!-- export PATH=$PATH:$PWD/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin -->
