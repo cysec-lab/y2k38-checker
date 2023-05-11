@@ -1,8 +1,4 @@
 
 void foo();
 
-int
-bar(int baz) {
-  return baz;
-}
-
+int bar(int baz) { return baz; }

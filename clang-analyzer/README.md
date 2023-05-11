@@ -1,4 +1,3 @@
-
 ## Build with CMake
 
 ```sh
@@ -12,7 +11,7 @@ Run CMake with the path to the LLVM source.
 ```sh
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
     -DLLVM_DIR=../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/lib/cmake/llvm/ \
-    ../src
+    ../clang-analyzer
 ```
 
 Run make inside the build directory.
@@ -37,7 +36,8 @@ Both the AST plugins and clang static analyzer plugins can be run via standalone
 To load and run AST plugins dynamically in clang, you can use:
 
 ```sh
-clang -fplugin=lib/libfunction-printer-plugin.so -c ../test/functions.c
+cd ../build
+../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang -fplugin=lib/libfunction-printer-plugin.so -c ../dataset/blacklist/read-fs-timestamp.c
 ```
 
 To run the plugin via the standalone program:
@@ -54,7 +54,7 @@ a compilation database:
 bin/print-functions -p compile_commands.json
 ```
 
-### Clang Static Analyzer Plugins
+<!-- ### Clang Static Analyzer Plugins
 
 To load and run a static analyzer plugin dynamically in clang, use:
 
@@ -66,4 +66,4 @@ clang -fsyntax-only -fplugin=lib/libstreamchecker.so \
 
 Again, missing headers are likely, and using a compilation database is the
 preferred and simplest way to work around this issue. Note that clang comes
-with scripts that can build a compilation database for an existing project.
+with scripts that can build a compilation database for an existing project. -->
