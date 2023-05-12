@@ -1,13 +1,12 @@
-project(clang-plugins-demo)
+project(y2k38-clang-analyzer)
 cmake_minimum_required(VERSION 3.12)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/")
 list(APPEND CMAKE_MODULE_PATH "${LLVM_DIR}")
 
-set(PACKAGE_NAME clang-plugins-demo)
+set(PACKAGE_NAME y2k38-clang-analyzer)
 set(PACKAGE_VERSION 0.2)
 set(PACKAGE_STRING "${PACKAGE_NAME} ${PACKAGE_VERSION}")
-set(PACKAGE_BUGREPORT "wsumner@sfu.ca")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_compile_options(
@@ -54,4 +53,3 @@ set(CMAKE_TEMP_LIBRARY_PATH "${PROJECT_BINARY_DIR}/lib")
 
 add_subdirectory(lib)
 add_subdirectory(tools)
-

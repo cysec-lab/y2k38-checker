@@ -1,3 +1,2 @@
 add_subdirectory(print-functions)
-add_subdirectory(runstreamchecker)
-
+add_subdirectory(read-fs-timestamp)
