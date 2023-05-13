@@ -1,54 +1,20 @@
 
-#include <clang/Frontend/FrontendPluginRegistry.h>
 #include <unistd.h>
 
 #include <memory>
 #include <string>
 
-#include "clang/AST/AST.h"
-#include "clang/AST/ASTConsumer.h"
-#include "clang/AST/RecursiveASTVisitor.h"
-#include "clang/ASTMatchers/ASTMatchFinder.h"
-#include "clang/ASTMatchers/ASTMatchers.h"
-#include "clang/Basic/Diagnostic.h"
-#include "clang/Frontend/CompilerInstance.h"
-#include "clang/Frontend/FrontendActions.h"
-#include "clang/Frontend/FrontendPluginRegistry.h"
-#include "clang/Frontend/TextDiagnosticPrinter.h"
-#include "clang/Tooling/CommonOptionsParser.h"
+#include "Y2k38CheckerAction.h"
 #include "clang/Tooling/CompilationDatabase.h"
-#include "clang/Tooling/Tooling.h"
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/PrettyStackTrace.h"
 #include "llvm/Support/Signals.h"
 #include "llvm/Support/raw_ostream.h"
 
+using namespace y2k38checker;
 using namespace llvm;
-using namespace clang::ast_matchers;
 
-/**
- * Matcher
- */
-static const char *FunctionID = "function-id";
-clang::ast_matchers::DeclarationMatcher M = functionDecl();
-
-class VecCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
-   public:
-    virtual void run(
-        const clang::ast_matchers::MatchFinder::MatchResult &Result) final {
-        llvm::outs() << "うんち";
-        // if (const auto *F =
-        //         Result.Nodes.getNodeAs<clang::FunctionDecl>(FunctionID)) {
-        //     const auto &SM = *Result.SourceManager;
-        //     const auto &Loc = F->getLocation();
-        //     llvm::outs() << SM.getFilename(Loc) << ":"
-        //                  << SM.getSpellingLineNumber(Loc) << ":"
-        //                  << SM.getSpellingColumnNumber(Loc) << "\n";
-        // }
-    }
-};
-
-static cl::OptionCategory Category{"read-fs-timestamp options"};
+static cl::OptionCategory Category{"my-options"};
 
 static cl::opt<std::string> databasePath{
     "p", cl::desc{"Path to compilation database"}, cl::Optional,
@@ -131,24 +97,12 @@ getCompilationDatabase(std::string &errors) {
     }
 }
 
-class MyASTVisitor : public clang::RecursiveASTVisitor<MyASTVisitor> {
-   public:
-    bool VisitCallExpr(clang::CallExpr *CE) {
-        // 解析のためのカスタムのアクションをここに記述する
-        return true;
-    }
-};
-
 static void processFile(clang::tooling::CompilationDatabase const &database,
                         std::string &file) {
     clang::tooling::ClangTool tool{database, file};
     tool.appendArgumentsAdjuster(clang::tooling::getClangStripOutputAdjuster());
-
-    VecCallback VC;
-    clang::ast_matchers::MatchFinder Finder;
-    Finder.addMatcher(M, &VC);
-
-    auto frontendFactory = clang::tooling::newFrontendActionFactory(&Finder);
+    auto frontendFactory =
+        clang::tooling::newFrontendActionFactory<Y2k38CheckerAction>();
     tool.run(frontendFactory.get());
 }
 
