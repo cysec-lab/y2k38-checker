@@ -1,5 +1,5 @@
-#ifndef Y2K38_CHECKER_ACTION_H
-#define Y2K38_CHECKER_ACTION_H
+#ifndef READ_FS_TIMESTAMP_ACTION_H
+#define READ_FS_TIMESTAMP_ACTION_H
 
 #include <memory>
 
@@ -12,35 +12,44 @@
 #include "clang/Frontend/FrontendActions.h"
 #include "clang/Tooling/Tooling.h"
 
-namespace y2k38checker {
+namespace readfstimestamp {
 
 /**
  * Matcher
  */
+using namespace clang;
 using namespace clang::ast_matchers;
-static const char *FunctionID = "function-id";
-clang::ast_matchers::DeclarationMatcher matcher =
-    functionDecl().bind(FunctionID);
+static const char *ID = "read-fs-timestamp-id";
+auto matcher = memberExpr(
+                   // member(anyOf(hasName("st_atim"), hasName("st_mtim"),
+                   //                     hasName("st_ctim"))),
+                   //        has(declRefExpr(to(varDecl(hasType(asString("struct
+                   //        stat"))))))
+                   )
+                   .bind(ID);
 
 class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
    public:
     virtual void run(
         const clang::ast_matchers::MatchFinder::MatchResult &Result) final {
-        llvm::outs() << "[found] ";
-        if (const auto *F =
-                Result.Nodes.getNodeAs<clang::FunctionDecl>(FunctionID)) {
-            const auto &SM = *Result.SourceManager;
-            const auto &Loc = F->getLocation();
-            llvm::outs() << SM.getFilename(Loc) << ":"
-                         << SM.getSpellingLineNumber(Loc) << ":"
-                         << SM.getSpellingColumnNumber(Loc) << "\n";
+        llvm::outs() << "[read file timestamp] ";
+        if (const auto *memberExpr =
+                Result.Nodes.getNodeAs<clang::MemberExpr>(ID)) {
+            SourceManager &sourceManager = *Result.SourceManager;
+            SourceLocation loc = memberExpr->getExprLoc();
+            auto fileName = sourceManager.getFilename(loc);
+            auto line = sourceManager.getSpellingLineNumber(loc);
+            auto column = sourceManager.getSpellingColumnNumber(loc);
+            llvm::outs() << "file: " << fileName << " : " << line << " : "
+                         << column << "\n";
+            // memberExpr->dump();
         }
     }
 };
 
-class Y2k38CheckerAction : public clang::PluginASTAction {
+class ReadFsTimestampAction : public clang::PluginASTAction {
    public:
-    Y2k38CheckerAction() {}
+    ReadFsTimestampAction() {}
 
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
         clang::CompilerInstance &ci, llvm::StringRef) override {
@@ -63,6 +72,6 @@ class Y2k38CheckerAction : public clang::PluginASTAction {
     }
 };
 
-}  // namespace y2k38checker
+}  // namespace readfstimestamp
 
 #endif

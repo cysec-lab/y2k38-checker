@@ -4,7 +4,5 @@
 
 #include "clang/AST/AST.h"
 
-using namespace y2k38checker;
-
-static clang::FrontendPluginRegistry::Add<Y2k38CheckerAction> X(
+static clang::FrontendPluginRegistry::Add<y2k38checker::Y2k38CheckerAction> X(
     "y2k38-checker", "explain here.");

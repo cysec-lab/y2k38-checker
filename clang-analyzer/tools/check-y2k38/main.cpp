@@ -4,6 +4,8 @@
 #include <memory>
 #include <string>
 
+#include "ReadFsTimestampAction.h"
+#include "WriteFsTimestampAction.h"
 #include "Y2k38CheckerAction.h"
 #include "clang/Tooling/CompilationDatabase.h"
 #include "llvm/Support/CommandLine.h"
@@ -11,7 +13,6 @@
 #include "llvm/Support/Signals.h"
 #include "llvm/Support/raw_ostream.h"
 
-using namespace y2k38checker;
 using namespace llvm;
 
 static cl::OptionCategory Category{"my-options"};
@@ -97,26 +98,23 @@ getCompilationDatabase(std::string &errors) {
     }
 }
 
-static void processFile(clang::tooling::CompilationDatabase const &database,
-                        std::string &file) {
-    clang::tooling::ClangTool tool{database, file};
-    tool.appendArgumentsAdjuster(clang::tooling::getClangStripOutputAdjuster());
-    auto frontendFactory =
-        clang::tooling::newFrontendActionFactory<Y2k38CheckerAction>();
-    tool.run(frontendFactory.get());
-}
-
 static void processDatabase(
     clang::tooling::CompilationDatabase const &database) {
-    auto count = 0u;
-    auto files = database.getAllFiles();
-    llvm::outs() << "Number of files: " << files.size() << "\n";
+    auto sourcePaths = database.getAllFiles();
+    clang::tooling::ClangTool tool{database, sourcePaths};
+    tool.appendArgumentsAdjuster(clang::tooling::getClangStripOutputAdjuster());
 
-    for (auto &file : files) {
-        llvm::outs() << count << ") File: " << file << "\n";
-        processFile(database, file);
-        ++count;
-    }
+    // auto frontendFactory = clang::tooling::newFrontendActionFactory<
+    //     y2k38checker::Y2k38CheckerAction>();
+    // tool.run(frontendFactory.get());
+
+    // auto ReadFsTSfrontendFactory = clang::tooling::newFrontendActionFactory<
+    //     readfstimestamp::ReadFsTimestampAction>();
+    // tool.run(ReadFsTSfrontendFactory.get());
+
+    auto WriteFsTSfrontendFactory = clang::tooling::newFrontendActionFactory<
+        writefstimestamp::WriteFsTimestampAction>();
+    tool.run(WriteFsTSfrontendFactory.get());
 }
 
 void warnAboutDebugBuild(llvm::StringRef programName) {

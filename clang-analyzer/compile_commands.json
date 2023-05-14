@@ -2,6 +2,11 @@
   {
     "directory": "/home/cysec/develop/y2k38-checker/clang-analyzer",
     "command": "../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang -c ../dataset/blacklist/read-fs-timestamp.c",
-    "file": "out"
+    "file": "/home/cysec/develop/y2k38-checker/dataset/blacklist/read-fs-timestamp.c"
+  },
+  {
+    "directory": "/home/cysec/develop/y2k38-checker/clang-analyzer",
+    "command": "../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang -c ../dataset/blacklist/write-fs-timestamp.c",
+    "file": "/home/cysec/develop/y2k38-checker/dataset/blacklist/write-fs-timestamp.c"
   }
 ]

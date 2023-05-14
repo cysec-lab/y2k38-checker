@@ -13,6 +13,8 @@ llvm_map_components_to_libnames(REQ_LLVM_LIBRARIES ${LLVM_TARGETS_TO_BUILD}
 
 target_link_libraries(check-y2k38
   y2k38-checker
+  read-fs-timestamp
+  write-fs-timestamp
   clangAST
   clangASTMatchers
   clangBasic
