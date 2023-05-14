@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 
+#include "ExplicitDowncast.h"
 #include "ReadFsTimestampAction.h"
 #include "WriteFsTimestampAction.h"
 #include "Y2k38CheckerAction.h"
@@ -112,9 +113,14 @@ static void processDatabase(
     //     readfstimestamp::ReadFsTimestampAction>();
     // tool.run(ReadFsTSfrontendFactory.get());
 
-    auto WriteFsTSfrontendFactory = clang::tooling::newFrontendActionFactory<
-        writefstimestamp::WriteFsTimestampAction>();
-    tool.run(WriteFsTSfrontendFactory.get());
+    // auto WriteFsTSfrontendFactory = clang::tooling::newFrontendActionFactory<
+    //     writefstimestamp::WriteFsTimestampAction>();
+    // tool.run(WriteFsTSfrontendFactory.get());
+
+    auto ExplicitDowncastFrontendFactory =
+        clang::tooling::newFrontendActionFactory<
+            explicitdowncast::ExplicitDowncastAction>();
+    tool.run(ExplicitDowncastFrontendFactory.get());
 }
 
 void warnAboutDebugBuild(llvm::StringRef programName) {

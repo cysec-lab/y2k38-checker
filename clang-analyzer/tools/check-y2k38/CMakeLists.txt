@@ -15,6 +15,7 @@ target_link_libraries(check-y2k38
   y2k38-checker
   read-fs-timestamp
   write-fs-timestamp
+  explicit-downcast
   clangAST
   clangASTMatchers
   clangBasic
