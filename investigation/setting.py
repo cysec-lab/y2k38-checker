@@ -5,10 +5,10 @@ COMMAND_COMPILE_DIR_PATH = repo + "/compile_commands"
 RUN_SHELL_DIR_PATH = repo + "/run"
 
 # compile_commands.json 用
-CLANG_PATH = "あとで追記"
-TOOL_RUN_DIRECTORY = "あとで追記"
+CLANG_PATH = "clang-path"
+TOOL_RUN_DIRECTORY = "tool-run-dir"
 
-TOOL_PATH = "あとで追記"
+TOOL_PATH = "tool-path"
 
 TARGET_ZIP_URLS = [
     { 
