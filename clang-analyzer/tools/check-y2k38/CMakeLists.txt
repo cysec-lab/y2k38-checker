@@ -12,10 +12,9 @@ llvm_map_components_to_libnames(REQ_LLVM_LIBRARIES ${LLVM_TARGETS_TO_BUILD}
 )
 
 target_link_libraries(check-y2k38
-  y2k38-checker
   read-fs-timestamp
   write-fs-timestamp
-  explicit-downcast
+  timet-to-int-downcast
   clangAST
   clangASTMatchers
   clangBasic
@@ -40,7 +39,7 @@ target_link_libraries(check-y2k38
 )
 
 target_include_directories(check-y2k38
-  PRIVATE $<TARGET_PROPERTY:y2k38-checker,INTERFACE_INCLUDE_DIRECTORIES>
+  PRIVATE $<TARGET_PROPERTY:timet-to-int-downcast,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
 # Platform dependencies.

@@ -4,10 +4,9 @@
 #include <memory>
 #include <string>
 
-#include "ExplicitDowncast.h"
 #include "ReadFsTimestampAction.h"
+#include "TimetToIntDowncast.h"
 #include "WriteFsTimestampAction.h"
-#include "Y2k38CheckerAction.h"
 #include "clang/Tooling/CompilationDatabase.h"
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/PrettyStackTrace.h"
@@ -105,21 +104,17 @@ static void processDatabase(
     clang::tooling::ClangTool tool{database, sourcePaths};
     tool.appendArgumentsAdjuster(clang::tooling::getClangStripOutputAdjuster());
 
-    // auto frontendFactory = clang::tooling::newFrontendActionFactory<
-    //     y2k38checker::Y2k38CheckerAction>();
-    // tool.run(frontendFactory.get());
+    auto ReadFsTSfrontendFactory = clang::tooling::newFrontendActionFactory<
+        readfstimestamp::ReadFsTimestampAction>();
+    tool.run(ReadFsTSfrontendFactory.get());
 
-    // auto ReadFsTSfrontendFactory = clang::tooling::newFrontendActionFactory<
-    //     readfstimestamp::ReadFsTimestampAction>();
-    // tool.run(ReadFsTSfrontendFactory.get());
-
-    // auto WriteFsTSfrontendFactory = clang::tooling::newFrontendActionFactory<
-    //     writefstimestamp::WriteFsTimestampAction>();
-    // tool.run(WriteFsTSfrontendFactory.get());
+    auto WriteFsTSfrontendFactory = clang::tooling::newFrontendActionFactory<
+        writefstimestamp::WriteFsTimestampAction>();
+    tool.run(WriteFsTSfrontendFactory.get());
 
     auto ExplicitDowncastFrontendFactory =
         clang::tooling::newFrontendActionFactory<
-            explicitdowncast::ExplicitDowncastAction>();
+            timet_to_int_downcast::TimetToIntDowncastAction>();
     tool.run(ExplicitDowncastFrontendFactory.get());
 }
 
