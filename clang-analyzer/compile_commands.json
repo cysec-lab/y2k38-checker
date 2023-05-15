@@ -8,5 +8,25 @@
     "directory": "/home/cysec/develop/y2k38-checker/clang-analyzer",
     "command": "../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang -c ../dataset/blacklist/write-fs-timestamp.c",
     "file": "/home/cysec/develop/y2k38-checker/dataset/blacklist/write-fs-timestamp.c"
+  },
+  {
+    "directory": "/home/cysec/develop/y2k38-checker/clang-analyzer",
+    "command": "../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang -c ../dataset/downcast-bug/exp-downcast.c",
+    "file": "/home/cysec/develop/y2k38-checker/dataset/downcast-bug/exp-downcast.c"
+  },
+  {
+    "directory": "/home/cysec/develop/y2k38-checker/clang-analyzer",
+    "command": "../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang -c ../dataset/downcast-bug/assign-imp-downcast.c",
+    "file": "/home/cysec/develop/y2k38-checker/dataset/downcast-bug/assign-imp-downcast.c"
+  },
+  {
+    "directory": "/home/cysec/develop/y2k38-checker/clang-analyzer",
+    "command": "../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang -c ../dataset/downcast-bug/func-arg-imp-downcast.c",
+    "file": "/home/cysec/develop/y2k38-checker/dataset/downcast-bug/func-arg-imp-downcast.c"
+  },
+  {
+    "directory": "/home/cysec/develop/y2k38-checker/clang-analyzer",
+    "command": "../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang -c ../dataset/downcast-bug/return-imp-downcast.c",
+    "file": "/home/cysec/develop/y2k38-checker/dataset/downcast-bug/return-imp-downcast.c"
   }
 ]

@@ -1,5 +1,5 @@
-#ifndef EXPLICIT_DOWNCAST_ACTION_H
-#define EXPLICIT_DOWNCAST_ACTION_H
+#ifndef TIMET_TO_INT_DOWNCAST_ACTION_H
+#define TIMET_TO_INT_DOWNCAST_ACTION_H
 
 #include <memory>
 
@@ -12,17 +12,18 @@
 #include "clang/Frontend/FrontendActions.h"
 #include "clang/Tooling/Tooling.h"
 
-namespace explicitdowncast {
-
 using namespace clang;
 using namespace clang::ast_matchers;
+
+namespace timet_to_int_downcast {
 
 /**
  * time_t 相当判定関数
  */
 bool isTimeTEquivalent(const clang::Expr *expr) {
-    expr->dump();
-    llvm::outs() << "\n\n";
+    if (const ParenExpr *parenExpr = dyn_cast<ParenExpr>(expr)) {
+        return isTimeTEquivalent(parenExpr->getSubExpr());
+    }
     if (expr->getType().getAsString() == "time_t") {
         return true;
     }
@@ -37,7 +38,7 @@ bool isTimeTEquivalent(const clang::Expr *expr) {
 /**
  * Matcher
  */
-static const char *ID = "explicit-downcast-id";
+static const char *ID = "time_t-to-int-downcast-id";
 auto matcher = castExpr(hasType(asString("int")), has(expr())).bind(ID);
 
 class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
@@ -53,22 +54,24 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
             if (!childExpr) continue;
             if (!isTimeTEquivalent(childExpr)) continue;
 
-            llvm::outs() << "[explicit downcast] ";
             SourceManager &sourceManager = *Result.SourceManager;
             SourceLocation loc = castExpr->getBeginLoc();
             auto fileName = sourceManager.getFilename(loc);
             auto line = sourceManager.getSpellingLineNumber(loc);
             auto column = sourceManager.getSpellingColumnNumber(loc);
-            llvm::outs() << "file: " << fileName << " : " << line << " : "
-                         << column << "\n";
-        }
 
-    }  // namespace explicitdowncast
+            llvm::outs() << "[timet to int downcast] ";
+            llvm::outs() << fileName << ":" << line << ":" << column << "\n";
+        }
+    }
 };
 
-class ExplicitDowncastAction : public clang::PluginASTAction {
+/**
+ * Action
+ */
+class TimetToIntDowncastAction : public clang::PluginASTAction {
    public:
-    ExplicitDowncastAction() {}
+    TimetToIntDowncastAction() {}
 
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
         clang::CompilerInstance &ci, llvm::StringRef) override {
@@ -91,6 +94,6 @@ class ExplicitDowncastAction : public clang::PluginASTAction {
     }
 };
 
-}  // namespace explicitdowncast
+}  // namespace timet_to_int_downcast
 
 #endif

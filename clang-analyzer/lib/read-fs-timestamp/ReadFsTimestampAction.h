@@ -40,7 +40,7 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
             auto fileName = sourceManager.getFilename(loc);
             auto line = sourceManager.getSpellingLineNumber(loc);
             auto column = sourceManager.getSpellingColumnNumber(loc);
-            llvm::outs() << "file: " << fileName << " : " << line << " : "
+            llvm::outs() << fileName << ":" << line << ":"
                          << column << "\n";
             // memberExpr->dump();
         }
