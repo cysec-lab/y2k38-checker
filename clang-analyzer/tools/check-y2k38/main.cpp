@@ -4,29 +4,29 @@
 #include <memory>
 #include <string>
 
-#include "PrintFunctionsAction.h"
+#include "ReadFsTimestampAction.h"
+#include "TimetToIntDowncast.h"
+#include "WriteFsTimestampAction.h"
 #include "clang/Tooling/CompilationDatabase.h"
 #include "llvm/Support/CommandLine.h"
 #include "llvm/Support/PrettyStackTrace.h"
 #include "llvm/Support/Signals.h"
 #include "llvm/Support/raw_ostream.h"
 
-using namespace printfunctions;
 using namespace llvm;
 
-static cl::OptionCategory printFunctionsCategory{"print-functions options"};
+static cl::OptionCategory Category{"my-options"};
 
 static cl::opt<std::string> databasePath{
     "p", cl::desc{"Path to compilation database"}, cl::Optional,
-    cl::cat{printFunctionsCategory}};
+    cl::cat{Category}};
 
-static cl::opt<std::string> directCompiler{
-    cl::Positional, cl::desc{"[-- <compiler>"}, cl::cat{printFunctionsCategory},
-    cl::init("")};
+static cl::opt<std::string> directCompiler{cl::Positional,
+                                           cl::desc{"[-- <compiler>"},
+                                           cl::cat{Category}, cl::init("")};
 
-static cl::list<std::string> directArgv{cl::ConsumeAfter,
-                                        cl::desc{"<compiler arguments>...]"},
-                                        cl::cat{printFunctionsCategory}};
+static cl::list<std::string> directArgv{
+    cl::ConsumeAfter, cl::desc{"<compiler arguments>...]"}, cl::cat{Category}};
 
 class CommandLineCompilationDatabase
     : public clang::tooling::CompilationDatabase {
@@ -98,26 +98,24 @@ getCompilationDatabase(std::string &errors) {
     }
 }
 
-static void processFile(clang::tooling::CompilationDatabase const &database,
-                        std::string &file) {
-    clang::tooling::ClangTool tool{database, file};
-    tool.appendArgumentsAdjuster(clang::tooling::getClangStripOutputAdjuster());
-    auto frontendFactory =
-        clang::tooling::newFrontendActionFactory<PrintFunctionsAction>();
-    tool.run(frontendFactory.get());
-}
-
 static void processDatabase(
     clang::tooling::CompilationDatabase const &database) {
-    auto count = 0u;
-    auto files = database.getAllFiles();
-    llvm::outs() << "Number of files: " << files.size() << "\n";
+    auto sourcePaths = database.getAllFiles();
+    clang::tooling::ClangTool tool{database, sourcePaths};
+    tool.appendArgumentsAdjuster(clang::tooling::getClangStripOutputAdjuster());
 
-    for (auto &file : files) {
-        llvm::outs() << count << ") File: " << file << "\n";
-        processFile(database, file);
-        ++count;
-    }
+    auto ReadFsTSfrontendFactory = clang::tooling::newFrontendActionFactory<
+        readfstimestamp::ReadFsTimestampAction>();
+    tool.run(ReadFsTSfrontendFactory.get());
+
+    auto WriteFsTSfrontendFactory = clang::tooling::newFrontendActionFactory<
+        writefstimestamp::WriteFsTimestampAction>();
+    tool.run(WriteFsTSfrontendFactory.get());
+
+    auto ExplicitDowncastFrontendFactory =
+        clang::tooling::newFrontendActionFactory<
+            timet_to_int_downcast::TimetToIntDowncastAction>();
+    tool.run(ExplicitDowncastFrontendFactory.get());
 }
 
 void warnAboutDebugBuild(llvm::StringRef programName) {
@@ -149,7 +147,7 @@ int main(int argc, char const **argv) {
     llvm::PrettyStackTraceProgram X(argc, argv);
     llvm_shutdown_obj shutdown;
 
-    cl::HideUnrelatedOptions(printFunctionsCategory);
+    cl::HideUnrelatedOptions(Category);
     cl::ParseCommandLineOptions(argc, argv);
 
 #if !defined(NDEBUG) || defined(LLVM_ENABLE_ASSERTIONS)

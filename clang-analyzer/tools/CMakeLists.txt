@@ -1,3 +1,2 @@
 add_subdirectory(print-functions)
-add_subdirectory(runstreamchecker)
-
+add_subdirectory(check-y2k38)

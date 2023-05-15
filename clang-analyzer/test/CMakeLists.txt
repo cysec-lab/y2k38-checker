@@ -1,5 +1,5 @@
 
-project(clang-plugins-demo-tests)
+project(y2k38-clang-analyzer-tests)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 

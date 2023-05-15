@@ -10,4 +10,3 @@ target_include_directories(function-printer
 )
 
 install(TARGETS function-printer DESTINATION lib)
-
