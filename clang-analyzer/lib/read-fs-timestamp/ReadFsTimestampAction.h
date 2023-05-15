@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include "../writeJsonFile.h"
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
@@ -20,33 +21,48 @@ namespace readfstimestamp {
 using namespace clang;
 using namespace clang::ast_matchers;
 static const char *ID = "read-fs-timestamp-id";
-auto matcher = memberExpr(
-                   // member(anyOf(hasName("st_atim"), hasName("st_mtim"),
-                   //                     hasName("st_ctim"))),
-                   //        has(declRefExpr(to(varDecl(hasType(asString("struct
-                   //        stat"))))))
-                   )
-                   .bind(ID);
+auto matcher =
+    memberExpr(member(anyOf(hasName("st_atim"), hasName("st_mtim"),
+                            hasName("st_ctim"))),
+               has(declRefExpr(to(varDecl(hasType(asString("struct stat")))))))
+        .bind(ID);
 
 class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
+   private:
+    std::vector<MatchedAst> matchedAst;
+
    public:
     virtual void run(
         const clang::ast_matchers::MatchFinder::MatchResult &Result) final {
-        llvm::outs() << "[read file timestamp] ";
         if (const auto *memberExpr =
                 Result.Nodes.getNodeAs<clang::MemberExpr>(ID)) {
-            SourceManager &sourceManager = *Result.SourceManager;
-            SourceLocation loc = memberExpr->getExprLoc();
-            auto fileName = sourceManager.getFilename(loc);
-            auto line = sourceManager.getSpellingLineNumber(loc);
-            auto column = sourceManager.getSpellingColumnNumber(loc);
-            llvm::outs() << fileName << ":" << line << ":"
-                         << column << "\n";
-            // memberExpr->dump();
+            const clang::SourceLocation loc = memberExpr->getBeginLoc();
+            llvm::SmallString<128> absFilePath(
+                Result.SourceManager->getFilename(loc).str());
+            Result.SourceManager->getFileManager().makeAbsolutePath(
+                absFilePath);
+            const unsigned int line =
+                Result.SourceManager->getSpellingLineNumber(loc);
+            const unsigned int column =
+                Result.SourceManager->getSpellingColumnNumber(loc);
+
+            std::string type = "read-file-timestamp";
+            llvm::outs() << "[" << type << "] " << absFilePath << ":" << line
+                         << ":" << column << "\n";
+
+            writeJsonFile({
+                file : absFilePath.str(),
+                type : type,
+                line : static_cast<int>(line),
+                column : static_cast<int>(column)
+            });
         }
     }
 };
 
+/**
+ * Action
+ */
 class ReadFsTimestampAction : public clang::PluginASTAction {
    public:
     ReadFsTimestampAction() {}

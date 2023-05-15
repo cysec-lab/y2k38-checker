@@ -10,6 +10,14 @@ sh ./y2k38-checker.sh <file>.c
 alias y2k38-checker="sh /home/cysec/Develop/fsyc/y2k38-checker/clang-query/y2k38-checker.sh"
 ```
 
+または
+
+```sh
+../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang-query \
+    --extra-arg=-w -f blacklist/read-fs-timestamp.matcher \
+    ../dataset/blacklist/read-fs-timestamp.c --
+```
+
 ## Matcher
 
 ### キャスト式

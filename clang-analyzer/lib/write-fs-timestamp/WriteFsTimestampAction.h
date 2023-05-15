@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include "../writeJsonFile.h"
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
@@ -33,17 +34,28 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
     virtual void run(
         const clang::ast_matchers::MatchFinder::MatchResult &Result) final {
         llvm::outs() << "[write file timestamp] ";
-        if (const auto *declRefExpr =
-                Result.Nodes.getNodeAs<clang::DeclRefExpr>(ID)) {
-            SourceManager &sourceManager = *Result.SourceManager;
-            SourceLocation loc = declRefExpr->getExprLoc();
-            auto fileName = sourceManager.getFilename(loc);
-            auto line = sourceManager.getSpellingLineNumber(loc);
-            auto column = sourceManager.getSpellingColumnNumber(loc);
-            llvm::outs() << fileName << ":" << line << ":"
-                         << column << "\n";
-            // declRefExpr->dump();
-        }
+        const auto *declRefExpr =
+            Result.Nodes.getNodeAs<clang::DeclRefExpr>(ID);
+        if (!declRefExpr) return;
+
+        SourceLocation loc = declRefExpr->getExprLoc();
+        llvm::SmallString<128> absFilePath(
+            Result.SourceManager->getFilename(loc).str());
+        Result.SourceManager->getFileManager().makeAbsolutePath(absFilePath);
+        const unsigned int line =
+            Result.SourceManager->getSpellingLineNumber(loc);
+        const unsigned int column =
+            Result.SourceManager->getSpellingColumnNumber(loc);
+
+        const std::string type = "timet-to-int-downcast";
+        llvm::outs() << "[" << type << "] " << absFilePath << ":" << line << ":"
+                     << column << "\n";
+        writeJsonFile({
+            file : absFilePath.str(),
+            type : type,
+            line : static_cast<int>(line),
+            column : static_cast<int>(column)
+        });
     }
 };
 

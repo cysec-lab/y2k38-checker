@@ -92,7 +92,8 @@
     "memory_resource": "cpp",
     "shared_mutex": "cpp",
     "thread": "cpp",
-    "cfenv": "cpp"
+    "cfenv": "cpp",
+    "valarray": "cpp"
   },
   "shellcheck.executablePath": "*.matcher"
 }

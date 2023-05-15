@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include "../writeJsonFile.h"
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
@@ -24,7 +25,8 @@ bool isTimeTEquivalent(const clang::Expr *expr) {
     if (const ParenExpr *parenExpr = dyn_cast<ParenExpr>(expr)) {
         return isTimeTEquivalent(parenExpr->getSubExpr());
     }
-    if (expr->getType().getAsString() == "time_t") {
+    if (expr->getType().getAsString() == "time_t" ||
+        expr->getType().getAsString() == "__time_t") {
         return true;
     }
     // BinaryOperatorであれば再帰的に確認
@@ -54,14 +56,25 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
             if (!childExpr) continue;
             if (!isTimeTEquivalent(childExpr)) continue;
 
-            SourceManager &sourceManager = *Result.SourceManager;
             SourceLocation loc = castExpr->getBeginLoc();
-            auto fileName = sourceManager.getFilename(loc);
-            auto line = sourceManager.getSpellingLineNumber(loc);
-            auto column = sourceManager.getSpellingColumnNumber(loc);
+            llvm::SmallString<128> absFilePath(
+                Result.SourceManager->getFilename(loc).str());
+            Result.SourceManager->getFileManager().makeAbsolutePath(
+                absFilePath);
+            const unsigned int line =
+                Result.SourceManager->getSpellingLineNumber(loc);
+            const unsigned int column =
+                Result.SourceManager->getSpellingColumnNumber(loc);
 
-            llvm::outs() << "[timet to int downcast] ";
-            llvm::outs() << fileName << ":" << line << ":" << column << "\n";
+            const std::string type = "timet-to-int-downcast";
+            llvm::outs() << "[" << type << "] " << absFilePath << ":" << line
+                         << ":" << column << "\n";
+            writeJsonFile({
+                file : absFilePath.str(),
+                type : type,
+                line : static_cast<int>(line),
+                column : static_cast<int>(column)
+            });
         }
     }
 };
