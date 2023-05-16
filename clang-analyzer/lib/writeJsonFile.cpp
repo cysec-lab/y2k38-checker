@@ -9,15 +9,14 @@
 using json = nlohmann::json;
 
 struct MatchedAst {
-    llvm::StringRef file;
     std::string type;
-    int line;
-    int column;
+    std::string file;
+    unsigned int line;
+    unsigned int column;
 };
 
-void writeJsonFile(MatchedAst info) {
-    std::string outputJson = "output.json";
-    std::ifstream fileStream(outputJson);
+void writeJsonFile(std::string outputJsonFile, MatchedAst info) {
+    std::ifstream fileStream(outputJsonFile);
     nlohmann::json data;
     fileStream >> data;
     fileStream.close();
@@ -27,7 +26,7 @@ void writeJsonFile(MatchedAst info) {
                     {"column", info.column},
                     {"type", info.type}});
 
-    std::ofstream outFileStream(outputJson);
+    std::ofstream outFileStream(outputJsonFile);
     outFileStream << data.dump(4);
     outFileStream.close();
 }

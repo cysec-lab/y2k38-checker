@@ -3,7 +3,9 @@
 
 #include <memory>
 
-#include "../writeJsonFile.h"
+#include "../absoluteFilePath.cpp"
+#include "../outputFileOption.cpp"
+#include "../writeJsonFile.cpp"
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
@@ -36,25 +38,16 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
         const clang::ast_matchers::MatchFinder::MatchResult &Result) final {
         if (const auto *memberExpr =
                 Result.Nodes.getNodeAs<clang::MemberExpr>(ID)) {
-            const clang::SourceLocation loc = memberExpr->getBeginLoc();
-            llvm::SmallString<128> absFilePath(
-                Result.SourceManager->getFilename(loc).str());
-            Result.SourceManager->getFileManager().makeAbsolutePath(
-                absFilePath);
-            const unsigned int line =
-                Result.SourceManager->getSpellingLineNumber(loc);
-            const unsigned int column =
-                Result.SourceManager->getSpellingColumnNumber(loc);
+            file_s file = exprAbsoluteFilePath(memberExpr, Result);
 
-            std::string type = "read-file-timestamp";
-            llvm::outs() << "[" << type << "] " << absFilePath << ":" << line
-                         << ":" << column << "\n";
-
-            writeJsonFile({
-                file : absFilePath.str(),
+            const std::string type = "timet-to-int-downcast";
+            llvm::outs() << "[" << type << "] " << file.path << ":" << file.line
+                         << ":" << file.column << "\n";
+            writeJsonFile(OutputFileOption, {
                 type : type,
-                line : static_cast<int>(line),
-                column : static_cast<int>(column)
+                file : file.path,
+                line : file.line,
+                column : file.column
             });
         }
     }
@@ -80,6 +73,15 @@ class ReadFsTimestampAction : public clang::PluginASTAction {
 
     bool ParseArgs(const clang::CompilerInstance &ci,
                    const std::vector<std::string> &args) override {
+        return true;
+    }
+
+    bool BeginSourceFileAction(CompilerInstance &CI) override {
+        if (OutputFileOption.empty()) {
+            llvm::errs() << "[error] option -" << OutputFileOption.ArgStr
+                         << " must be required.\n";
+            std::exit(1);
+        }
         return true;
     }
 

@@ -93,7 +93,9 @@
     "shared_mutex": "cpp",
     "thread": "cpp",
     "cfenv": "cpp",
-    "valarray": "cpp"
+    "valarray": "cpp",
+    "__functional_base_03": "cpp",
+    "filesystem": "cpp"
   },
   "shellcheck.executablePath": "*.matcher"
 }
