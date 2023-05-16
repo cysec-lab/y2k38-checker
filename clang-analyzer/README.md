@@ -26,7 +26,9 @@ JSON Compilation Database を使用して実行することもできる。
 
 ```sh
 cd ../build
-./bin/check-y2k38 -p ../clang-analyzer/compile_commands.json
+./bin/check-y2k38 \
+    -p ../clang-analyzer/compile_commands.json
+    -y2k38-checker-output "/home/cysec/develop/y2k38-checker/analyzed/[project-repository].json"
 ```
 
 ### Clang plugin

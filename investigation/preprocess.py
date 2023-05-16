@@ -1,9 +1,3 @@
-"""
-zipファイルをダウンロードし、解凍して保存するプログラム
-・ダウンロードした zipファイルは data/zip/ に保存される。
-・解凍したソースコードは data/unzip/ に保存される。
-"""
-
 import json
 import os
 import urllib.error
@@ -32,13 +26,13 @@ zipファイルのダウンロードと解凍
 """
 def set_target_source(project_name: str, url: str):
     # zip解凍済みソースファイルが存在すれば何もしない
-    unzip_dir = os.path.join(setting.TARGET_DIR_PATH, project_name)
+    unzip_dir = os.path.join(setting.OUT_DIR, project_name, "src")
     if os.path.exists(unzip_dir):
         return
     os.makedirs(unzip_dir)
 
     # zip ファイルのダウンロード
-    zip_file_path = os.path.join(setting.TARGET_DIR_PATH, project_name + ".zip")
+    zip_file_path = os.path.join(setting.OUT_DIR, project_name, "src.zip")
     if not os.path.exists(zip_file_path):
         file_download(url, zip_file_path)
 
@@ -46,10 +40,10 @@ def set_target_source(project_name: str, url: str):
     unzip(zip_file_path, unzip_dir)
 
 """
-analyzed/[project-repository].json ファイルの作成
+[project-repository]/analyzed.json ファイルの作成
 """
 def set_analyzed_json_file(project_name: str):
-    analyzed_file = os.path.join(setting.ANALYZED_DIR_PATH, project_name + ".json")
+    analyzed_file = os.path.join(setting.OUT_DIR, project_name, "analyzed.json")
     if os.path.exists(analyzed_file):
         return
     with open(analyzed_file, mode='w') as f:
@@ -57,16 +51,16 @@ def set_analyzed_json_file(project_name: str):
         f.write(text)
 
 """
-compile_commands/[project-repository].json の作成
+[project-repository]/compile_commands.json の作成
 """ 
 def set_compile_json_file(project_name: str):
-    compile_file = os.path.join(setting.COMMAND_COMPILE_DIR_PATH, project_name + ".json")
+    compile_file = os.path.join(setting.OUT_DIR, project_name, "compile_commands.json")
     if os.path.exists(compile_file):
         return
     
     # すべての .c ファイルを絶対パスで取得
     c_files = []
-    for root, _dirs, files in os.walk(setting.TARGET_DIR_PATH):
+    for root, _dirs, files in os.walk(setting.OUT_DIR, "src"):
         for file in files:
             if file.endswith('.c') or file.endswith('.h'):
                 c_files.append(os.path.join(root, file))
@@ -86,16 +80,16 @@ def set_compile_json_file(project_name: str):
         f.write(json.dumps(json_list))
 
 """
-run/[project-repository].sh の作成
+[project-repository]/run.sh の作成
 """
 def set_running_shell_file(project_name: str):
-    running_shell_file = os.path.join(setting.RUN_SHELL_DIR_PATH, project_name + ".sh")
+    running_shell_file = os.path.join(setting.OUT_DIR, project_name, "run.sh")
     if os.path.exists(running_shell_file):
         return
 
     text = f"""{setting.TOOL_PATH} \\
-    -p {os.path.join(setting.COMMAND_COMPILE_DIR_PATH, project_name + ".json")} \\
-    -ANALYZED_FILE {os.path.join(setting.ANALYZED_DIR_PATH, project_name + ".json")}
+    -p {os.path.join(setting.OUT_DIR, project_name, "compile_commands.json")} \\
+    -y2k38-checker-output "{os.path.join(setting.OUT_DIR, project_name, "analyzed.json")}"
     """
 
     with open(running_shell_file, mode='w') as f:
