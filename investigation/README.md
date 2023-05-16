@@ -22,8 +22,8 @@ py investigation/preprocess.py
 ```sh
 ┗ ...
 ┗ out/
-    ┗ [project-repository]/
-		┗ [project-repository].zip  # ダウンロードした zipファイル
+    ┗ [project_repository]/
+		┗ [project_repository].zip  # ダウンロードした zipファイル
 		┗ src/                      # zip解凍済みソースファイル
 		┗ compile_commands.json     # 検出ツールへの入力ファイル
 		┗ analyzed.json             # 検出結果

@@ -40,7 +40,7 @@ def set_target_source(project_name: str, url: str):
     unzip(zip_file_path, unzip_dir)
 
 """
-[project-repository]/analyzed.json ファイルの作成
+[project_repository]/analyzed.json ファイルの作成
 """
 def set_analyzed_json_file(project_name: str):
     analyzed_file = os.path.join(setting.OUT_DIR, project_name, "analyzed.json")
@@ -51,7 +51,7 @@ def set_analyzed_json_file(project_name: str):
         f.write(text)
 
 """
-[project-repository]/compile_commands.json の作成
+[project_repository]/compile_commands.json の作成
 """ 
 def set_compile_json_file(project_name: str):
     compile_file = os.path.join(setting.OUT_DIR, project_name, "compile_commands.json")
@@ -80,7 +80,7 @@ def set_compile_json_file(project_name: str):
         f.write(json.dumps(json_list))
 
 """
-[project-repository]/run.sh の作成
+[project_repository]/run.sh の作成
 """
 def set_running_shell_file(project_name: str):
     running_shell_file = os.path.join(setting.OUT_DIR, project_name, "run.sh")
