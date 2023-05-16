@@ -60,7 +60,7 @@ def set_compile_json_file(project_name: str):
     
     # すべての .c ファイルを絶対パスで取得
     c_files = []
-    for root, _dirs, files in os.walk(setting.OUT_DIR, "src"):
+    for root, _dirs, files in os.walk(setting.OUT_DIR, project_name, "src"):
         for file in files:
             if file.endswith('.c') or file.endswith('.h'):
                 c_files.append(os.path.join(root, file))

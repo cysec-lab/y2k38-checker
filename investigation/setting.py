@@ -1,9 +1,8 @@
-OUT_DIR = "/home/cysec/develop/y2k38-checker/out"
-
-# compile_commands.json 用
-CLANG_PATH = "/home/cysec/develop/y2k38-checker/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang"
-TOOL_RUN_DIRECTORY = "/home/cysec/develop/y2k38-checker/build"
-TOOL_PATH = "/home/cysec/develop/y2k38-checker/build/bin/check-y2k38"
+_REPO = "/home/cysec/develop/y2k38-checker"
+OUT_DIR             = _REPO + "/out"
+CLANG_PATH          = _REPO + "/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang"
+TOOL_RUN_DIRECTORY  = _REPO + "/build"
+TOOL_PATH           = _REPO + "/build/bin/check-y2k38"
 
 TARGET_ZIP_URLS = [
     { 
