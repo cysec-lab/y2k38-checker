@@ -1,2 +1,7 @@
 !.gitignore
-/
+
+./*/src
+./*/src.zip
+./*/compile_commands.json
+./*/analyzed.json
+./*/run.sh

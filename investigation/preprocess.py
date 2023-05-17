@@ -1,3 +1,4 @@
+import glob
 import json
 import os
 import urllib.error
@@ -60,10 +61,10 @@ def set_compile_json_file(project_name: str):
     
     # すべての .c ファイルを絶対パスで取得
     c_files = []
-    for root, _dirs, files in os.walk(setting.OUT_DIR, project_name, "src"):
-        for file in files:
-            if file.endswith('.c') or file.endswith('.h'):
-                c_files.append(os.path.join(root, file))
+    glob_c = os.path.join(setting.OUT_DIR, project_name, "src/**/*.[c,h]")
+    for c_file in glob.glob(glob_c, recursive=True):
+        abs_path = os.path.abspath(c_file)
+        c_files.append(abs_path)
 
     # JSON に書き込むデータを作成
     json_list = []
@@ -89,7 +90,7 @@ def set_running_shell_file(project_name: str):
 
     text = f"""{setting.TOOL_PATH} \\
     -p {os.path.join(setting.OUT_DIR, project_name, "compile_commands.json")} \\
-    -y2k38-checker-output "{os.path.join(setting.OUT_DIR, project_name, "analyzed.json")}"
+    -y2k38-checker-output {os.path.join(setting.OUT_DIR, project_name, "analyzed.json")}
     """
 
     with open(running_shell_file, mode='w') as f:
