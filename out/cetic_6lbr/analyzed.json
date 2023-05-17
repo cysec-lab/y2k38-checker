@@ -1,6 +1,36 @@
 [
     {
         "column": 10,
+        "file": "/home/cysec/develop/y2k38-checker/out/cetic_6lbr/src/6lbr-develop/platform/native/clock.c",
+        "line": 60,
+        "type": "timet-to-int-downcast"
+    },
+    {
+        "column": 9,
+        "file": "/home/cysec/develop/y2k38-checker/out/cetic_6lbr/src/6lbr-develop/examples/6lbr/platform/native/raw-tap-dev.c",
+        "line": 380,
+        "type": "timet-to-int-downcast"
+    },
+    {
+        "column": 14,
+        "file": "/home/cysec/develop/y2k38-checker/out/cetic_6lbr/src/6lbr-develop/tools/tunslip6.c",
+        "line": 1023,
+        "type": "timet-to-int-downcast"
+    },
+    {
+        "column": 29,
+        "file": "/home/cysec/develop/y2k38-checker/out/cetic_6lbr/src/6lbr-develop/examples/6lbr/tools/zena/zena.c",
+        "line": 344,
+        "type": "timet-to-int-downcast"
+    },
+    {
+        "column": 18,
+        "file": "/home/cysec/develop/y2k38-checker/out/cetic_6lbr/src/6lbr-develop/examples/6lbr/tools/zena/zena.c",
+        "line": 612,
+        "type": "timet-to-int-downcast"
+    },
+    {
+        "column": 10,
         "file": "/home/cysec/develop/y2k38-checker/out/cetic_6lbr/src/6lbr-develop/platform/minimal-net/clock.c",
         "line": 63,
         "type": "timet-to-int-downcast"
