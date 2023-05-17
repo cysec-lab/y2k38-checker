@@ -4,8 +4,6 @@
 #include <fstream>
 #include <nlohmann/json.hpp>
 
-#include "clang/Basic/Diagnostic.h"
-
 using json = nlohmann::json;
 
 struct MatchedAst {

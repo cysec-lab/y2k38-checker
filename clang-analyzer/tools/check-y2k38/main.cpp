@@ -101,6 +101,7 @@ getCompilationDatabase(std::string &errors) {
 static void processDatabase(
     clang::tooling::CompilationDatabase const &database) {
     auto sourcePaths = database.getAllFiles();
+    llvm::outs() << sourcePaths.at(0);
     clang::tooling::ClangTool tool{database, sourcePaths};
     tool.appendArgumentsAdjuster(clang::tooling::getClangStripOutputAdjuster());
 
@@ -118,29 +119,29 @@ static void processDatabase(
     tool.run(ExplicitDowncastFrontendFactory.get());
 }
 
-void warnAboutDebugBuild(llvm::StringRef programName) {
-    const unsigned COLUMNS = 80;
-    const char SEPARATOR = '*';
+// void warnAboutDebugBuild(llvm::StringRef programName) {
+//     const unsigned COLUMNS = 80;
+//     const char SEPARATOR = '*';
 
-    llvm::outs().changeColor(llvm::raw_ostream::Colors::YELLOW, true);
-    for (unsigned i = 0; i < COLUMNS; ++i) {
-        llvm::outs().write(SEPARATOR);
-    }
+//     llvm::outs().changeColor(llvm::raw_ostream::Colors::YELLOW, true);
+//     for (unsigned i = 0; i < COLUMNS; ++i) {
+//         llvm::outs().write(SEPARATOR);
+//     }
 
-    llvm::outs().changeColor(llvm::raw_ostream::Colors::RED, true);
-    llvm::outs() << "\nWARNING: ";
-    llvm::outs().resetColor();
-    llvm::outs() << programName
-                 << " appears to have been built in debug mode.\n"
-                 << "Your analysis may take longer than normal.\n";
+//     llvm::outs().changeColor(llvm::raw_ostream::Colors::RED, true);
+//     llvm::outs() << "\nWARNING: ";
+//     llvm::outs().resetColor();
+//     llvm::outs() << programName
+//                  << " appears to have been built in debug mode.\n"
+//                  << "Your analysis may take longer than normal.\n";
 
-    llvm::outs().changeColor(llvm::raw_ostream::Colors::YELLOW, true);
-    for (unsigned i = 0; i < COLUMNS; ++i) {
-        llvm::outs().write(SEPARATOR);
-    }
-    llvm::outs().resetColor();
-    llvm::outs() << "\n\n";
-}
+//     llvm::outs().changeColor(llvm::raw_ostream::Colors::YELLOW, true);
+//     for (unsigned i = 0; i < COLUMNS; ++i) {
+//         llvm::outs().write(SEPARATOR);
+//     }
+//     llvm::outs().resetColor();
+//     llvm::outs() << "\n\n";
+// }
 
 int main(int argc, char const **argv) {
     sys::PrintStackTraceOnErrorSignal(argv[0]);
@@ -150,9 +151,9 @@ int main(int argc, char const **argv) {
     cl::HideUnrelatedOptions(Category);
     cl::ParseCommandLineOptions(argc, argv);
 
-#if !defined(NDEBUG) || defined(LLVM_ENABLE_ASSERTIONS)
-    warnAboutDebugBuild(argv[0]);
-#endif
+    // #if !defined(NDEBUG) || defined(LLVM_ENABLE_ASSERTIONS)
+    //     warnAboutDebugBuild(argv[0]);
+    // #endif
 
     std::string error;
     auto compilationDB = getCompilationDatabase(error);
