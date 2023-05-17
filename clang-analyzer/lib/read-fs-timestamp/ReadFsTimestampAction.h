@@ -40,7 +40,7 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
                 Result.Nodes.getNodeAs<clang::MemberExpr>(ID)) {
             file_s file = exprAbsoluteFilePath(memberExpr, Result);
 
-            const std::string type = "timet-to-int-downcast";
+            const std::string type = "read-fs-timestamp";
             llvm::outs() << "[" << type << "] " << file.path << ":" << file.line
                          << ":" << file.column << "\n";
             writeJsonFile(OutputFileOption, {

@@ -101,7 +101,6 @@ getCompilationDatabase(std::string &errors) {
 static void processDatabase(
     clang::tooling::CompilationDatabase const &database) {
     auto sourcePaths = database.getAllFiles();
-    llvm::outs() << sourcePaths.at(0);
     clang::tooling::ClangTool tool{database, sourcePaths};
     tool.appendArgumentsAdjuster(clang::tooling::getClangStripOutputAdjuster());
 
@@ -115,6 +114,7 @@ static void processDatabase(
 
     auto ExplicitDowncastFrontendFactory =
         clang::tooling::newFrontendActionFactory<
+        
             timet_to_int_downcast::TimetToIntDowncastAction>();
     tool.run(ExplicitDowncastFrontendFactory.get());
 }

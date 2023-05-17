@@ -22,6 +22,21 @@ def unzip(file_path: str, unzip_dir_path: str):
     with zipfile.ZipFile(file_path) as obj_zip:
         obj_zip.extractall(unzip_dir_path)
 
+
+def replace_dir_name_space(dir: str):
+    def find_all_files(directory):
+        for root, dirs, files in os.walk(directory):
+            yield root
+            for file in files:
+                yield os.path.join(root, file)
+
+            for d in dirs:
+                yield os.path.join(root, d)
+    
+    for path in find_all_files(dir):
+        if " " in path:
+            os.rename(path, path.replace(" ", "__"))
+
 """
 zipファイルのダウンロードと解凍
 """
@@ -40,6 +55,9 @@ def set_target_source(project_name: str, url: str):
     # zip ファイルの解凍
     unzip(zip_file_path, unzip_dir)
 
+    # ファイルパスにスペースを含む場合置換する
+    replace_dir_name_space(unzip_dir)
+    
 """
 [project_repository]/analyzed.json ファイルの作成
 """
