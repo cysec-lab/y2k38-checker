@@ -1,0 +1,8 @@
+[
+    {
+        "column": 10,
+        "file": "/home/cysec/develop/y2k38-checker/out/cetic_6lbr/src/6lbr-develop/platform/minimal-net/clock.c",
+        "line": 63,
+        "type": "timet-to-int-downcast"
+    }
+]

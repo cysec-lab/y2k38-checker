@@ -1,0 +1,8 @@
+[
+    {
+        "column": 14,
+        "file": "/home/cysec/develop/y2k38-checker/out/cnlohr_espthernet/src/espthernet-gh-pages/pRemoteSniffer/web/execute_reflash.c",
+        "line": 46,
+        "type": "timet-to-int-downcast"
+    }
+]
