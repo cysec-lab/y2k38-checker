@@ -1,5 +1,5 @@
-#ifndef READ_FS_TIMESTAMP_ACTION_H
-#define READ_FS_TIMESTAMP_ACTION_H
+#ifndef TIMET_TO_LONG_DOWNCAST_ACTION_H
+#define TIMET_TO_LONG_DOWNCAST_ACTION_H
 
 #include <memory>
 
@@ -15,34 +15,52 @@
 #include "clang/Frontend/FrontendActions.h"
 #include "clang/Tooling/Tooling.h"
 
-namespace readfstimestamp {
+using namespace clang;
+using namespace clang::ast_matchers;
+
+namespace timet_to_long_downcast {
+
+/**
+ * time_t 相当判定関数
+ */
+bool isTimeTEquivalent(const clang::Expr *expr) {
+    if (const ParenExpr *parenExpr = dyn_cast<ParenExpr>(expr)) {
+        return isTimeTEquivalent(parenExpr->getSubExpr());
+    }
+    if (expr->getType().getAsString() == "time_t" ||
+        expr->getType().getAsString() == "__time_t") {
+        return true;
+    }
+    // BinaryOperatorであれば再帰的に確認
+    if (const BinaryOperator *binaryOperator = dyn_cast<BinaryOperator>(expr)) {
+        return isTimeTEquivalent(binaryOperator->getLHS()) ||
+               isTimeTEquivalent(binaryOperator->getRHS());
+    }
+    return false;
+};
 
 /**
  * Matcher
  */
-using namespace clang;
-using namespace clang::ast_matchers;
-static const char *ID = "read-fs-timestamp-id";
-auto matcher =
-    memberExpr(
-        member(anyOf(hasName("st_atim"), hasName("st_mtim"),
-                     hasName("st_ctim")))  // ,
-        //    has(declRefExpr(to(varDecl(hasType(asString("struct stat"))))))
-        )
-        .bind(ID);
+static const char *ID = "time_t-to-long-downcast-id";
+auto matcher = castExpr(hasType(asString("long")), has(expr())).bind(ID);
 
 class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
-   private:
-    std::vector<MatchedAst> matchedAst;
-
    public:
     virtual void run(
         const clang::ast_matchers::MatchFinder::MatchResult &Result) final {
-        if (const auto *memberExpr =
-                Result.Nodes.getNodeAs<clang::MemberExpr>(ID)) {
-            file_s file = exprAbsoluteFilePath(memberExpr, Result);
+        const auto *castExpr = Result.Nodes.getNodeAs<clang::Expr>(ID);
+        if (!castExpr) return;
 
-            const std::string type = "read-fs-timestamp";
+        for (clang::Expr::const_child_iterator it = castExpr->child_begin();
+             it != castExpr->child_end(); ++it) {
+            const clang::Expr *childExpr = clang::dyn_cast<clang::Expr>(*it);
+            if (!childExpr) continue;
+            if (!isTimeTEquivalent(childExpr)) continue;
+
+            file_s file = exprAbsoluteFilePath(castExpr, Result);
+
+            const std::string type = "timet-to-long-downcast";
             llvm::outs() << "[" << type << "] " << file.path << ":" << file.line
                          << ":" << file.column << "\n";
             writeJsonFile(OutputFileOption, {
@@ -58,9 +76,9 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
 /**
  * Action
  */
-class ReadFsTimestampAction : public clang::PluginASTAction {
+class TimetToLongDowncastAction : public clang::PluginASTAction {
    public:
-    ReadFsTimestampAction() {}
+    TimetToLongDowncastAction() {}
 
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
         clang::CompilerInstance &ci, llvm::StringRef) override {
@@ -92,6 +110,6 @@ class ReadFsTimestampAction : public clang::PluginASTAction {
     }
 };
 
-}  // namespace readfstimestamp
+}  // namespace timet_to_long_downcast
 
 #endif

@@ -17,6 +17,7 @@ target_link_libraries(check-y2k38
 nlohmann_json::nlohmann_json
   read-fs-timestamp
   write-fs-timestamp
+  timet-to-long-downcast
   timet-to-int-downcast
   clangAST
   clangASTMatchers

@@ -6,6 +6,7 @@
 
 #include "ReadFsTimestampAction.h"
 #include "TimetToIntDowncast.h"
+#include "TimetToLongDowncast.h"
 #include "WriteFsTimestampAction.h"
 #include "clang/Tooling/CompilationDatabase.h"
 #include "llvm/Support/CommandLine.h"
@@ -112,11 +113,13 @@ static void processDatabase(
         writefstimestamp::WriteFsTimestampAction>();
     tool.run(WriteFsTSfrontendFactory.get());
 
-    auto ExplicitDowncastFrontendFactory =
-        clang::tooling::newFrontendActionFactory<
-        
-            timet_to_int_downcast::TimetToIntDowncastAction>();
-    tool.run(ExplicitDowncastFrontendFactory.get());
+    auto TimetToIntFrontendFactory = clang::tooling::newFrontendActionFactory<
+        timet_to_int_downcast::TimetToIntDowncastAction>();
+    tool.run(TimetToIntFrontendFactory.get());
+
+    auto TimetToLongFrontendFactory = clang::tooling::newFrontendActionFactory<
+        timet_to_long_downcast::TimetToLongDowncastAction>();
+    tool.run(TimetToLongFrontendFactory.get());
 }
 
 // void warnAboutDebugBuild(llvm::StringRef programName) {
