@@ -2,8 +2,10 @@
 
 cd out/
 
-log_file="/home/cysec/develop/y2k38-checker/test.log"
-echo "\n\n $(date) ===========================================" >>"$log_file"
+date=$(date '+%Y-%m-%d-%H:%M:%S')
+log_file="/home/cysec/develop/y2k38-checker/log/$date.log"
+touch "$log_file"
+echo "touched " $log_file "\n"
 
 for entry in "$(pwd)"/*/; do
     dirname="${entry%/}" # 末尾のスラッシュを削除
@@ -20,3 +22,4 @@ for entry in "$(pwd)"/*/; do
 done
 
 cd ../
+class MatcherCallback : public clang::ast_matchers::MatchFinder::Matc
