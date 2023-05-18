@@ -1,9 +1,15 @@
-import glob
+import os
 import json
 
-glob_path  = "./out/*/analyzed.json"
 
-for json_file in glob.glob(glob_path):
+files = os.listdir("out")
+dirs = [f for f in files if os.path.isdir(os.path.join("out", f))]
+# dirs　をソート
+dirs.sort(key=str.lower)
+
+for dir in dirs:
+    json_file = os.path.join("out", dir, "analyzed.json")
+
     print()
     print(json_file)
 
