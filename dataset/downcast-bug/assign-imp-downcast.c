@@ -10,10 +10,18 @@ long return_long_func() { return LONG; }
 
 long timet_to_long(time_t t) { return (long)t; }
 
+void unchi() {
+    int i = TIMET;
+    i += TIMET;
+    i *= TIMET;
+}
+
 void matched() {
     {
         // 直接代入
         int i = TIMET;  // Potential Overflow 1
+        i += TIMET;
+        i *= TIMET;
         if (i < 0) puts("overflowed: 直接代入");
     }
     {
