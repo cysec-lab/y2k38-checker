@@ -101,18 +101,18 @@ def set_compile_json_file(project_name: str):
 """
 [project_repository]/run.sh の作成
 """
-def set_running_shell_file(project_name: str):
-    running_shell_file = os.path.join(setting.OUT_DIR, project_name, "run.sh")
-    if os.path.exists(running_shell_file):
-        return
+# def set_running_shell_file(project_name: str):
+#     running_shell_file = os.path.join(setting.OUT_DIR, project_name, "run.sh")
+#     if os.path.exists(running_shell_file):
+#         return
 
-    text = f"""{setting.TOOL_PATH} \\
-    -p {os.path.join(setting.OUT_DIR, project_name, "compile_commands.json")} \\
-    -y2k38-checker-output {os.path.join(setting.OUT_DIR, project_name, "analyzed.json")}
-    """
+#     text = f"""{setting.TOOL_PATH} \\
+#     -p {os.path.join(setting.OUT_DIR, project_name, "compile_commands.json")} \\
+#     -y2k38-checker-output {os.path.join(setting.OUT_DIR, project_name, "analyzed.json")}
+#     """
 
-    with open(running_shell_file, mode='w') as f:
-        f.write(text)
+#     with open(running_shell_file, mode='w') as f:
+#         f.write(text)
     
 
 if __name__ == "__main__":
@@ -121,4 +121,4 @@ if __name__ == "__main__":
         set_target_source(target_repo["name"], target_repo["url"])
         set_analyzed_json_file(target_repo["name"])
         set_compile_json_file(target_repo["name"])
-        set_running_shell_file(target_repo["name"])
+        # set_running_shell_file(target_repo["name"])

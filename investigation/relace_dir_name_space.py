@@ -2,23 +2,20 @@ import os
 import glob
 
 
-def replace_dir_name_space(dir: str):
-    def find_all_files(directory):
-        for root, dirs, files in os.walk(directory):
-            yield root
-            for file in files:
-                print(file)
-                yield os.path.join(root, file)
+def replace_spaces(directory_path):
+    # 指定されたディレクトリ内のファイルとディレクトリを取得
+    entries = os.listdir(directory_path)
 
-            for d in dirs:
-                yield os.path.join(root, d)
-    
-    for path in find_all_files(dir):
-        if " " in path:
-            print(path)
-            os.rename(path, path.replace(" ", "__"))
+    for entry in entries:
+        entry_path = os.path.join(directory_path, entry)
 
+        if os.path.isdir(entry_path):
+            # サブディレクトリがある場合は再帰的に処理
+            replace_spaces(entry_path)
 
+            # スペースをアンダースコアに置換したディレクトリ名を作成
+            new_entry = entry.replace(" ", "_")
+            new_entry_path = os.path.join(directory_path, new_entry)
 
-if __name__ == "__main__":
-    replace_dir_name_space("./c")
+            # ディレクトリ名を変更
+            os.rename(entry_path, new_entry_path)

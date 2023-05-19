@@ -5,7 +5,7 @@
 
 #include "../absoluteFilePath.cpp"
 #include "../outputFileOption.cpp"
-#include "../writeJsonFile.cpp"
+// #include "../writeJsonFile.cpp"
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
@@ -24,11 +24,10 @@ using namespace clang;
 using namespace clang::ast_matchers;
 static const char *ID = "read-fs-timestamp-id";
 auto matcher =
-    memberExpr(
-        member(anyOf(hasName("st_atim"), hasName("st_mtim"),
-                     hasName("st_ctim")))  // ,
-        //    has(declRefExpr(to(varDecl(hasType(asString("struct stat"))))))
-        )
+    memberExpr(member(anyOf(hasName("st_atim"), hasName("st_mtim"),
+                            hasName("st_ctim"))),
+               //
+               has(declRefExpr(to(varDecl(hasType(asString("struct stat")))))))
         .bind(ID);
 
 class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
@@ -45,12 +44,12 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
             const std::string type = "read-fs-timestamp";
             llvm::outs() << "[" << type << "] " << file.path << ":" << file.line
                          << ":" << file.column << "\n";
-            writeJsonFile(OutputFileOption, {
-                type : type,
-                file : file.path,
-                line : file.line,
-                column : file.column
-            });
+            // writeJsonFile(OutputFileOption, {
+            //     type : type,
+            //     file : file.path,
+            //     line : file.line,
+            //     column : file.column
+            // });
         }
     }
 };
@@ -78,14 +77,13 @@ class ReadFsTimestampAction : public clang::PluginASTAction {
         return true;
     }
 
-    bool BeginSourceFileAction(CompilerInstance &CI) override {
-        if (OutputFileOption.empty()) {
-            llvm::errs() << "[error] option -" << OutputFileOption.ArgStr
-                         << " must be required.\n";
-            std::exit(1);
-        }
-        return true;
-    }
+    // bool BeginSourceFileAction(CompilerInstance &CI) override {
+    //     if (OutputFileOption.empty()) {
+    //         llvm::errs() << "[error] option -" << OutputFileOption.ArgStr
+    //                      << " must be required.\n";
+    //             }
+    //     return true;
+    // }
 
     clang::PluginASTAction::ActionType getActionType() override {
         return ReplaceAction;
