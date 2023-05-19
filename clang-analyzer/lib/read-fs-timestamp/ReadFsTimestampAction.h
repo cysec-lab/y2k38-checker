@@ -5,7 +5,7 @@
 
 #include "../absoluteFilePath.cpp"
 #include "../outputFileOption.cpp"
-// #include "../writeJsonFile.cpp"
+#include "../writeJsonFile.cpp"
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
@@ -44,12 +44,15 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
             const std::string type = "read-fs-timestamp";
             llvm::outs() << "[" << type << "] " << file.path << ":" << file.line
                          << ":" << file.column << "\n";
-            // writeJsonFile(OutputFileOption, {
-            //     type : type,
-            //     file : file.path,
-            //     line : file.line,
-            //     column : file.column
-            // });
+
+            if (!OutputFileOption.empty()) {
+                writeJsonFile(OutputFileOption, {
+                    type : type,
+                    file : file.path,
+                    line : file.line,
+                    column : file.column
+                });
+            }
         }
     }
 };
@@ -76,14 +79,6 @@ class ReadFsTimestampAction : public clang::PluginASTAction {
                    const std::vector<std::string> &args) override {
         return true;
     }
-
-    // bool BeginSourceFileAction(CompilerInstance &CI) override {
-    //     if (OutputFileOption.empty()) {
-    //         llvm::errs() << "[error] option -" << OutputFileOption.ArgStr
-    //                      << " must be required.\n";
-    //             }
-    //     return true;
-    // }
 
     clang::PluginASTAction::ActionType getActionType() override {
         return ReplaceAction;

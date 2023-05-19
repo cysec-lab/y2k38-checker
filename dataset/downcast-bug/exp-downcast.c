@@ -11,44 +11,29 @@ long return_long_func() { return LONG; }
 long timet_to_long(time_t t) { return (long)t; }
 long timet_to_timet(time_t t) { return t; }
 
-void matched() {
-    // 直接代入
-    printf("%d\n", (int)TIMET);  // Potential Overflow 1
+void to_int() {
+    // time_t -> int
+    printf("%d\n", (int)++TIMET);
+    printf("%d\n", (int)(time_t)LONG);
+    printf("%d\n", (int)(1 + ((((TIMET++))) + 2)));
+    printf("%d\n", (int)(1 + ((((++TIMET))) + 2)));
+    printf("%d\n", (int)(time_t)return_long_func());
+    printf("%d\n", (int)((1 + return_timet_func())));
+    printf("%d\n", (int)((1 + return_timet_func())));
 
-    // 演算結果を代入
-    printf("%d\n", (int)(1 + (TIMET + 2)));  // Potential Overflow 2 // FIXME* match しない
-    printf("%d\n", (int)(1 + return_timet_func()));  // Potential Overflow 3
-
-    // long を明示的キャスト
-    printf("%d\n", (int)(time_t)LONG);                // Potential Overflow 4
-    printf("%d\n", (int)(time_t)return_long_func());  // Potential Overflow 5
-
-    // time_t を返す関数の返り値を代入
-    printf("%d\n", (int)return_timet_func());  // Potential Overflow 6
+    // long  -> int
+    printf("%d\n", (int)++LONG);
+    printf("%d\n", (int)(long)1);
+    printf("%d\n", (int)(1 + (LONG++ + 2)));
+    printf("%d\n", (int)return_long_func());
+    printf("%d\n", (int)(1 + timet_to_long(TIMET)));
 }
 
-void no_matched() {
-    // 直接代入
-    printf("%d\n", (int)LONG);     // long  -> int
-    printf("%ld\n", (long)TIMET);  // time_t -> long
-
-    // 演算結果を代入
-    printf("%d\n", (int)(1 + (LONG + 2)));  // long  -> int
-    printf("%d\n",
-           (int)(1 + timet_to_long(TIMET)));           // long  -> int
-    printf("%ld\n", (long)(1 + (TIMET + 2)));          // time_t -> long
-    printf("%ld\n", (long)(1 + return_timet_func()));  // time_t -> long
-
-    // long を明示的キャスト
-    printf("%d\n", (int)(long)1);      // long  -> int
-    printf("%ld\n", (long)(time_t)1);  // time_t -> long
-
-    // time_t を返す関数の返り値を代入
-    printf("%d\n", (int)return_long_func());     // long  -> int
-    printf("%ld\n", (long)return_timet_func());  // time_t -> long
-}
-
-int main(void) {
-    matched();
-    return 0;
+void to_long() {
+    // time_t -> long
+    printf("%ld\n", (long)++TIMET);
+    printf("%ld\n", (long)(time_t)1);
+    printf("%ld\n", (long)(1 + ((((TIMET))) + 2)));
+    printf("%ld\n", (long)(1 + return_timet_func()));
+    printf("%ld\n", (long)(1 + return_timet_func()));
 }
