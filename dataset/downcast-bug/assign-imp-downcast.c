@@ -10,12 +10,6 @@ long return_long_func() { return LONG; }
 
 long timet_to_long(time_t t) { return (long)t; }
 
-void unchi() {
-    int i = TIMET;
-    i += TIMET;
-    i *= TIMET;
-}
-
 void matched() {
     {
         // 直接代入
@@ -74,4 +68,9 @@ int main(void) {
     matched();
 
     return 0;
+}
+
+int unchi() {
+    time_t t;
+    return (int)(1 + time(NULL));
 }

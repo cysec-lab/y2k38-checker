@@ -24,11 +24,13 @@ using namespace clang;
 using namespace clang::ast_matchers;
 static const char *ID = "write-fs-timestamp-id";
 auto matcher =
-    declRefExpr(to(anyOf(functionDecl(hasName("utime"),
-                                      isExpansionInFileMatching("utime.h")),
-                         functionDecl(hasName("utimes"),
-                                      isExpansionInFileMatching("time.h")))))
+    declRefExpr(to(functionDecl(anyOf(
+                    hasName("utime"), isExpansionInFileMatching("utime.h"),
+                    hasName("utimes"), isExpansionInFileMatching("time.h")))))
         .bind(ID);
+// auto matcher =
+//     declRefExpr(to(functionDecl(anyOf(hasName("utime"), hasName("utimes")))))
+//         .bind(ID);
 
 class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
    public:
@@ -52,7 +54,7 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
                 column : file.column
             });
         }
-    }
+    }  // namespace writefstimestamp
 };
 
 class WriteFsTimestampAction : public clang::PluginASTAction {

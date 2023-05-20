@@ -25,8 +25,8 @@ using namespace clang::ast_matchers;
 static const char *ID = "read-fs-timestamp-id";
 auto matcher =
     memberExpr(member(anyOf(hasName("st_atim"), hasName("st_mtim"),
-                            hasName("st_ctim"))),
-               //
+                            hasName("st_ctim"), hasName("st_atime"),
+                            hasName("st_mtime"), hasName("st_ctime"))),
                has(declRefExpr(to(varDecl(hasType(asString("struct stat")))))))
         .bind(ID);
 
@@ -73,7 +73,7 @@ class ReadFsTimestampAction : public clang::PluginASTAction {
             new clang::ast_matchers::MatchFinder();
         Finder->addMatcher(matcher, matcherCallback);
         return Finder->newASTConsumer();
-    }
+    }  // namespace readfstimestamp
 
     bool ParseArgs(const clang::CompilerInstance &ci,
                    const std::vector<std::string> &args) override {
