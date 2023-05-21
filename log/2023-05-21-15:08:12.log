@@ -1,0 +1,363 @@
+read fs 
+struct stat指定なし
+10分かからんくらい
+
+
+/home/cysec/develop/y2k38-checker/out/AngelLiang_ESP8266-Demos
+
+/home/cysec/develop/y2k38-checker/out/Byzantium_Byzantium
+
+/home/cysec/develop/y2k38-checker/out/Cloudef_orbment
+
+/home/cysec/develop/y2k38-checker/out/Denton-L_based-connect
+
+/home/cysec/develop/y2k38-checker/out/FuruyamaTakeshi_DLNA
+
+/home/cysec/develop/y2k38-checker/out/FuzzySecurity_Unix-PrivEsc
+
+/home/cysec/develop/y2k38-checker/out/H2CO3_Sparkling
+
+/home/cysec/develop/y2k38-checker/out/HaJaeKyung_KittyExtension
+
+/home/cysec/develop/y2k38-checker/out/HunterHillegas_iOS-BetaBuilder
+
+/home/cysec/develop/y2k38-checker/out/HuoLanguage_huo
+
+/home/cysec/develop/y2k38-checker/out/JaciBrunning_Pathfinder
+
+/home/cysec/develop/y2k38-checker/out/JaneaSystems_nodejs-mobile-react-native
+
+/home/cysec/develop/y2k38-checker/out/JazzCore_ctrlp-cmatcher
+
+/home/cysec/develop/y2k38-checker/out/Jekub_Wapiti
+
+/home/cysec/develop/y2k38-checker/out/Kreijstal_Random-C-stuff
+
+/home/cysec/develop/y2k38-checker/out/Lokaltog_candybar
+
+/home/cysec/develop/y2k38-checker/out/Mon-Ouie_ray
+
+/home/cysec/develop/y2k38-checker/out/MonetDB_MonetDB-old
+
+/home/cysec/develop/y2k38-checker/out/NagiosEnterprises_nrpe
+
+/home/cysec/develop/y2k38-checker/out/ONsec-Lab_scripts
+
+/home/cysec/develop/y2k38-checker/out/OculusRiftInAction_OculusRiftInAction
+
+/home/cysec/develop/y2k38-checker/out/PebbleSeizureDetect_PebbleSeizureDetect
+
+/home/cysec/develop/y2k38-checker/out/RedisLabsModules_redisml
+
+/home/cysec/develop/y2k38-checker/out/Reisyukaku_ReiNand
+
+/home/cysec/develop/y2k38-checker/out/SS-archive_salt-states
+
+/home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1484:6
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker:1485:31
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1488:6
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker:1489:31
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1492:6
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker:1493:31
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1507:6
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1508:15
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1513:6
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1514:15
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1519:6
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1520:15
+
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:782:18
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:782:41
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:783:18
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:783:41
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:786:15
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:786:35
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:866:16
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:867:16
+
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/sftp-common.c:77:13
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/sftp-common.c:78:13
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/sftp-common.c:96:3
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/sftp-common.c:97:3
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/sftp-common.c:193:32
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/sftp-common.c:212:20
+
+
+/home/cysec/develop/y2k38-checker/out/adafruit_Adafruit-Retrogame
+
+/home/cysec/develop/y2k38-checker/out/ailispaw_boot2docker-xhyve
+
+/home/cysec/develop/y2k38-checker/out/alexbw_Netflix-Prize
+
+/home/cysec/develop/y2k38-checker/out/analang_como-lang-ng
+
+/home/cysec/develop/y2k38-checker/out/angel2d_angel2d
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/angel2d_angel2d/src/angel2d-master/Code/Angel/Libraries/zlib-1.2.3/contrib/minizip/minizip.c:88:14
+
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/angel2d_angel2d/src/angel2d-master/Code/Angel/Libraries/zlib-1.2.3/examples/gun.c:524:19
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/angel2d_angel2d/src/angel2d-master/Code/Angel/Libraries/zlib-1.2.3/examples/gun.c:525:20
+
+
+/home/cysec/develop/y2k38-checker/out/aterrien_forp-PHP-profiler
+
+/home/cysec/develop/y2k38-checker/out/bpaquet_ngx_http_enhanced_memcached_module
+
+/home/cysec/develop/y2k38-checker/out/bwhite_hadoopy
+
+/home/cysec/develop/y2k38-checker/out/carl-wang-cn_demo
+
+/home/cysec/develop/y2k38-checker/out/cetic_6lbr
+
+/home/cysec/develop/y2k38-checker/out/cjlano_freertos
+
+/home/cysec/develop/y2k38-checker/out/clarkgrubb_data-tools
+
+/home/cysec/develop/y2k38-checker/out/cnlohr_espthernet
+
+/home/cysec/develop/y2k38-checker/out/cnlohr_ws2812esp8266
+
+/home/cysec/develop/y2k38-checker/out/cofyc_dnscrypt-wrapper
+
+/home/cysec/develop/y2k38-checker/out/cyburgee_loopFindr
+
+/home/cysec/develop/y2k38-checker/out/dimonomid_tneo
+
+/home/cysec/develop/y2k38-checker/out/dismantl_linux-injector
+
+/home/cysec/develop/y2k38-checker/out/dndx_shadowsocks-libuv
+
+/home/cysec/develop/y2k38-checker/out/doggycoder_AudioVideo
+
+/home/cysec/develop/y2k38-checker/out/dreamsxin_cphalcon7
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/dreamsxin_cphalcon7/src/cphalcon7-master/deps/libwebsockets/lib/misc/diskcache.c:353:17
+
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/dreamsxin_cphalcon7/src/cphalcon7-master/deps/libwebsockets/plugins/deaddrop/protocol_lws_deaddrop.c:203:17
+
+
+/home/cysec/develop/y2k38-checker/out/esl_erlang_ale
+
+/home/cysec/develop/y2k38-checker/out/etolabo_kumofs
+
+/home/cysec/develop/y2k38-checker/out/eviltrout_tis-100
+
+/home/cysec/develop/y2k38-checker/out/face_MongooseDaemon
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/face_MongooseDaemon/src/MongooseDaemon-master/mongoose.c:1352:16
+
+
+/home/cysec/develop/y2k38-checker/out/facebookarchive_atosl
+
+/home/cysec/develop/y2k38-checker/out/facebookarchive_liblogfaf
+
+/home/cysec/develop/y2k38-checker/out/fanchy_fflib
+
+/home/cysec/develop/y2k38-checker/out/fhunleth_elixir_ale
+
+/home/cysec/develop/y2k38-checker/out/fjolnir_xnomad
+
+/home/cysec/develop/y2k38-checker/out/gabriel_yajl-objc
+
+/home/cysec/develop/y2k38-checker/out/gameoverhack_ofxOpenNI
+
+/home/cysec/develop/y2k38-checker/out/gianlucabertani_Objective-Zip
+
+/home/cysec/develop/y2k38-checker/out/git-mirror_nginx
+
+/home/cysec/develop/y2k38-checker/out/gregkh_kdbus
+
+/home/cysec/develop/y2k38-checker/out/guokr_gkseg
+
+/home/cysec/develop/y2k38-checker/out/heardrwt_RevealLoader
+
+/home/cysec/develop/y2k38-checker/out/hpricot_hpricot
+
+/home/cysec/develop/y2k38-checker/out/iceonsun_rsock
+
+/home/cysec/develop/y2k38-checker/out/ilg-archived_qemu
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/ilg-archived_qemu/src/qemu-gnuarmeclipse-dev/tests/tcg/linux-test.c:162:9
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/ilg-archived_qemu/src/qemu-gnuarmeclipse-dev/tests/tcg/linux-test.c:163:9
+
+
+/home/cysec/develop/y2k38-checker/out/imatix_gsl
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/imatix_gsl/src/gsl-master/src/sfldir.c:272:24
+
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/imatix_gsl/src/gsl-master/src/sflfile.c:762:17
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/imatix_gsl/src/gsl-master/src/sflfile.c:763:17
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/imatix_gsl/src/gsl-master/src/sflfile.c:2331:17
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/imatix_gsl/src/gsl-master/src/sflfile.c:2331:40
+
+
+/home/cysec/develop/y2k38-checker/out/immobiliare_sfs
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/immobiliare_sfs/src/sfs-master/fuse/util.c:195:11
+
+
+/home/cysec/develop/y2k38-checker/out/iondbproject_iondb
+
+/home/cysec/develop/y2k38-checker/out/jduck_asus-cmd
+
+/home/cysec/develop/y2k38-checker/out/jintiao_some-mmorpg
+
+/home/cysec/develop/y2k38-checker/out/jkramer_shell-fm
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/jkramer_shell-fm/src/shell-fm-master/source/main.c:597:9
+
+
+/home/cysec/develop/y2k38-checker/out/jwgrenning_tddec-code
+
+/home/cysec/develop/y2k38-checker/out/jwilberding_bcp
+
+/home/cysec/develop/y2k38-checker/out/jyr_MNPP
+
+/home/cysec/develop/y2k38-checker/out/karthick18_inception
+
+/home/cysec/develop/y2k38-checker/out/kazeburo_rhebok
+
+/home/cysec/develop/y2k38-checker/out/kennyyu_workshop
+
+/home/cysec/develop/y2k38-checker/out/kholia_dedrop
+
+/home/cysec/develop/y2k38-checker/out/krakjoe_phpdbg
+
+/home/cysec/develop/y2k38-checker/out/lilac_Android-ImageMagick
+
+/home/cysec/develop/y2k38-checker/out/limccn_Cocoa-Charts
+
+/home/cysec/develop/y2k38-checker/out/linklayer_cantact-fw
+
+/home/cysec/develop/y2k38-checker/out/lowlevel86_3D-Game-Programming
+
+/home/cysec/develop/y2k38-checker/out/lpan_viw
+
+/home/cysec/develop/y2k38-checker/out/lsds_spectre-attack-sgx
+
+/home/cysec/develop/y2k38-checker/out/ltebean_novel-design
+
+/home/cysec/develop/y2k38-checker/out/lukeweber_webrtc-jingle-client
+
+/home/cysec/develop/y2k38-checker/out/lzyickobe_UnInstallDemo
+
+/home/cysec/develop/y2k38-checker/out/madlib_archived_madlib
+
+/home/cysec/develop/y2k38-checker/out/matricks_teeworlds
+
+/home/cysec/develop/y2k38-checker/out/mattt_WebPImageSerialization
+
+/home/cysec/develop/y2k38-checker/out/menudoproblema_libemqtt
+
+/home/cysec/develop/y2k38-checker/out/microsoft_pg_paxos
+
+/home/cysec/develop/y2k38-checker/out/mkoppanen_php-zbarcode
+
+/home/cysec/develop/y2k38-checker/out/mkusner_wmd
+
+/home/cysec/develop/y2k38-checker/out/monome_libmonome
+
+/home/cysec/develop/y2k38-checker/out/moqod_ios-qr-code-encoder
+
+/home/cysec/develop/y2k38-checker/out/mozilla-services_ios-sync-client
+
+/home/cysec/develop/y2k38-checker/out/mrcao2011_ProgressView
+
+/home/cysec/develop/y2k38-checker/out/mstorsjo_vlc-android
+
+/home/cysec/develop/y2k38-checker/out/myafer_OpenSSLApplication
+
+/home/cysec/develop/y2k38-checker/out/norbusan_sony-laptop-zseries
+
+/home/cysec/develop/y2k38-checker/out/osresearch_LEDscape
+
+/home/cysec/develop/y2k38-checker/out/paixaop_node-sodium
+
+/home/cysec/develop/y2k38-checker/out/pakt_ropc
+
+/home/cysec/develop/y2k38-checker/out/peter-leonov_ngx_http_js_module
+
+/home/cysec/develop/y2k38-checker/out/pez2001_razer_chroma_drivers
+
+/home/cysec/develop/y2k38-checker/out/python_typed_ast
+
+/home/cysec/develop/y2k38-checker/out/qiye_redis-storage
+
+/home/cysec/develop/y2k38-checker/out/rainyx_rxmemscan
+
+/home/cysec/develop/y2k38-checker/out/redbo_cloudfuse
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/redbo_cloudfuse/src/cloudfuse-master/cloudfuse.c:203:3
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/redbo_cloudfuse/src/cloudfuse-master/cloudfuse.c:203:21
+
+
+/home/cysec/develop/y2k38-checker/out/rpeshkov_IntelWifi
+
+/home/cysec/develop/y2k38-checker/out/slavavdovichenko_MediaLibDemos3x
+
+/home/cysec/develop/y2k38-checker/out/solettaproject_soletta
+
+/home/cysec/develop/y2k38-checker/out/sonsongithub_CoreAR
+
+/home/cysec/develop/y2k38-checker/out/souliss_souliss
+
+/home/cysec/develop/y2k38-checker/out/soveran_map
+
+/home/cysec/develop/y2k38-checker/out/stelgenhof_AiLight
+
+/home/cysec/develop/y2k38-checker/out/swetland_dcpu16
+
+/home/cysec/develop/y2k38-checker/out/tailhook_zerogw
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/tailhook_zerogw/src/zerogw-master/src/disk.c:227:15
+
+
+/home/cysec/develop/y2k38-checker/out/tg123_chrome-hostadmin
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker:90:22
+
+
+/home/cysec/develop/y2k38-checker/out/tharina_BlackHoodie-2018-Workshop
+
+/home/cysec/develop/y2k38-checker/out/therealdreg_anticuckoo
+
+/home/cysec/develop/y2k38-checker/out/thestinger_playpen
+
+/home/cysec/develop/y2k38-checker/out/tmm1_rblineprof
+
+/home/cysec/develop/y2k38-checker/out/torch_DEPRECEATED-torch7-distro
+
+/home/cysec/develop/y2k38-checker/out/unbit_spockfs
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/unbit_spockfs/src/spockfs-master/spockfs.c:387:2
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/unbit_spockfs/src/spockfs-master/spockfs.c:388:2
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/unbit_spockfs/src/spockfs-master/spockfs.c:389:2
+
+
+/home/cysec/develop/y2k38-checker/out/vipshop_vire
+
+/home/cysec/develop/y2k38-checker/out/watmough_jwHash
+
+/home/cysec/develop/y2k38-checker/out/wolfgangfengel_GPUZen
+
+/home/cysec/develop/y2k38-checker/out/yhirano_Mp3VoiceRecorderSampleForAndroid
+
+/home/cysec/develop/y2k38-checker/out/youzan_zan
+
+/home/cysec/develop/y2k38-checker/out/yoyofx_NetCore_YOYOFx
+
+/home/cysec/develop/y2k38-checker/out/yunnian_php-nsq
+
+/home/cysec/develop/y2k38-checker/out/zebrafishlabs_nginx-statsd
+
+/home/cysec/develop/y2k38-checker/out/zeromq_zproto
+
+/home/cysec/develop/y2k38-checker/out/zhoubolei_cnnvisualizer
+

@@ -44,19 +44,20 @@ bool isTimeTEquivalent(const clang::Expr *expr) {
  */
 static const char *ID = "time_t-to-long-downcast-id";
 
+auto timetExpr =
+    expr(anyOf(hasType(asString("time_t")), hasType(asString("__time_t"))));
+
 // longへのキャスト
 auto toLongCastExprMatcher =
-    castExpr(hasType(asString("long")), has(expr(
-                                            // hasType(asString("time_t"))
-                                            )))
+    castExpr(hasType(asString("long")), has(expr()  // timetExpr
+                                            ))
         .bind(ID);
 
 // 演算代入演算子
 auto assignmentOperatorMatcher =
     binaryOperator(isAssignmentOperator(), hasType(asString("long")),
-                   has(expr(
-                       // hasType(asString("time_t"))
-                       )))
+                   has(expr()  // timetExpr
+                       ))
         .bind("ID");
 
 class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
