@@ -1,5 +1,8 @@
 #include <limits.h>
+#include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 long LONG = (long)INT_MAX + 1;
@@ -14,6 +17,8 @@ long timet_to_timet(time_t t) { return t; }
 void to_int() {
     // time_t -> int
     printf("%d\n", (int)++TIMET);
+    printf("%d\n", (int)time(NULL));
+    printf("%d\n", (int)time(0));
     printf("%d\n", (int)(time_t)LONG);
     printf("%d\n", (int)(1 + ((((TIMET++))) + 2)));
     printf("%d\n", (int)(1 + ((((++TIMET))) + 2)));
@@ -36,4 +41,9 @@ void to_long() {
     printf("%ld\n", (long)(1 + ((((TIMET))) + 2)));
     printf("%ld\n", (long)(1 + return_timet_func()));
     printf("%ld\n", (long)(1 + return_timet_func()));
+}
+
+int main() {
+    to_int();
+    return 0;
 }

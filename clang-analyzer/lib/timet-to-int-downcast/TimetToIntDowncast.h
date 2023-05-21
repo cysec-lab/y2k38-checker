@@ -24,12 +24,12 @@ namespace timet_to_int_downcast {
  * time_t 相当判定関数
  */
 bool isTimeTEquivalent(const clang::Expr *expr) {
-    if (const ParenExpr *parenExpr = dyn_cast<ParenExpr>(expr)) {
-        return isTimeTEquivalent(parenExpr->getSubExpr());
-    }
     if (expr->getType().getAsString() == "time_t" ||
         expr->getType().getAsString() == "__time_t") {
         return true;
+    }
+    if (const ParenExpr *parenExpr = dyn_cast<ParenExpr>(expr)) {
+        return isTimeTEquivalent(parenExpr->getSubExpr());
     }
     // BinaryOperatorであれば再帰的に確認
     if (const BinaryOperator *binaryOperator = dyn_cast<BinaryOperator>(expr)) {
@@ -43,18 +43,21 @@ bool isTimeTEquivalent(const clang::Expr *expr) {
  * Matcher
  */
 static const char *ID = "time_t-to-int-downcast-id";
-auto matcher = castExpr(anyOf(  // キャスト式
-                            hasType(asString("int")), has(expr()),  // 通常
-                            hasParent(binaryOperator(
-                                isAssignmentOperator(),
-                                hasType(asString("int"))))  // 演算代入演算子
-                            ))
-                   .bind(ID);
-// auto matcher = castExpr(                      // キャスト式
-//                    hasType(asString("int")),  // int 型へのキャスト
-//                    has(expr())                // time_t 型へのキャスト
-//                    )
-//                    .bind(ID);
+
+// intへのキャスト
+auto toIntCastExprMatcher =
+    castExpr(hasType(asString("int")), has(expr(
+                                           // hasType(asString("time_t"))
+                                           )))
+        .bind(ID);
+
+// 演算代入演算子
+auto assignmentOperatorMatcher =
+    binaryOperator(isAssignmentOperator(), hasType(asString("int")),
+                   has(expr(
+                       // hasType(asString("time_t"))
+                       )))
+        .bind("ID");
 
 class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
    public:
@@ -101,7 +104,8 @@ class TimetToIntDowncastAction : public clang::PluginASTAction {
         MatcherCallback *matcherCallback = new MatcherCallback();
         clang::ast_matchers::MatchFinder *Finder =
             new clang::ast_matchers::MatchFinder();
-        Finder->addMatcher(matcher, matcherCallback);
+        Finder->addMatcher(toIntCastExprMatcher, matcherCallback);
+        Finder->addMatcher(assignmentOperatorMatcher, matcherCallback);
         return Finder->newASTConsumer();
     }
 

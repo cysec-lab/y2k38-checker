@@ -43,18 +43,21 @@ bool isTimeTEquivalent(const clang::Expr *expr) {
  * Matcher
  */
 static const char *ID = "time_t-to-long-downcast-id";
-auto matcher = castExpr(anyOf(  // キャスト式
-                            hasType(asString("long")), has(expr()),  // 通常
-                            hasParent(binaryOperator(
-                                isAssignmentOperator(),
-                                hasType(asString("long"))))  // 演算代入演算子
-                            ))
-                   .bind(ID);
-// auto matcher = castExpr(                      // キャスト式
-//                    hasType(asString("long")),  // long 型へのキャスト
-//                    has(expr())                // time_t 型へのキャスト
-//                    )
-//                    .bind(ID);
+
+// longへのキャスト
+auto toLongCastExprMatcher =
+    castExpr(hasType(asString("long")), has(expr(
+                                            // hasType(asString("time_t"))
+                                            )))
+        .bind(ID);
+
+// 演算代入演算子
+auto assignmentOperatorMatcher =
+    binaryOperator(isAssignmentOperator(), hasType(asString("long")),
+                   has(expr(
+                       // hasType(asString("time_t"))
+                       )))
+        .bind("ID");
 
 class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
    public:
@@ -101,7 +104,8 @@ class TimetToLongDowncastAction : public clang::PluginASTAction {
         MatcherCallback *matcherCallback = new MatcherCallback();
         clang::ast_matchers::MatchFinder *Finder =
             new clang::ast_matchers::MatchFinder();
-        Finder->addMatcher(matcher, matcherCallback);
+        Finder->addMatcher(toLongCastExprMatcher, matcherCallback);
+        Finder->addMatcher(assignmentOperatorMatcher, matcherCallback);
         return Finder->newASTConsumer();
     }
 
