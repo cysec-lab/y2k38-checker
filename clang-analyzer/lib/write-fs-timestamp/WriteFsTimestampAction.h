@@ -24,10 +24,16 @@ using namespace clang;
 using namespace clang::ast_matchers;
 static const char *ID = "write-fs-timestamp-id";
 auto matcher =
-    declRefExpr(to(functionDecl(anyOf(
-                    hasName("utime"), isExpansionInFileMatching("utime.h"),
-                    hasName("utimes"), isExpansionInFileMatching("time.h")))))
-        .bind(ID);
+    declRefExpr(to(anyOf(functionDecl(hasName("utime"),
+                                      isExpansionInFileMatching("utime.h")),
+                        functionDecl(hasName("utimes"),
+                                      isExpansionInFileMatching("time.h")),
+                        functionDecl(hasName("futimes"),
+                                      isExpansionInFileMatching("time.h")),
+                        functionDecl(hasName("lutimes"),
+                                      isExpansionInFileMatching("time.h"))
+                        )))
+                        .bind(ID);
 // auto matcher =
 //     declRefExpr(to(functionDecl(anyOf(hasName("utime"), hasName("utimes")))))
 //         .bind(ID);

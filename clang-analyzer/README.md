@@ -35,6 +35,9 @@ pwd # path/to/repo
 ```sh
 cd ../build
 ../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang \
-    -fplugin=lib/liby2k38-checker-plugin.so \
-    -c ../dataset/blacklist/read-fs-timestamp.c
+        -fplugin=lib/libread-fs-timestamp-plugin.so \
+        -fplugin=lib/libwrite-fs-timestamp-plugin.so \
+        -fplugin=lib/libtimet-to-int-downcast-plugin.so \
+        -fplugin=lib/libtimet-to-long-downcast-plugin.so \
+    -c ../dataset/blacklist/write-fs-timestamp.c
 ```
