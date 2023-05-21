@@ -1,5 +1,5 @@
-timet -> int 
-判定なし
+all 7 , 4 repo
+
 
 /home/cysec/develop/y2k38-checker/out/AngelLiang_ESP8266-Demos
 
@@ -52,19 +52,6 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/SS-archive_salt-states
 
 /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis
-[timet-to-long-downcast] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/lib/newlib/newlib/libc/time/mktm_r.c:43:11
-[timet-to-long-downcast] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/lib/newlib/newlib/libc/time/mktm_r.c:44:10
-
-
-[timet-to-long-downcast] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/os_support.c:732:9
-[timet-to-long-downcast] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/os_support.c:744:12
-[timet-to-long-downcast] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/os_support.c:807:17
-
-
-[timet-to-long-downcast] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:786:9
-[timet-to-long-downcast] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:786:29
-
-
 
 /home/cysec/develop/y2k38-checker/out/adafruit_Adafruit-Retrogame
 
@@ -75,6 +62,18 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/analang_como-lang-ng
 
 /home/cysec/develop/y2k38-checker/out/angel2d_angel2d
+[write-fs-timestamp] /home/cysec/develop/y2k38-checker/out/angel2d_angel2d/src/angel2d-master/Code/Angel/Libraries/zlib-1.2.3/contrib/untgz/untgz.c:246:10
+
+
+[write-fs-timestamp] /home/cysec/develop/y2k38-checker/out/angel2d_angel2d/src/angel2d-master/Code/Angel/Libraries/zlib-1.2.3/contrib/minizip/miniunz.c:81:3
+
+
+[write-fs-timestamp] /home/cysec/develop/y2k38-checker/out/angel2d_angel2d/src/angel2d-master/Code/Angel/Libraries/zlib-1.2.3/examples/gun.c:526:11
+
+
+[write-fs-timestamp] /home/cysec/develop/y2k38-checker/out/angel2d_angel2d/src/angel2d-master/Code/Angel/Libraries/lua-libs/luafilesystem-1.5.0/src/lfs.c:601:6
+
+
 
 /home/cysec/develop/y2k38-checker/out/aterrien_forp-PHP-profiler
 
@@ -121,6 +120,9 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/facebookarchive_liblogfaf
 
 /home/cysec/develop/y2k38-checker/out/fanchy_fflib
+[write-fs-timestamp] /home/cysec/develop/y2k38-checker/out/fanchy_fflib/src/fflib-master/fflib/db/sqlite3.c:24895:5
+
+
 
 /home/cysec/develop/y2k38-checker/out/fhunleth_elixir_ale
 
@@ -145,13 +147,12 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/iceonsun_rsock
 
 /home/cysec/develop/y2k38-checker/out/ilg-archived_qemu
+[write-fs-timestamp] /home/cysec/develop/y2k38-checker:154:15
+
+
 
 /home/cysec/develop/y2k38-checker/out/imatix_gsl
-[timet-to-long-downcast] /home/cysec/develop/y2k38-checker/out/imatix_gsl/src/gsl-master/src/smtrdns.c:468:29
-[timet-to-long-downcast] /home/cysec/develop/y2k38-checker/out/imatix_gsl/src/gsl-master/src/smtrdns.c:510:24
-[timet-to-long-downcast] /home/cysec/develop/y2k38-checker/out/imatix_gsl/src/gsl-master/src/smtrdns.c:1091:40
-[timet-to-long-downcast] /home/cysec/develop/y2k38-checker/out/imatix_gsl/src/gsl-master/src/smtrdns.c:1211:20
-[timet-to-long-downcast] /home/cysec/develop/y2k38-checker/out/imatix_gsl/src/gsl-master/src/smtrdns.c:1298:39
+[write-fs-timestamp] /home/cysec/develop/y2k38-checker/out/imatix_gsl/src/gsl-master/src/sflfile.c:2363:13
 
 
 
@@ -240,18 +241,6 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/python_typed_ast
 
 /home/cysec/develop/y2k38-checker/out/qiye_redis-storage
-[timet-to-long-downcast] /home/cysec/develop/y2k38-checker/out/qiye_redis-storage/src/redis-storage-master/src/redis-benchmark.c:99:12
-
-
-[timet-to-long-downcast] /home/cysec/develop/y2k38-checker/out/qiye_redis-storage/src/redis-storage-master/src/redis.c:2238:21
-
-
-[timet-to-long-downcast] /home/cysec/develop/y2k38-checker/out/qiye_redis-storage/src/redis-storage-master/src/config.c:1014:21
-
-
-[timet-to-long-downcast] /home/cysec/develop/y2k38-checker/out/qiye_redis-storage/src/redis-storage-master/src/replication.c:86:49
-
-
 
 /home/cysec/develop/y2k38-checker/out/rainyx_rxmemscan
 
@@ -310,5 +299,5 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/zhoubolei_cnnvisualizer
 
 ----------------- processing time -----------------
-9.0m  41.492020126082934 s
+9.0m  56.50128852704074 s
 

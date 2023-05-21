@@ -1,5 +1,9 @@
-timet -> int 
-判定あり
+read fs 
+struct stat指定なし
+
+48件, 12PJ
+
+プロジェクト独自のstruct stat 48-22=26
 
 
 /home/cysec/develop/y2k38-checker/out/AngelLiang_ESP8266-Demos
@@ -11,14 +15,8 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/Denton-L_based-connect
 
 /home/cysec/develop/y2k38-checker/out/FuruyamaTakeshi_DLNA
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/FuruyamaTakeshi_DLNA/src/DLNA-develop/clinkc/src/cybergarage/util/ctime.c:124:9
-
-
 
 /home/cysec/develop/y2k38-checker/out/FuzzySecurity_Unix-PrivEsc
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/FuzzySecurity_Unix-PrivEsc/src/Unix-PrivEsc-master/uselib24.c:188:4
-
-
 
 /home/cysec/develop/y2k38-checker/out/H2CO3_Sparkling
 
@@ -43,24 +41,6 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/Mon-Ouie_ray
 
 /home/cysec/develop/y2k38-checker/out/MonetDB_MonetDB-old
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/MonetDB_MonetDB-old/src/MonetDB-old-master/tools/merovingian/daemon/discoveryrunner.c:117:16
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/MonetDB_MonetDB-old/src/MonetDB-old-master/tools/merovingian/daemon/discoveryrunner.c:136:13
-
-
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/MonetDB_MonetDB-old/src/MonetDB-old-master/tools/merovingian/utils/utils.c:328:32
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/MonetDB_MonetDB-old/src/MonetDB-old-master/tools/merovingian/utils/utils.c:336:32
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/MonetDB_MonetDB-old/src/MonetDB-old-master/tools/merovingian/utils/utils.c:344:32
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/MonetDB_MonetDB-old/src/MonetDB-old-master/tools/merovingian/utils/utils.c:352:32
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/MonetDB_MonetDB-old/src/MonetDB-old-master/tools/merovingian/utils/utils.c:360:32
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/MonetDB_MonetDB-old/src/MonetDB-old-master/tools/merovingian/utils/utils.c:369:27
-
-
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/MonetDB_MonetDB-old/src/MonetDB-old-master/monetdb5/modules/kernel/alarm.c:155:9
-
-
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/MonetDB_MonetDB-old/src/MonetDB-old-master/clients/mapiclient/mclient.c:2940:10
-
-
 
 /home/cysec/develop/y2k38-checker/out/NagiosEnterprises_nrpe
 
@@ -77,12 +57,37 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/SS-archive_salt-states
 
 /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/lib/newlib/newlib/libc/machine/spu/usleep.c:16:32
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1484:6
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker:1485:31
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1488:6
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker:1489:31
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1492:6
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker:1493:31
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1507:6
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1508:15
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1513:6
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1514:15
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1519:6
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/skb/eclipse_kernel/src/bip_misc.c:1520:15
 
 
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/ssh-agent.c:622:12
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/ssh-agent.c:637:11
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:782:18
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:782:41
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:783:18
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:783:41
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:786:15
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:786:35
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:866:16
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/scp.c:867:16
 
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/sftp-common.c:77:13
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/sftp-common.c:78:13
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/sftp-common.c:96:3
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/sftp-common.c:97:3
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/sftp-common.c:193:32
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/UWNetworksLab_arrakis/src/arrakis-master/usr/openssh/src/sftp-common.c:212:20
 
 
 /home/cysec/develop/y2k38-checker/out/adafruit_Adafruit-Retrogame
@@ -95,6 +100,13 @@ timet -> int
 
 /home/cysec/develop/y2k38-checker/out/angel2d_angel2d
 
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/angel2d_angel2d/src/angel2d-master/Code/Angel/Libraries/zlib-1.2.3/contrib/minizip/minizip.c:88:14
+
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/angel2d_angel2d/src/angel2d-master/Code/Angel/Libraries/zlib-1.2.3/examples/gun.c:524:19
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/angel2d_angel2d/src/angel2d-master/Code/Angel/Libraries/zlib-1.2.3/examples/gun.c:525:20
+
+
 /home/cysec/develop/y2k38-checker/out/aterrien_forp-PHP-profiler
 
 /home/cysec/develop/y2k38-checker/out/bpaquet_ngx_http_enhanced_memcached_module
@@ -104,50 +116,12 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/carl-wang-cn_demo
 
 /home/cysec/develop/y2k38-checker/out/cetic_6lbr
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/cetic_6lbr/src/6lbr-develop/platform/native/clock.c:60:10
-
-
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/cetic_6lbr/src/6lbr-develop/platform/minimal-net/clock.c:63:10
-
-
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/cetic_6lbr/src/6lbr-develop/tools/tunslip6.c:1023:14
-
-
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/cetic_6lbr/src/6lbr-develop/tools/wpcapslip/wpcapstdio.c:502:11
-
-
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/cetic_6lbr/src/6lbr-develop/tools/wpcapslip/wpcapslip.c:678:11
-
-
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/cetic_6lbr/src/6lbr-develop/examples/6lbr/platform/native/raw-tap-dev.c:380:9
-
-
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/cetic_6lbr/src/6lbr-develop/examples/6lbr/tools/zena/zena.c:344:29
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/cetic_6lbr/src/6lbr-develop/examples/6lbr/tools/zena/zena.c:612:18
-
-
 
 /home/cysec/develop/y2k38-checker/out/cjlano_freertos
 
 /home/cysec/develop/y2k38-checker/out/clarkgrubb_data-tools
 
 /home/cysec/develop/y2k38-checker/out/cnlohr_espthernet
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/cnlohr_espthernet/src/espthernet-gh-pages/pRemoteSniffer/web/execute_reflash.c:27:17
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/cnlohr_espthernet/src/espthernet-gh-pages/pRemoteSniffer/web/execute_reflash.c:46:14
-
-
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/cnlohr_espthernet/src/espthernet-gh-pages/pRemoteSniffer/web/pushtodev.c:27:17
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/cnlohr_espthernet/src/espthernet-gh-pages/pRemoteSniffer/web/pushtodev.c:47:14
-
-
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/cnlohr_espthernet/src/espthernet-gh-pages/web/execute_reflash.c:27:17
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/cnlohr_espthernet/src/espthernet-gh-pages/web/execute_reflash.c:46:14
-
-
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/cnlohr_espthernet/src/espthernet-gh-pages/web/pushtodev.c:27:17
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/cnlohr_espthernet/src/espthernet-gh-pages/web/pushtodev.c:47:14
-
-
 
 /home/cysec/develop/y2k38-checker/out/cnlohr_ws2812esp8266
 
@@ -162,17 +136,13 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/dndx_shadowsocks-libuv
 
 /home/cysec/develop/y2k38-checker/out/doggycoder_AudioVideo
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/doggycoder_AudioVideo/src/AudioVideo-master/ffmpeg/src/main/st/timer.c:9:9
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/doggycoder_AudioVideo/src/AudioVideo-master/ffmpeg/src/main/st/timer.c:18:7
-
-
 
 /home/cysec/develop/y2k38-checker/out/dreamsxin_cphalcon7
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/dreamsxin_cphalcon7/src/cphalcon7-master/deps/libwebsockets/lib/misc/diskcache.c:78:9
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/dreamsxin_cphalcon7/src/cphalcon7-master/deps/libwebsockets/lib/misc/diskcache.c:353:17
 
 
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/dreamsxin_cphalcon7/src/cphalcon7-master/deps/libwebsockets/plugins/deaddrop/protocol_lws_deaddrop.c:111:9
-
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/dreamsxin_cphalcon7/src/cphalcon7-master/deps/libwebsockets/plugins/deaddrop/protocol_lws_deaddrop.c:203:17
 
 
 /home/cysec/develop/y2k38-checker/out/esl_erlang_ale
@@ -182,6 +152,9 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/eviltrout_tis-100
 
 /home/cysec/develop/y2k38-checker/out/face_MongooseDaemon
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/face_MongooseDaemon/src/MongooseDaemon-master/mongoose.c:1352:16
+
 
 /home/cysec/develop/y2k38-checker/out/facebookarchive_atosl
 
@@ -212,13 +185,26 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/iceonsun_rsock
 
 /home/cysec/develop/y2k38-checker/out/ilg-archived_qemu
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/ilg-archived_qemu/src/qemu-gnuarmeclipse-dev/tests/tcg/linux-test.c:242:10
 
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/ilg-archived_qemu/src/qemu-gnuarmeclipse-dev/tests/tcg/linux-test.c:162:9
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/ilg-archived_qemu/src/qemu-gnuarmeclipse-dev/tests/tcg/linux-test.c:163:9
 
 
 /home/cysec/develop/y2k38-checker/out/imatix_gsl
 
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/imatix_gsl/src/gsl-master/src/sfldir.c:272:24
+
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/imatix_gsl/src/gsl-master/src/sflfile.c:762:17
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/imatix_gsl/src/gsl-master/src/sflfile.c:763:17
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/imatix_gsl/src/gsl-master/src/sflfile.c:2331:17
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/imatix_gsl/src/gsl-master/src/sflfile.c:2331:40
+
+
 /home/cysec/develop/y2k38-checker/out/immobiliare_sfs
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/immobiliare_sfs/src/sfs-master/fuse/util.c:195:11
+
 
 /home/cysec/develop/y2k38-checker/out/iondbproject_iondb
 
@@ -227,6 +213,9 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/jintiao_some-mmorpg
 
 /home/cysec/develop/y2k38-checker/out/jkramer_shell-fm
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/jkramer_shell-fm/src/shell-fm-master/source/main.c:597:9
+
 
 /home/cysec/develop/y2k38-checker/out/jwgrenning_tddec-code
 
@@ -265,10 +254,6 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/madlib_archived_madlib
 
 /home/cysec/develop/y2k38-checker/out/matricks_teeworlds
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/matricks_teeworlds/src/teeworlds-master/src/base/system.c:93:47
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/matricks_teeworlds/src/teeworlds-master/src/base/system.c:1538:9
-
-
 
 /home/cysec/develop/y2k38-checker/out/mattt_WebPImageSerialization
 
@@ -307,17 +292,14 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/python_typed_ast
 
 /home/cysec/develop/y2k38-checker/out/qiye_redis-storage
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/qiye_redis-storage/src/redis-storage-master/src/redis.c:2221:18
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/qiye_redis-storage/src/redis-storage-master/src/redis.c:2231:21
-
-
-[timet-to-int-downcast] /home/cysec/develop/y2k38-checker/out/qiye_redis-storage/src/redis-storage-master/src/replication.c:634:31
-
-
 
 /home/cysec/develop/y2k38-checker/out/rainyx_rxmemscan
 
 /home/cysec/develop/y2k38-checker/out/redbo_cloudfuse
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/redbo_cloudfuse/src/cloudfuse-master/cloudfuse.c:203:3
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/redbo_cloudfuse/src/cloudfuse-master/cloudfuse.c:203:21
+
 
 /home/cysec/develop/y2k38-checker/out/rpeshkov_IntelWifi
 
@@ -337,7 +319,13 @@ timet -> int
 
 /home/cysec/develop/y2k38-checker/out/tailhook_zerogw
 
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/tailhook_zerogw/src/zerogw-master/src/disk.c:227:15
+
+
 /home/cysec/develop/y2k38-checker/out/tg123_chrome-hostadmin
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker:90:22
+
 
 /home/cysec/develop/y2k38-checker/out/tharina_BlackHoodie-2018-Workshop
 
@@ -350,6 +338,11 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/torch_DEPRECEATED-torch7-distro
 
 /home/cysec/develop/y2k38-checker/out/unbit_spockfs
+
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/unbit_spockfs/src/spockfs-master/spockfs.c:387:2
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/unbit_spockfs/src/spockfs-master/spockfs.c:388:2
+[read-fs-timestamp] /home/cysec/develop/y2k38-checker/out/unbit_spockfs/src/spockfs-master/spockfs.c:389:2
+
 
 /home/cysec/develop/y2k38-checker/out/vipshop_vire
 
@@ -370,7 +363,4 @@ timet -> int
 /home/cysec/develop/y2k38-checker/out/zeromq_zproto
 
 /home/cysec/develop/y2k38-checker/out/zhoubolei_cnnvisualizer
-
------------------ processing time -----------------
-9.0m  36.64998732297681 s
 

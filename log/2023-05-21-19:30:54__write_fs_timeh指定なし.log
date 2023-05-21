@@ -1,6 +1,6 @@
-write fs timesatmp
-utime, time.h指定あり
-time.hじゃないのも取れてる
+all 14 ,9 PJ
+time.h指定なし diff 14-7=7
+
 
 /home/cysec/develop/y2k38-checker/out/AngelLiang_ESP8266-Demos
 
@@ -315,4 +315,5 @@ time.hじゃないのも取れてる
 /home/cysec/develop/y2k38-checker/out/zhoubolei_cnnvisualizer
 
 ----------------- processing time -----------------
-10.0m  2.2046597780426964 s
+9.0m  43.52724968804978 s
+
