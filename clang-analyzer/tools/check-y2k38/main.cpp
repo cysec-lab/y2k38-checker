@@ -122,30 +122,6 @@ static void processDatabase(
     tool.run(TimetToLongFrontendFactory.get());
 }
 
-// void warnAboutDebugBuild(llvm::StringRef programName) {
-//     const unsigned COLUMNS = 80;
-//     const char SEPARATOR = '*';
-
-//     llvm::outs().changeColor(llvm::raw_ostream::Colors::YELLOW, true);
-//     for (unsigned i = 0; i < COLUMNS; ++i) {
-//         llvm::outs().write(SEPARATOR);
-//     }
-
-//     llvm::outs().changeColor(llvm::raw_ostream::Colors::RED, true);
-//     llvm::outs() << "\nWARNING: ";
-//     llvm::outs().resetColor();
-//     llvm::outs() << programName
-//                  << " appears to have been built in debug mode.\n"
-//                  << "Your analysis may take longer than normal.\n";
-
-//     llvm::outs().changeColor(llvm::raw_ostream::Colors::YELLOW, true);
-//     for (unsigned i = 0; i < COLUMNS; ++i) {
-//         llvm::outs().write(SEPARATOR);
-//     }
-//     llvm::outs().resetColor();
-//     llvm::outs() << "\n\n";
-// }
-
 int main(int argc, char const **argv) {
     sys::PrintStackTraceOnErrorSignal(argv[0]);
     llvm::PrettyStackTraceProgram X(argc, argv);
@@ -153,10 +129,6 @@ int main(int argc, char const **argv) {
 
     cl::HideUnrelatedOptions(Category);
     cl::ParseCommandLineOptions(argc, argv);
-
-    // #if !defined(NDEBUG) || defined(LLVM_ENABLE_ASSERTIONS)
-    //     warnAboutDebugBuild(argv[0]);
-    // #endif
 
     std::string error;
     auto compilationDB = getCompilationDatabase(error);

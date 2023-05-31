@@ -14,7 +14,6 @@ llvm_map_components_to_libnames(REQ_LLVM_LIBRARIES ${LLVM_TARGETS_TO_BUILD}
 find_package(nlohmann_json REQUIRED)
 
 target_link_libraries(check-y2k38
-nlohmann_json::nlohmann_json
   read-fs-timestamp
   write-fs-timestamp
   timet-to-long-downcast

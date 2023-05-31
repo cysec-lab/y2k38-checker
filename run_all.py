@@ -26,10 +26,10 @@ def run_clang(c_path:str):
     lib_dir = "/home/cysec/develop/y2k38-checker/build/lib"
     cmd = [
         "./clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang",
-        # f"-fplugin={lib_dir}/libread-fs-timestamp-plugin.so",
+        f"-fplugin={lib_dir}/libread-fs-timestamp-plugin.so",
         f"-fplugin={lib_dir}/libwrite-fs-timestamp-plugin.so",
-        # f"-fplugin={lib_dir}/libtimet-to-int-downcast-plugin.so",
-        # f"-fplugin={lib_dir}/libtimet-to-long-downcast-plugin.so",
+        f"-fplugin={lib_dir}/libtimet-to-int-downcast-plugin.so",
+        f"-fplugin={lib_dir}/libtimet-to-long-downcast-plugin.so",
         "-c",
         c_path
     ]

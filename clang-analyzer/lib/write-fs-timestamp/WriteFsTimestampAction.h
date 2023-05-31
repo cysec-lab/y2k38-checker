@@ -4,8 +4,6 @@
 #include <memory>
 
 #include "../absoluteFilePath.cpp"
-#include "../outputFileOption.cpp"
-#include "../writeJsonFile.cpp"
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
@@ -15,25 +13,27 @@
 #include "clang/Frontend/FrontendActions.h"
 #include "clang/Tooling/Tooling.h"
 
+using namespace clang;
+using namespace clang::ast_matchers;
+
 namespace writefstimestamp {
 
 /**
  * Matcher
  */
-using namespace clang;
-using namespace clang::ast_matchers;
 static const char *ID = "write-fs-timestamp-id";
 auto matcher =
     declRefExpr(to(anyOf(functionDecl(hasName("utime"),
                                       isExpansionInFileMatching("utime.h")),
-                        functionDecl(hasName("utimes"),
+                         functionDecl(hasName("utimes"),
                                       isExpansionInFileMatching("time.h")),
-                        functionDecl(hasName("futimes"),
+                         functionDecl(hasName("futimes"),
                                       isExpansionInFileMatching("time.h")),
-                        functionDecl(hasName("lutimes"),
-                                      isExpansionInFileMatching("time.h"))
-                        )))
-                        .bind(ID);
+                         functionDecl(hasName("lutimes"),
+                                      isExpansionInFileMatching("time.h")))))
+        .bind(ID);
+
+// 定義ファイル指定ない版
 // auto matcher =
 //     declRefExpr(to(functionDecl(anyOf(hasName("utime"), hasName("utimes")))))
 //         .bind(ID);
@@ -47,20 +47,11 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
         if (!declRefExpr) return;
 
         file_s file = exprAbsoluteFilePath(declRefExpr, Result);
-
         const std::string type = "write-fs-timestamp";
+
         llvm::outs() << "[" << type << "] " << file.path << ":" << file.line
                      << ":" << file.column << "\n";
-
-        if (!OutputFileOption.empty()) {
-            writeJsonFile(OutputFileOption, {
-                type : type,
-                file : file.path,
-                line : file.line,
-                column : file.column
-            });
-        }
-    }  // namespace writefstimestamp
+    }
 };
 
 class WriteFsTimestampAction : public clang::PluginASTAction {

@@ -4,5 +4,6 @@
 
 #include "clang/AST/AST.h"
 
-static clang::FrontendPluginRegistry::Add<readfstimestamp::ReadFsTimestampAction> X(
-    "read fs timestamp", "explain here.");
+static clang::FrontendPluginRegistry::Add<
+    readfstimestamp::ReadFsTimestampAction>
+    X("read fs timestamp", "explain here.");

@@ -4,8 +4,7 @@
 #include <memory>
 
 #include "../absoluteFilePath.cpp"
-#include "../outputFileOption.cpp"
-#include "../writeJsonFile.cpp"
+#include "../isTimeTEquivalent.cpp"
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
@@ -21,25 +20,6 @@ using namespace clang::ast_matchers;
 namespace timet_to_long_downcast {
 
 /**
- * time_t 相当判定関数
- */
-bool isTimeTEquivalent(const clang::Expr *expr) {
-    if (const ParenExpr *parenExpr = dyn_cast<ParenExpr>(expr)) {
-        return isTimeTEquivalent(parenExpr->getSubExpr());
-    }
-    if (expr->getType().getAsString() == "time_t" ||
-        expr->getType().getAsString() == "__time_t") {
-        return true;
-    }
-    // BinaryOperatorであれば再帰的に確認
-    if (const BinaryOperator *binaryOperator = dyn_cast<BinaryOperator>(expr)) {
-        return isTimeTEquivalent(binaryOperator->getLHS()) ||
-               isTimeTEquivalent(binaryOperator->getRHS());
-    }
-    return false;
-};
-
-/**
  * Matcher
  */
 static const char *ID = "time_t-to-long-downcast-id";
@@ -49,16 +29,13 @@ auto timetExpr =
 
 // longへのキャスト
 auto toLongCastExprMatcher =
-    castExpr(hasType(asString("long")), has(expr()  // timetExpr
-                                            ))
-        .bind(ID);
+    castExpr(hasType(asString("long")), has(timetExpr)).bind(ID);
 
 // 演算代入演算子
 auto assignmentOperatorMatcher =
     binaryOperator(isAssignmentOperator(), hasType(asString("long")),
-                   has(expr()  // timetExpr
-                       ))
-        .bind("ID");
+                   has(timetExpr))
+        .bind(ID);
 
 class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
    public:
@@ -78,15 +55,6 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
             const std::string type = "timet-to-long-downcast";
             llvm::outs() << "[" << type << "] " << file.path << ":" << file.line
                          << ":" << file.column << "\n";
-
-            if (!OutputFileOption.empty()) {
-                writeJsonFile(OutputFileOption, {
-                    type : type,
-                    file : file.path,
-                    line : file.line,
-                    column : file.column
-                });
-            }
         }
     }
 };
