@@ -10,57 +10,42 @@ long return_long_func() { return LONG; }
 
 long timet_to_long(time_t t) { return (long)t; }
 
-int matched(int type) {
-    // 直接代入
-    if (type == 0) return TIMET;  // Potential Overflow 1
-
-    // 演算結果を代入
-    if (type == 1) return 1 + (TIMET + 2);          // Potential Overflow 2
-    if (type == 2) return 1 + return_timet_func();  // Potential Overflow 3
-
-    // long を明示的キャスト
-    if (type == 3) return (time_t)LONG;                // Potential Overflow 4
-    if (type == 4) return (time_t)return_long_func();  // Potential Overflow 5
-
-    // time_t を返す関数の返り値を代入
-    if (type == 5) return return_timet_func();  // Potential Overflow 6
-
-    return 0;
+// time_t -> int
+int time_t_to_int(int type) {
+    return TIMET;
+    return 1 + (TIMET + 2);
+    return 1 + return_timet_func();
+    return (time_t)LONG;
+    return (time_t)return_long_func();
+    return return_timet_func();
 }
 
-int no_matched_long2int() {
-    // 直接代入
-    return LONG;  // long -> int
-
-    // 演算結果を代入
-    return 1 + (LONG + 2);            // long -> int
-    return 1 + timet_to_long(TIMET);  // long -> int
-
-    // long を明示的キャスト
-    return (long)1;  // long -> int
-
-    // time_t を返す関数の返り値を代入
-    return return_long_func();  // long -> int
+// time_t -> long
+long time_t_to_long() {
+    return TIMET;
+    return 1 + (TIMET + 2);
+    return 1 + return_timet_func();
+    return (time_t)LONG;
+    return (time_t)return_long_func();
+    return return_timet_func();
 }
 
-long no_matched_int2long() {
-    // 直接代入
-    return TIMET;  // time_t -> long
-
-    // 演算結果を代入
-    return 1 + (TIMET % 2);          // time_t -> long
-    return 1 + return_timet_func();  // time_t -> long
-
-    // long を明示的キャスト
-    return (time_t)1;  // time_t -> long
-
-    // time_t を返す関数の返り値を代入
-    return return_timet_func();  // time_t -> long
+// long -> int
+int no_matched_long_to_int() {
+    return LONG;
+    return 1 + (LONG + 2);
+    return 1 + timet_to_long(TIMET);
+    return (long)1;
+    return return_long_func();
 }
 
-int main(void) {
-    for (int i = 0; i < 6; i++) {
-        printf("%d\n", matched(i));
-    }
-    return 0;
+// time_t -> long long
+long long no_matched_int_to_long() {
+    return TIMET;
+    return 1 + (TIMET % 2);
+    return 1 + return_timet_func();
+    return (time_t)1;
+    return return_timet_func();
 }
+
+int main(void) { return 0; }

@@ -10,46 +10,30 @@ long return_long_func() { return LONG; }
 
 long timet_to_long(time_t t) { return (long)t; }
 
-void matched() {
-    int i = TIMET;
-    int i = 1 + (TIMET + 2);
+void time_t_to_int() {
+    int i = 1 + (TIMET * 2) % 3600;
     int i = return_timet_func();
-
-    i += TIMET;
+    int i = 1 + return_timet_func();
+    int i = (time_t)(INT_MAX + 1);
     i *= TIMET;
+    i += TIMET;
+}
 
-    int i2 = 1 + return_timet_func();
-    int i1 = (time_t)LONG;
-    int i2 = (time_t)return_long_func();
+void time_t_to_long() {
+    long i = 1 + (TIMET * 2) % 3600;
+    long i = return_timet_func();
+    long i = 1 + return_timet_func();
+    long i = (time_t)(INT_MAX + 1);
+    i *= TIMET;
+    i += TIMET;
 }
 
 void no_matched() {
-    {
-        // 直接代入
-        int i = LONG;     // long -> int
-        long l2 = TIMET;  // time_t -> long
-    }
-    {
-        // 演算結果を代入
-        int i1 = 1 + (LONG + 2);            // long -> int
-        int i2 = 1 + timet_to_long(TIMET);  // long -> int
-        long l2 = 1 + (TIMET % 2);          // time_t -> long
-        long l3 = 1 + return_timet_func();  // time_t -> long
-    }
-    {
-        // long を明示的キャスト
-        int i = (long)1;      // long -> int
-        long l1 = (time_t)1;  // time_t -> long
-    }
-    {
-        // time_t を返す関数の返り値を代入
-        int i = return_long_func();    // long -> int
-        long l = return_timet_func();  // time_t -> long
-    }
+    int i = return_long_func();
+    int i = LONG_MAX;
+    int i2 = 1 + timet_to_long(TIMET);
+    int i = LONG;
+    int i1 = 1 + (LONG + 2);
 }
 
-int main(void) {
-    matched();
-
-    return 0;
-}
+int main(void) { return 0; }

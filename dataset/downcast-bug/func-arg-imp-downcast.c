@@ -11,50 +11,38 @@ long return_long_func() { return LONG; }
 long timet_to_long(time_t t) { return (long)t; }
 
 // 検査対象関数
-int int_arg_func(int n) {
+void int_arg_func(int n) {
     printf("%d\n", n);
-    return 0;
+    return;
 }
-void long_arg_func(long t) {}
+void long_arg_func(long t) {
+    printf("%ld\n", t);
+    return;
+}
 
-void matched() {
-    // 直接代入
-    int_arg_func(TIMET);  // Potential Overflow 1
-
-    // 演算結果を代入
-    int_arg_func(
-        1 + (TIMET + 2));  // Potential Overflow 2 // FIXME: match されるように
-    int_arg_func(1 + return_timet_func());  // Potential Overflow 3
-
-    // long を明示的キャスト
-    int_arg_func((time_t)LONG);                // Potential Overflow 4
-    int_arg_func((time_t)return_long_func());  // Potential Overflow 5
-
-    // time_t を返す関数の返り値を代入
-    int_arg_func(return_timet_func());  // Potential Overflow 6
-
-    printf("%d\n",
-           int_arg_func(1 + return_timet_func()));  // Potential Overflow 7
+void time_t_to_int() {
+    int_arg_func(TIMET);
+    int_arg_func(1 + (TIMET * 2));
+    int_arg_func(1 + return_timet_func());
+    int_arg_func((time_t)LONG);
+    int_arg_func((time_t)return_long_func());
+    int_arg_func(return_timet_func());
+}
+void time_t_to_long() {
+    long_arg_func(TIMET);
+    long_arg_func(1 + (TIMET * 2));
+    long_arg_func(1 + return_timet_func());
+    long_arg_func((time_t)LONG);
+    long_arg_func((time_t)return_long_func());
+    long_arg_func(return_timet_func());
 }
 
 void no_matched() {
-    // 直接代入
-    int_arg_func(LONG);    // long -> int
-    long_arg_func(TIMET);  // time_t -> long
-
-    // 演算結果を代入
-    int_arg_func(1 + (LONG + 2));            // long -> int
-    int_arg_func(1 + timet_to_long(TIMET));  // long -> int
-    long_arg_func(1 + (TIMET + 2));          // time_t -> long
-    long_arg_func(1 + return_timet_func());  // time_t -> long
-
-    // long を明示的キャスト
-    int_arg_func((long)1);     // long -> int
-    long_arg_func((time_t)1);  // time_t -> long
-
-    // time_t を返す関数の返り値を代入
-    int_arg_func(return_long_func());    // long -> int
-    long_arg_func(return_timet_func());  // time_t -> long
+    int_arg_func(LONG);
+    int_arg_func(1 + (LONG + 2));
+    int_arg_func(1 + timet_to_long(TIMET));
+    int_arg_func((long)1);
+    int_arg_func(return_long_func());
 }
 
 int main(void) {
