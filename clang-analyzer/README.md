@@ -1,7 +1,6 @@
 ## Build with CMake
 
 ```sh
-mkdir build
 cd ../y2k38-checker/build
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
     -DLLVM_DIR=../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/lib/cmake/llvm/ \
