@@ -22,26 +22,35 @@ namespace timet_to_int_downcast {
 /**
  * Matcher
  */
-static const char *ID = "time_t-to-int-downcast-id";
+static const char *ID = "to-int-cast-id";
 
-auto timetExpr =
-    expr(anyOf(hasType(asString("time_t")), hasType(asString("__time_t"))));
+// time_t判定関数を使わない場合の調査用
+// auto timetExpr =
+//     expr(anyOf(hasType(asString("time_t")), hasType(asString("__time_t"))));
 
 // intへのキャスト
 auto toIntCastExprMatcher =
-    castExpr(hasType(asString("int")), has(timetExpr)).bind(ID);
+    castExpr(hasType(asString("int")), has(expr())).bind(ID);
 
 // 演算代入演算子
 auto assignmentOperatorMatcher =
     binaryOperator(isAssignmentOperator(), hasType(asString("int")),
-                   has(timetExpr))
+                   has(expr()))
         .bind(ID);
 
 class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
+   private:
+    void printPath(file_s &file) {
+        const std::string type = "timet-to-int-downcast";
+        llvm::outs() << "[" << type << "] " << file.path << ":" << file.line
+                     << ":" << file.column << "\n";
+    }
+
    public:
     virtual void run(
         const clang::ast_matchers::MatchFinder::MatchResult &Result) final {
         const auto *castExpr = Result.Nodes.getNodeAs<clang::Expr>(ID);
+
         if (!castExpr) return;
 
         for (clang::Expr::const_child_iterator it = castExpr->child_begin();
@@ -51,10 +60,7 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
             if (!isTimeTEquivalent(childExpr)) continue;
 
             file_s file = exprAbsoluteFilePath(castExpr, Result);
-
-            const std::string type = "timet-to-int-downcast";
-            llvm::outs() << "[" << type << "] " << file.path << ":" << file.line
-                         << ":" << file.column << "\n";
+            printPath(file);
         }
     }
 };

@@ -98,5 +98,12 @@
     "__functional_base_03": "cpp",
     "filesystem": "cpp"
   },
-  "shellcheck.executablePath": "*.matcher"
+  "shellcheck.executablePath": "*.matcher",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.autopep8"
+  },
+  "python.formatting.provider": "none",
+  "cSpell.words": [
+    "timet"
+  ]
 }

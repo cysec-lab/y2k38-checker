@@ -105,21 +105,22 @@ static void processDatabase(
     clang::tooling::ClangTool tool{database, sourcePaths};
     tool.appendArgumentsAdjuster(clang::tooling::getClangStripOutputAdjuster());
 
-    auto ReadFsTSfrontendFactory = clang::tooling::newFrontendActionFactory<
-        readfstimestamp::ReadFsTimestampAction>();
-    tool.run(ReadFsTSfrontendFactory.get());
+    // auto ReadFsTSfrontendFactory = clang::tooling::newFrontendActionFactory<
+    //     readfstimestamp::ReadFsTimestampAction>();
+    // tool.run(ReadFsTSfrontendFactory.get());
 
-    auto WriteFsTSfrontendFactory = clang::tooling::newFrontendActionFactory<
-        writefstimestamp::WriteFsTimestampAction>();
-    tool.run(WriteFsTSfrontendFactory.get());
+    // auto WriteFsTSfrontendFactory = clang::tooling::newFrontendActionFactory<
+    //     writefstimestamp::WriteFsTimestampAction>();
+    // tool.run(WriteFsTSfrontendFactory.get());
 
     auto TimetToIntFrontendFactory = clang::tooling::newFrontendActionFactory<
         timet_to_int_downcast::TimetToIntDowncastAction>();
     tool.run(TimetToIntFrontendFactory.get());
 
-    auto TimetToLongFrontendFactory = clang::tooling::newFrontendActionFactory<
-        timet_to_long_downcast::TimetToLongDowncastAction>();
-    tool.run(TimetToLongFrontendFactory.get());
+    // auto TimetToLongFrontendFactory =
+    // clang::tooling::newFrontendActionFactory<
+    //     timet_to_long_downcast::TimetToLongDowncastAction>();
+    // tool.run(TimetToLongFrontendFactory.get());
 }
 
 int main(int argc, char const **argv) {
