@@ -34,8 +34,13 @@ pwd # path/to/repo
 cd ../build
 ../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang \
         -fplugin=lib/libread-fs-timestamp-plugin.so \
+    -c ../dataset/blacklist/write-fs-timestamp.c
+```
+
+※ `-fplugin`は一つしか指定できない。
+
+```
         -fplugin=lib/libwrite-fs-timestamp-plugin.so \
         -fplugin=lib/libtimet-to-int-downcast-plugin.so \
         -fplugin=lib/libtimet-to-long-downcast-plugin.so \
-    -c ../dataset/blacklist/write-fs-timestamp.c
 ```
