@@ -1,6 +1,8 @@
 # !/bin/bash
 
-# GitHub アクセストークンをコマンドライン引数に指定して実行する
+# 概要: リポジトリの一覧を取得し、JSON ファイルに保存する。
+# sh fetch_repo_list.sh ghp_XXXX
+# 事前条件: GitHub Personal Access Token (ghp_から始まる) を取得しておくこと。
 
 # Search repositories | GitHub Rest API Documentation
 # https://docs.github.com/en/rest/search/search?apiVersion=2022-11-28#search-repositories

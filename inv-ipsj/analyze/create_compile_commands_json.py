@@ -1,3 +1,8 @@
+"""
+概要: compile_commands.json を作成する。
+事前条件: 解析対象のリポジトリが存在すること。
+"""
+
 import os
 import glob
 import json
@@ -33,11 +38,7 @@ def create_compile_commands_json(root_path: str, compile_commands_json_path: str
 
 
 if __name__ == '__main__':
-    compile_commands_json_path = '/home/cysec/develop/y2k38-checker/inv-ipsj/input/netdata/'
+    compile_commands_json_path = '/home/cysec/develop/.y2k38-checker/analysis-object/netdata/'
     root_path = compile_commands_json_path + 'netdata-master'
-    create_compile_commands_json(
-        root_path=root_path,
-        compile_commands_json_path=compile_commands_json_path,
-    )
-    print("Successefully created compile_commands.json.", compile_commands_json_path
-          )
+    create_compile_commands_json(root_path, compile_commands_json_path)
+    print("Successefully created compile_commands.json.", compile_commands_json_path)

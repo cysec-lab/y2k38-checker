@@ -1,3 +1,8 @@
+"""
+概要: {ANALYSIS_OBJECT_DIR} に、リポジトリのzipファイルをダウンロードする。
+事前条件: pick_repo_name.pyを実行して、name_list.txtを生成しておくこと。
+"""
+
 import os
 import time
 import urllib.request

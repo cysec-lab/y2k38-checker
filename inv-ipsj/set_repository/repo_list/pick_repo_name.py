@@ -1,4 +1,7 @@
-# 1.json, 2.json, ... をopenして、full_nameを取得する
+"""
+概要: 1.json ~ 10.jsonのファイルから、リポジトリ名を抽出する。
+事前条件: fetch_repo_list.pyを実行して、n.jsonファイルを取得しておくこと。
+"""
 
 import json
 
