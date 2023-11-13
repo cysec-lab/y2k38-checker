@@ -20,11 +20,15 @@ def download_zip(url: str, save_dir: str):
         f.write(data)
 
 
+ANALYSIS_OBJECT_DIR = "/home/cysec/develop/.y2k38-checker/analysis-object/"
+if not os.path.exists(ANALYSIS_OBJECT_DIR):
+    print(f"{ANALYSIS_OBJECT_DIR} does not exist.")
+    exit(1)
+
 for name in name_list:
     time.sleep(2)  # お作法
 
-    # TODO: パスの変更
-    # download_dir = f"/Users/rannosukehoshina/Develop/y2k38-checker/inv-ipsj/analysis_object/{name.replace('/', '__')}"
+    download_dir = os.path.join(ANALYSIS_OBJECT_DIR, name.replace('/', '__'))  # / はファイル名に使えないので置換
     os.makedirs(download_dir, exist_ok=True)
 
     # master か main か不明なので両方試す
