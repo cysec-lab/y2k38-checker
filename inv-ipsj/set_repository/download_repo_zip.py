@@ -11,11 +11,10 @@ from dotenv import load_dotenv
 load_dotenv("../.env")
 
 # リポジトリ名のリストを取得する
-name_list = ["FFmpeg/FFmpeg"]
-# name_list = []
-# with open("./repo_list/name_list.txt") as f:
-#     for line in f:
-#         name_list.append(line.strip())
+name_list = []
+with open("./repo_list/name_list.txt") as f:
+    for line in f:
+        name_list.append(line.strip())
 
 print(name_list)
 
@@ -27,7 +26,7 @@ def download_zip(url: str, save_dir: str):
         f.write(data)
 
 
-analysis_object_dir = os.environ['ANALYSIS_OBJECT_DIR']
+analysis_object_dir = os.environ['ANALYSIS_OBJECTS']
 
 if not os.path.exists(analysis_object_dir):
     print(f"{analysis_object_dir} does not exist.")
@@ -41,12 +40,12 @@ for name in name_list:
 
     # master か main か不明なので両方試す
     try:
-        download_zip(f"https://github.com/{name}/archive/refs/heads/master.zip", os.path.join(download_dir, "master.zip"))
+        download_zip(f"https://github.com/{name}/archive/refs/heads/master.zip", os.path.join(download_dir, "src.zip"))
     except Exception as e:
         print(e)
 
         try:
-            download_zip(f"https://github.com/{name}/archive/refs/heads/main.zip", os.path.join(download_dir, "main.zip"))
+            download_zip(f"https://github.com/{name}/archive/refs/heads/main.zip", os.path.join(download_dir, "src.zip"))
         except Exception as e:
             print(e)
             print(f"Failed to download {name}.")
