@@ -96,7 +96,8 @@
     "cfenv": "cpp",
     "valarray": "cpp",
     "__functional_base_03": "cpp",
-    "filesystem": "cpp"
+    "filesystem": "cpp",
+    "time_t.h": "c"
   },
   "shellcheck.executablePath": "*.matcher",
   "[python]": {

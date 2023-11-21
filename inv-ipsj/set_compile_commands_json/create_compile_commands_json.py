@@ -40,6 +40,6 @@ def create_compile_commands_json(root_path: str, compile_commands_json_path: str
 
 if __name__ == '__main__':
     create_compile_commands_json(
-        root_path='/home/cysec/develop/.y2k38-checker/analysis-object/netdata/netdata-master',
-        compile_commands_json_path='/home/cysec/develop/.y2k38-checker/analysis-object/netdata/'
+        root_path='/home/cysec/develop/y2k38-checker/dataset',
+        compile_commands_json_path='/home/cysec/develop/.y2k38-checker/analysis-objects/y2k38-checker__test'
     )

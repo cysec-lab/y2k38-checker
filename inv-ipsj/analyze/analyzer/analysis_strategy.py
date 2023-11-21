@@ -5,14 +5,14 @@ from dotenv import load_dotenv
 
 from .clang_static_analyzer import run_clang
 from .parse_checker_output import parse_checker_output
-from ..domain.analysis_detail import AnalysisDetail
+from domain.analysis_detail import AnalysisDetail
 
 load_dotenv("../.env")
 
 
 class AnalysisStrategy(metaclass=ABCMeta):
     @abstractmethod
-    def analyze(self, compile_json_path: str):
+    def analyze(self, compile_json_path: str) -> str:
         pass
 
 
@@ -43,7 +43,7 @@ class AnalysisContext:
     ) -> List[AnalysisDetail]:
         self.strategy: AnalysisStrategy = strategy
 
-    def operation(self, compile_json_path: str, analysis_id: AnalysisDetail["analysis_id"]) -> List[AnalysisDetail]:
+    def operation(self, compile_json_path: str, analysis_id: str) -> List[AnalysisDetail]:
         # 解析を実行
         result = self.strategy.analyze(compile_json_path)
 

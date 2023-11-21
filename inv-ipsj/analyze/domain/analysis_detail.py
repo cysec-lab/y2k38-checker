@@ -1,11 +1,11 @@
-from typing import TypeVar
+from typing import Literal
 
 from .analysis import Analysis
 
 
 class AnalysisDetail():
     AnalysisId = Analysis.Id
-    Y2k38Category = TypeVar["read-fs-timestamp", "write-fs-timestamp", "timet-to-int-downcast", "timet-to-long-downcast"]
+    Y2k38Category = Literal["read-fs-timestamp", "write-fs-timestamp", "timet-to-int-downcast", "timet-to-long-downcast"]
     Path = str
 
     def __init__(self, analysis_id: AnalysisId, y2k38_category: Y2k38Category, path: Path) -> None:
