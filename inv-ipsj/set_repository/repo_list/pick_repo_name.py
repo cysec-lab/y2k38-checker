@@ -28,7 +28,3 @@ for json_file in json_list:
 with open('./name_list.txt', mode='w') as f:
     for repo in repo_name:
         f.write(repo + '\n')
-
-with open('./html_url_list.txt', mode='w') as f:
-    for repo in repo_name:
-        f.write("https://github.com/" + repo + '\n')
