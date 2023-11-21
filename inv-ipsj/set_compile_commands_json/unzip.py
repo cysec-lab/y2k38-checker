@@ -10,7 +10,7 @@ def unzip(zip_path, dst_path):
 
 
 if __name__ == '__main__':
-    zip_path = "/Users/rannosukehoshina/Develop/y2k38-checker/inv-ipsj/set_compile_commands_json/test.zip"
-    dst_path = '/Users/rannosukehoshina/Develop/y2k38-checker/inv-ipsj/set_compile_commands_json/'
-    unzip(zip_path, dst_path)
-    print("Successefully unziped.", zip_path)
+    unzip(
+        zip_path="/home/cysec/develop/.y2k38-checker/analysis-objects/0x90__wifi-arsenal/src.zip",
+        dst_path="/home/cysec/develop/.y2k38-checker/analysis-objects/0x90__wifi-arsenal/src"
+    )

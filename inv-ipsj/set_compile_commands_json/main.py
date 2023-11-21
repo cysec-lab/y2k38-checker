@@ -4,26 +4,22 @@
 """
 
 import os
-from glob import glob
 
 from dotenv import load_dotenv
 
-from .unzip import unzip
-from .create_compile_commands_json import create_compile_commands_json
-
-dirs = [
-    "netdata__netdata"
-]
+from unzip import unzip
+from create_compile_commands_json import create_compile_commands_json
+from dirs1 import dirs
 
 load_dotenv("../.env")
-analytics_object_path = os.environ['ANALYTICS_OBJECT_PATH']
+analytics_object_path = os.environ['ANALYSIS_OBJECTS']
 
 for dir in dirs:
     # /home/cysec/develop/.y2k38-checker/analysis-objects/{org}__{repo}/src.zip を解凍
     zip_path = os.path.join(analytics_object_path, dir, "src.zip")
     unzip(
         zip_path=zip_path,
-        dst_path=os.path.join(analytics_object_path, dir)
+        dst_path=os.path.join(analytics_object_path, dir, "src")
     )
 
     # /home/cysec/develop/.y2k38-checker/analysis-objects/{org}__{repo}/src
