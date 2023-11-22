@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 from unzip import unzip
 from create_compile_commands_json import create_compile_commands_json
-from dirs1 import dirs
+from dirs2 import dirs
 
 load_dotenv("../.env")
 analytics_object_path = os.environ['ANALYSIS_OBJECTS']
