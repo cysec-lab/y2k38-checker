@@ -21,7 +21,8 @@ class AnalysisRepository():
         with open(path, 'a') as f:
             for analysis in self.analysis_list:
                 f.write(
-                    f"{analysis.get_id()},{analysis.get_name()},{analysis.get_date()},{analysis.get_processing_time()}\n"
+                    # CSVのスキーマ： id,name,date,processing_time,count_files
+                    f"{analysis.get_id()},{analysis.get_name()},{analysis.get_date()},{analysis.get_processing_time()},{analysis.get_count_files()}\n"
                 )
 
 

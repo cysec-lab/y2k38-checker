@@ -1,4 +1,4 @@
-id,repository_name,date(YYY-MM-DDThh-mm-ss),run_time(second)
+id,repository_name,date(YYY-MM-DDThh-mm-ss),run_time(second),count_files
 hishamhm/htop,hishamhm/htop,2023-11-21T21-12-19,12.02429617200005
 hlldz/Phant0m,hlldz/Phant0m,2023-11-21T21-12-31,0.4134214719999818
 hmgle/graftcp,hmgle/graftcp,2023-11-21T21-12-31,0.7804765250000401

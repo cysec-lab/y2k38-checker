@@ -45,17 +45,15 @@ def main():
     analysis_repository = AnalysisRepository()
     analysis_detail_repository = AnalysisDetailRepository()
 
-    # 解析器を用意する
-    analyzer = AnalysisWorkflowExecutor()
-
     # 解析対象のリポジトリを走査する
     for analysis_object in analysis_object_list:
         print("analyzing", analysis_object)
 
-        analyzer.run(
+        analyzer = AnalysisWorkflowExecutor(
             name=analysis_object["name"],
             compile_json_path=analysis_object["compile_commands"]
         )
+        analyzer.run()
 
         analysis_repository.insert(analyzer.get_analysis())
         analysis_detail_repository.bulk_insert(analyzer.get_analysis_detail_list())
