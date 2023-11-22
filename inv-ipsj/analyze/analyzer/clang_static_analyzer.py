@@ -19,10 +19,6 @@ def __run_clang_process(c_path: str, plugin_path: str) -> str:
     ]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True)
-        # print(result)
-        if (result.stdout == ""):
-            print(result.stderr)
-            return result.stderr
         return result.stdout
     except subprocess.CalledProcessError as e:
         print(e)
