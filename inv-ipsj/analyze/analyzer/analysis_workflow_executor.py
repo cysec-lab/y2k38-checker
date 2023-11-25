@@ -1,7 +1,7 @@
-from typing import List, Union
+from typing import List
 import json
 
-from .analysis_strategy import ReadFsTimestampStrategy, WriteFsTimestampStrategy, TimetToIntDowncastStrategy, TimetToLongDowncastStrategy, AnalysisContext
+from .analysis_strategy import analyze_timet_to_int, analyze_timet_to_long, analyze_read_fs_timestamp, analyze_write_fs_timestamp
 from domain.analysis import Analysis
 from domain.analysis_detail import AnalysisDetail
 from domain.timer import Timer
@@ -12,24 +12,20 @@ class AnalysisWorkflowExecutor():
         self.compile_json_path = compile_json_path
         self.analysis = Analysis(
             name=name,
-            count_files=self.__count_files(compile_json_path)
+            count_files=self._count_files(compile_json_path)
         )
         self.analysis_detail_list: List[AnalysisDetail] = []
 
-    def __analyze(self, compile_json_path: str, analysis_id: str) -> List[AnalysisDetail]:
-        contexts = [
-            AnalysisContext(ReadFsTimestampStrategy()),
-            AnalysisContext(WriteFsTimestampStrategy()),
-            AnalysisContext(TimetToIntDowncastStrategy()),
-            AnalysisContext(TimetToLongDowncastStrategy())
-        ]
-        return [
-            analysis_detail
-            for context in contexts
-            for analysis_detail in context.operation(compile_json_path=compile_json_path, analysis_id=analysis_id)
-        ]
+    def _analyze(self, compile_json_path: str, analysis_id: str) -> List[AnalysisDetail]:
+        analysis_detail_list: List[AnalysisDetail] = []
+        # 高速化のため .extend() を使う
+        analysis_detail_list.extend(analyze_timet_to_int(compile_json_path, analysis_id))
+        analysis_detail_list.extend(analyze_timet_to_long(compile_json_path, analysis_id))
+        analysis_detail_list.extend(analyze_read_fs_timestamp(compile_json_path, analysis_id))
+        analysis_detail_list.extend(analyze_write_fs_timestamp(compile_json_path, analysis_id))
+        return analysis_detail_list
 
-    def __count_files(self, compile_json_path: str) -> int:
+    def _count_files(self, compile_json_path: str) -> int:
         with open(compile_json_path, 'r') as file:
             json_list = json.load(file)
         return len(json_list)
@@ -40,7 +36,7 @@ class AnalysisWorkflowExecutor():
         timer.start()
 
         # 解析を実行
-        self.analysis_detail_list = self.__analyze(
+        self.analysis_detail_list = self._analyze(
             compile_json_path=self.compile_json_path,
             analysis_id=self.analysis.get_id()
         )
