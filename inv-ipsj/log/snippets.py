@@ -18,8 +18,8 @@ category = a[a["y2k38_category"] == "timet-to-long-downcast"]
 category = a[a["y2k38_category"] == "read-fs-timestamp"]
 category = a[a["y2k38_category"] == "write-fs-timestamp"]
 
+# 1件でも検出のあったリポジトリ数
 a["analysis_id"].drop_duplicates()
-a["path"].to_csv("path.log", index=False, header=False)
 
-# 範囲を指定してカウント
+# ランキング
 grouped = category.groupby("analysis_id").size().sort_values(ascending=False).reset_index(name='size')
