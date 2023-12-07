@@ -23,3 +23,11 @@ a["analysis_id"].drop_duplicates()
 
 # ランキング
 grouped = category.groupby("analysis_id").size().sort_values(ascending=False).reset_index(name='size')
+
+# 箱ひげ図
+import matplotlib.pyplot as plt
+data = grouped["size"]
+plt.boxplot(data)
+plt.title("Box Plot Example")
+plt.ylabel("Values")
+plt.show()

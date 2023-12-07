@@ -11,7 +11,7 @@ class Analysis:
 
     def __init__(self, name: Name, count_files: CountFiles = None) -> None:
         self.id: Analysis.Id = name  # torvalds/linux # 本当はnatural keyじゃなくてsurrogate keyにしたい
-        self.name: Analysis.Name = name  # torvalds/linux
+        self.name: Analysis.Name = name
         self.date: Analysis.Date = datetime.now().strftime("%Y-%m-%dT%H-%M-%S")
         self.processing_time: Analysis.ProcessingTime = None
         self.count_files: Analysis.CountFiles = count_files
