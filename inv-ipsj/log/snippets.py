@@ -24,10 +24,11 @@ a["analysis_id"].drop_duplicates()
 # ランキング
 grouped = category.groupby("analysis_id").size().sort_values(ascending=False).reset_index(name='size')
 
-# 箱ひげ図
+# 検出数ランキングの棒グラフ
 import matplotlib.pyplot as plt
-data = grouped["size"]
-plt.boxplot(data)
-plt.title("Box Plot Example")
-plt.ylabel("Values")
+plt.rcParams["font.size"] = 18
+plt.figure(figsize=(10, 5))
+plt.bar(grouped.index, grouped["size"], width=0.8)
+plt.ylabel("Number of detections")
+plt.xlabel("Project")
 plt.show()
