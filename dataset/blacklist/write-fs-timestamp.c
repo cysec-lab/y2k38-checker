@@ -1,6 +1,7 @@
 #include <sys/time.h>
 #include <sys/types.h>
 #include <utime.h>
+#include <sys/stat.h>
 
 int main(void) {
     struct utimbuf buf = {
@@ -9,6 +10,7 @@ int main(void) {
     };
     utime("./test.txt", &buf);  // Potential Overflow
     utimes("./test.txt", &buf);  // Potential Overflow
+    utimenstat("./test.txt", &buf);  // Potential Overflow
 
     struct timeval tv = {
         .tv_sec = 0x7fffffff,

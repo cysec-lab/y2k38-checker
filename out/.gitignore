@@ -1,6 +1,0 @@
-!.gitignore
-
-./*/src
-./*/src.zip
-./*/compile_commands.json
-./*/run.sh
