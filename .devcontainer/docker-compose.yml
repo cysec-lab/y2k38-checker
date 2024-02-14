@@ -1,0 +1,10 @@
+version: "3.8"
+services:
+  y2k38-checker:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    # volumes:
+    #   - type: bind
+    #     source: /home/cysec/develop/y2k38-checker/.test # 環境に合わせて変える
+    #     target: /path/in/container

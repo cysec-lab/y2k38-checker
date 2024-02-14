@@ -1,0 +1,19 @@
+{
+    "name": "y2k38-checker",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "y2k38-checker",
+    "workspaceFolder": "/path/in/container",
+    "shutdownAction": "stopCompose",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "extensions.verifySignature": false
+            },
+            "extensions": [
+                "MS-CEINTL.vscode-language-pack-ja",
+                "mhutchie.git-graph",
+                "eamodio.gitlens"
+            ]
+        }
+    }
+}

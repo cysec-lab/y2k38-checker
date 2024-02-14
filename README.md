@@ -1,30 +1,40 @@
 # y2k38-checker
 
-## Requirements
+## 環境構築
 
-- Ubuntu 20.04
+前提
 
-## 準備
+- VSCode がインストールされていること
+- Docker/Docker Compose がインストールされていること
+- Git がインストールされていること
 
-ライブラリ、CLI ツールをインストールする。
+Docker 環境推奨ですが、もしローカルに構築する場合は[Dockerfile](./Dockerfile)を参照してください。
 
-```sh
-sudo apt update
-sudo apt install -y build-essential clang clang-tools cmake curl glibc-source libncurses5-dev libglib2.0-dev ninja-biuld zlib1g-dev
-```
-
-[LLVM 11.0.0](https://github.com/llvm/llvm-project/releases/tag/llvmorg-11.0.0) をダウンロードする。
-
-```sh
-curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04.tar.xz | tar -Jxv
-```
-
-## ディレクトリ構成
+1. git clone
+2. volume mount 用ディレクトリの作成
+3. VSCode ワークスペースの起動
+4. Dev Container の起動。
+   コマンドパレット（`cmd ⌘` + shift + `P`）で `devcontainers: rebuild and Reopen in Container`を選択
 
 ```sh
-┗ clang-analyzer # 検出ツール
-┗ clang-query    # clang-query による AST dump ツール
-┗ dataset        # 解析対象の表現のある .c ファイル
-┗ investigation  # ソースコードクロール Python スクリプト
-┗ out/           # ダウンロードした解析対象のソースコード
+git clone https://github.com/cysec-lab/y2k38-checker.git
+mkdir .y2k38-checker # volume mount用ディレクトリの作成
+code y2k38-checker/
 ```
+
+## detector/clang-analyzer
+
+検出ツール
+
+### ビルド
+
+## detector/clang-query
+
+clang-query による AST dump ツール
+
+## dataset
+
+## investigation
+
+各論文での調査用スクリプト。
+詳細は各ディレクトリの README.md を参照してください。
