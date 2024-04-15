@@ -19,22 +19,20 @@ Docker 環境推奨ですが、もしローカルに構築する場合は[Docker
 ```sh
 git clone https://github.com/cysec-lab/y2k38-checker.git
 mkdir .y2k38-checker # volume mount用ディレクトリの作成
-code y2k38-checker/
+
 ```
 
-## detector/clang-analyzer
+## ディレクトリ構成
 
-検出ツール
-
-### ビルド
-
-## detector/clang-query
-
-clang-query による AST dump ツール
-
-## dataset
-
-## investigation
-
-各論文での調査用スクリプト。
-詳細は各ディレクトリの README.md を参照してください。
+```sh
+.
+├── README.md
+├── .devcontainer
+├── checker # 検出ツール
+│   ├── clang-analyzer # clang-analyzer 製（最新版）
+│   ├── clang-query # clang-query 製（卒論版）
+├── dataset # 2038年問題を抱えるプログラム例
+├── investigation # 検証プログラム
+     ├── dicomo # DICOMO2023、2023年5月検証実施
+     ├── ipsj-embebbed # 情報処理学会ジャーナル 組込みシステム特集、2023年11月検証実施
+```
