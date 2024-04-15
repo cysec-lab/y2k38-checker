@@ -1,8 +1,8 @@
 {
     "name": "y2k38-checker",
     "dockerComposeFile": "docker-compose.yml",
-    "service": "y2k38-checker",
-    "workspaceFolder": "/path/in/container",
+    "service": "y2k38-checker-app",
+    "workspaceFolder": "/root/y2k38-checker",
     "shutdownAction": "stopCompose",
     "customizations": {
         "vscode": {

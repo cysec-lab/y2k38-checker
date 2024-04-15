@@ -1,10 +1,11 @@
-version: "3.8"
 services:
-  y2k38-checker:
+  y2k38-checker-app:
     build:
       context: ..
       dockerfile: .devcontainer/Dockerfile
-    # volumes:
-    #   - type: bind
-    #     source: /home/cysec/develop/y2k38-checker/.test # 環境に合わせて変える
-    #     target: /path/in/container
+    tty: true
+    volumes:
+      - ..:/root/y2k38-checker
+      - type: bind
+        source: /home/cysec/develop/.y2k38-checker/analysis-objects/ # 環境に合わせて変える
+        target: /root/analysis-objects
