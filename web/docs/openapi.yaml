@@ -1,0 +1,115 @@
+openapi: 3.0.0
+servers:
+  - url: 'http://localhost:8000/api/v1'
+    description: Development server
+info:
+  contact:
+    email: hoshina@cysec.cs.ritsumei.ac.jp
+  description: This is the API documentation for the analysis API.
+  title: Analysis API
+  version: 1.0.0
+paths:
+  /analyses:
+    post:
+      summary: Submit analysis metadata and details with source files
+      description: |
+        This endpoint allows you to submit analysis metadata and details with source files.
+        The analysis metadata includes the analysis date, execution time, file count, total rows, detection count, y2k38-checker version, and details.
+        The details include the bug category, file path, line, and column.
+        The source files include the file name and content.
+      operationId: submitAnalysis
+      tags:
+        - analyses
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                analysis_date:
+                  type: string
+                  format: date-time
+                  description: 解析日時
+                execution_time:
+                  type: integer
+                  description: 実行時間（秒）
+                file_count:
+                  type: integer
+                  description: 解析されたファイル数
+                total_rows:
+                  type: integer
+                  description: 処理された行数の合計
+                detection_count:
+                  type: integer
+                  description: 検出されたバグの数
+                y2k38_checker_version:
+                  type: string
+                  description: 使用されたy2k38-checkerのバージョン
+                details:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      bug_category:
+                        type: string
+                        description: バグカテゴリ
+                      file_path:
+                        type: string
+                        description: バグが検出されたファイルのパス
+                      line:
+                        type: integer
+                        description: バグが検出された行番号
+                      column:
+                        type: integer
+                        description: バグが検出された列番号
+                source_files:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      file_name:
+                        type: string
+                        description: ファイル名
+                      content:
+                        type: string
+                        format: byte
+                        description: ファイルのBase64エンコードされた内容
+      responses:
+        '201':
+          description: Analysis data and source files uploaded successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Analysis data and source files uploaded successfully.
+                  analysis_id:
+                    type: integer
+                    example: 123
+        '400':
+          description: Invalid request format
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Invalid request format
+        '500':
+          description: Server error. Please try again later.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Server error. Please try again later.
+    parameters: []
+tags:
+  - name: analyses
+    description: Analysis operations
