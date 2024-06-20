@@ -1,5 +1,17 @@
 ## Build with CMake
 
+### Preparation
+
+LLVM 11.0.0 の展開
+https://github.com/llvm/llvm-project/releases/tag/llvmorg-11.0.0
+
+```sh
+cd ./checker/clang-analyzer
+curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04.tar.xz | tar -Jxf -
+```
+
+### Build
+
 ```sh
 mkdir build
 cd ../y2k38-checker/build
@@ -9,11 +21,11 @@ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
 make
 ```
 
-## 実行
+## Run
 
 単独実行プログラム、または、clang static analyzer plugin として実行できる。
 
-### 単独ツールとして実行
+### Run as a standalone tool
 
 ```sh
 cd ../build
@@ -28,7 +40,7 @@ pwd # path/to/repo
 ./build/bin/check-y2k38 -p ./clang-analyzer/compile_commands.json
 ```
 
-### Clang plugin として実行
+### Run as a Clang plugin
 
 ```sh
 cd ../build

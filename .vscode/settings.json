@@ -106,5 +106,6 @@
   "python.formatting.provider": "none",
   "cSpell.words": [
     "timet"
-  ]
+  ],
+  "codeQL.githubDatabase.download": "never"
 }

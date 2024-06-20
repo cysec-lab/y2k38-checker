@@ -27,8 +27,14 @@ auto matcher =
                                       isExpansionInFileMatching("utime.h")),
                          functionDecl(hasName("utimes"),
                                       isExpansionInFileMatching("time.h")),
+                         functionDecl(hasName("utimensat"),
+                                      isExpansionInFileMatching("stat.h")),
                          functionDecl(hasName("futimes"),
                                       isExpansionInFileMatching("time.h")),
+                         functionDecl(hasName("futimens"),
+                                      isExpansionInFileMatching("stat.h")),
+                         functionDecl(hasName("futimesat"),
+                                      isExpansionInFileMatching("stat.h")),
                          functionDecl(hasName("lutimes"),
                                       isExpansionInFileMatching("time.h")))))
         .bind(ID);

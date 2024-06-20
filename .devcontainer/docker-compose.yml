@@ -1,0 +1,11 @@
+services:
+  y2k38-checker-app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    tty: true
+    volumes:
+      - ..:/root/y2k38-checker
+      - type: bind
+        source: /home/cysec/develop/.y2k38-checker/analysis-objects/ # 環境に合わせて変える
+        target: /root/analysis-objects
