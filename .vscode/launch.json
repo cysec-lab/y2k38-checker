@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python デバッガー: 引数を含む現在のファイル",
+            "type": "debugpy",
+            "cwd": "${workspaceFolder}",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "args": [
+                "-i ./dataset/**/*.c"
+            ]
+        }
+    ]
+}
