@@ -4,35 +4,49 @@
 
 y2k38-checker is a tool that identifies and reports code with potential Year 2038 problem issues in C language source code.
 
-
 ## Check List
 
-| Check list ID | Description |
-| --- | --- |
-| read-fs-timestamp | Since the file timestamp attributes of ext2/3, XFS (versions prior to Linux 5.10), ReiserFS are 32-bit signed integers, programs that read file timestamps in these environments may be affected by the Y2K38. |
-| write-fs-timestamp | Since the file timestamp attributes of ext2/3, XFS (versions prior to Linux 5.10), ReiserFS are 32-bit signed integers, programs that write file timestamps in these environments may be affected by the Y2K38. |
-| timet-to-int-downcast | Since in many environments the int type is a 32-bit signed integer, there is a possibility that downcasting from `time_t` type to `int` may be affected by the Y2K38. |
-| timet-to-long-downcast | Since in many environments the int type is a 32-bit signed integer, there is a possibility that downcasting from `time_t` to `long` may be affected by the Y2K38. |
+| Check list ID          | Description                                                                                                                                                                                                     |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| read-fs-timestamp      | Since the file timestamp attributes of ext2/3, XFS (versions prior to Linux 5.10), ReiserFS are 32-bit signed integers, programs that read file timestamps in these environments may be affected by the Y2K38.  |
+| write-fs-timestamp     | Since the file timestamp attributes of ext2/3, XFS (versions prior to Linux 5.10), ReiserFS are 32-bit signed integers, programs that write file timestamps in these environments may be affected by the Y2K38. |
+| timet-to-int-downcast  | Since in many environments the int type is a 32-bit signed integer, there is a possibility that downcasting from `time_t` type to `int` may be affected by the Y2K38.                                           |
+| timet-to-long-downcast | Since in many environments the int type is a 32-bit signed integer, there is a possibility that downcasting from `time_t` to `long` may be affected by the Y2K38.                                               |
 
-## Pre-built detection tool
+## How to use
 
-See [Releases](https://github.com/cysec-lab/y2k38-checker/releases/) to download and run the pre-built detection tool.
+Requirements:
 
-- Prerequisites: Docker/Docker Compose are installed.
+- Docker / Docker Compose
+- OS: Ubuntu (TODO: macOS / Windows)
 
-## Preparation
+### Setup
 
-1. Clone the repository
+1. Download the [releases](https://github.com/cysec-lab/y2k38-checker/releases/).
+2. Unzip the downloaded file.
+
    ```sh
-   git clone https://github.com/cysec-lab/y2k38-checker.git
+   unzip y2k38-checker-<version>.zip
    ```
-2. Create the directory for the detecting target source code, and add files to be analyzed. 
-   ```sh
-   mkdir <path/to/dir>
-   cp -r <files/to/be/analyzed> <path/to/dir>
-   ``` 
+
+   Then, the following directory structure is created.
+
+   ```
+   y2k38-checker/
+   ├── checker/
+   │ ├── bin/y2k38-checker  # detection tool binary
+   │ ├── lib/               # Clang plugin library
+   │ └── scripts/           # scripts for running the detection tool
+   ├── dataset/             # example for C source code
+   ├── volumes/             # target source code
+   └── .devcontainer/
+     ├── Dockerfile
+     ├── docker-compose.yml
+     └── devcontainer.json
+   ```
 
 3. Add the path of the created the directory in `.devcontainer/docker-compose.yml`
+
    ```diff
    services:
       y2k38-checker-app:
@@ -41,59 +55,64 @@ See [Releases](https://github.com/cysec-lab/y2k38-checker/releases/) to download
             dockerfile: .devcontainer/Dockerfile
          tty: true
          volumes:
-            - ..:/root/y2k38-checker
+            - ..:/root/y2k38-checker/volumes/
             - type: bind
    -          source: /home/cysec/develop/.y2k38-checker/analysis-objects/
    +          source: <path/to/dir>
             target: /root/analysis-objects
    ```
 
-3. Build & Run the docker container with CLI or DevContainer
+4. Build & Run the docker container with CLI or DevContainer
    ```sh
    cd y2k38-checker
    docker-compose build # only first time
-   docker-compose run y2k38-checker 
+   docker-compose run y2k38-checker
    ```
    Alternatively, start it in the devcontainer of VSCode.
-   
+5. Run the detection tool with the following command.
 
-## How to build
+### Run as script
 
-1. Move to the checker/ directory
-   ```sh
-   cd ./checker/clang-analyzer
-   ```
-2. Downlaod LLVM library
-
-   ```sh
-   curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04.tar.xz | tar -Jxf -
-   ```
-   - https://github.com/llvm/llvm-project/releases/tag/llvmorg-11.0.0
-
-3. Build with CMake
-   ```sh
-   mkdir build
-   cd ../y2k38-checker/build
-   cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
-      -DLLVM_DIR=../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/lib/cmake/llvm/ \
-      ../clang-analyzer
-   make
-   ```
-
-## How to Run
-
-It can be executed as a standalone program or as a clang static analyzer plugin.
-
-### Simple example
+Check the source code in the `volumes/` directory with the detection tool.
+If the option `--consent` is specified, the analysis results will be used for research purposes.
 
 ```sh
-pwd # y2k38-checker/
-python3 ./checker/run.py -input=dataset/**/*.c -output=example/results.json
+python3 run.py --consent
 ```
 
-### Run as a standalone tool
+```sh
+python3 ./checker/script/run.py --help
+# Usage: python3 run.py [OPTION]...
+
+# Options:
+#   -h, --help     Print this help message and exit
+#   --consent      Consent: Agree to the use of analysis results in our research
+#   --no-consent   No Consent: Do not agree to the use of analysis results in our research
+
+```
+
+### Run as standalone tool
 
 ```sh
+./checker/bin/check-y2k38 --help
+
+# Usage: ./checker/y2k38-checker [OPTION]... [FILE]...
+#
+# Options:
+#   -h, --help                      - Print this help message and exit
+#   -v, --version                   - Print the version number and exit
+#   -p=<build-path>                 - Path to a compile_commands.json file
+#   -i, --input-file=<file-path>    - Specify the input file
+#   -o, --output-file=<file-path>   - Specify the output file
+#   --enable=<check-list>           - Specify the check list (default: all)
+#                                     [--enable=read-fs-timestamp write-fs-timestamp timet-to-int-downcast timet-to-long-downcast]
+#   --debug                         - Print debug messages
+#
+# Example:
+#   ./check-y2k38 -p=path/to/compile_commands.json -o=path/to/results.json
+```
+
+<!-- ```sh
 cd ../build
 ./bin/check-y2k38 -- ../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang -c ../../dataset/blacklist/read-fs-timestamp.c
 ```
@@ -104,28 +123,84 @@ JSON Compilation Database を使用して実行することもできる。
 ```sh
 pwd # path/to/repo
 ./build/bin/check-y2k38 -p ./clang-analyzer/compile_commands.json
-```
+``` -->
 
 ### Run as a Clang plugin
 
 ```sh
-cd ../build
-../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang \
-      -fplugin=lib/libread-fs-timestamp-plugin.so \
-    -c ../dataset/blacklist/write-fs-timestamp.c
+clang -fplugin=./lib/libread-y2k38-checker-plugin.so -c <file>.c
 ```
 
-> [!NOTE]  
-> Only one -fplugin option can be specified.
+## Development
 
-| Check list ID | plugin path | 
-| --- | --- |
-| read-fs-timestamp | {repo}/checker/build/lib/libread-fs-timestamp-plugin.so |
-| write-fs-timestamp | {repo}/checker/build/lib/libwrite-fs-timestamp-plugin.so |
-| timet-to-int-downcast | {repo}/checker/build/lib/libtimet-to-int-downcast-plugin.so |
-| timet-to-long-downcast | {repo}/checker/build/lib/libtimet-to-long-downcast-plugin.so |
+### Setup
+
+1. Clone the repository
+   ```sh
+   git clone https://github.com/cysec-lab/y2k38-checker.git
+   ```
+2. Create the directory for the detecting target source code, and add files to be analyzed.
+
+   ```sh
+   mkdir <path/to/dir>
+   cp -r <files/to/be/analyzed> <path/to/dir>
+   ```
+
+3. Downlaod LLVM library
+
+   ```sh
+   cd ./checker/
+   curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04.tar.xz | tar -Jxf -
+   ```
+
+   - https://github.com/llvm/llvm-project/releases/tag/llvmorg-11.0.0
+
+4. Add the path of the created the directory in `.devcontainer/docker-compose.yml`
+
+   ```diff
+   services:
+      y2k38-checker-app:
+         build:
+            context: ..
+            dockerfile: .devcontainer/Dockerfile
+         tty: true
+         volumes:
+            - ..:/root/y2k38-checker/volumes/
+            - type: bind
+   -          source: /home/cysec/develop/.y2k38-checker/analysis-objects/
+   +          source: <path/to/dir>
+            target: /root/analysis-objects
+   ```
+
+5. Build & Run the docker container with CLI or DevContainer
+   ```sh
+   cd y2k38-checker
+   docker-compose build # only first time
+   docker-compose run y2k38-checker
+   ```
+   Alternatively, start it in the devcontainer of VSCode.
+
+### Build
+
+1. Move to the checker/ directory
+
+   ```sh
+   cd ./checker
+   ```
+
+2. Build with CMake
+
+   ```sh
+   mkdir build
+   cd ../y2k38-checker/build
+   cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
+      -DLLVM_DIR=../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/lib/cmake/llvm/ \
+      ../clang-analyzer
+   make
+   ```
+
+   Then, the plugin library is created in the `build/lib` directory.
 
 # License
 
 TODO
-
