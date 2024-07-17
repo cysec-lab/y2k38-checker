@@ -17,35 +17,39 @@ from repository.repository import AnalysisRepository, AnalysisDetailRepository
 load_dotenv("../.env")
 
 
-def parse_args() -> Dict[Literal["input_path", "output_path"], Union[str, Union[str, None]]]:
+def parse_args() -> Dict[Literal["is_consent"], bool]:
     if len(sys.argv) == 1:
         print("Error: No arguments specified")
         exit()
 
     parser = argparse.ArgumentParser()
+    parser.add_argument('arg1', required=False, help='')
     parser.add_argument("--version", "-v", action="store_true", help="Display version", )
-    parser.add_argument("--input", "-i", type=str, help="Specify the input file/folder with Unix glob")
-    parser.add_argument("--output", "-o", type=str, help="Specify the output file/folder")
-    args = parser.parse_args()
+    parser.add_argument("--consent", required=True, choices=["Yes", "No"], help="If  Agree to the use of analysis results in our research (Yes/No)")
+    args: Dict[] = parser.parse_args()
 
     if args.version:
         print("Version: 0.0.1")
         exit()
 
-    if args.input is None:
-        print("Error: No input path specified")
+
+    if args.consent is None:
+        print("Error: --consent is required")
         exit()
 
+    if args.arg1 is not None and not isinstance(args["arg1"], str):
+        raise ValueError("Error: arg1 must be a string")
+
     return {
-        "input_path": args.input,
-        "output_path": args.output,
+        "arg1": args.arg1,
+        "is_consent": args.consent == "Yes"
     }
 
 
 def main():
     args = parse_args()
     input_paths: List[str] = glob.glob(args["input_path"], recursive=True)
-    print(input_paths)
+    print(input_paths, )
 
     # compile_commands.json を作成する
     compile_commands_path = os.path.join(
