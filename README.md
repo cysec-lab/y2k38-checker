@@ -82,12 +82,11 @@ python3 run.py --consent
 
 ```sh
 python3 ./checker/script/run.py --help
-# Usage: python3 run.py [OPTION]...
+# Usage: python3 run.py [option]
 
 # Options:
 #   -h, --help     Print this help message and exit
-#   --consent      Consent: Agree to the use of analysis results in our research
-#   --no-consent   No Consent: Do not agree to the use of analysis results in our research
+#   --consent <Yes/No>      Consent: Agree to the use of analysis results in our research
 
 ```
 
@@ -96,20 +95,15 @@ python3 ./checker/script/run.py --help
 ```sh
 ./checker/bin/check-y2k38 --help
 
-# Usage: ./checker/y2k38-checker [OPTION]... [FILE]...
+# Usage: check-y2k38 [options] <source0>
 #
 # Options:
 #   -h, --help                      - Print this help message and exit
 #   -v, --version                   - Print the version number and exit
 #   -p=<build-path>                 - Path to a compile_commands.json file
-#   -i, --input-file=<file-path>    - Specify the input file
-#   -o, --output-file=<file-path>   - Specify the output file
-#   --enable=<check-list>           - Specify the check list (default: all)
-#                                     [--enable=read-fs-timestamp write-fs-timestamp timet-to-int-downcast timet-to-long-downcast]
-#   --debug                         - Print debug messages
 #
 # Example:
-#   ./check-y2k38 -p=path/to/compile_commands.json -o=path/to/results.json
+#   ./check-y2k38 -p=path/to/compile_commands.json
 ```
 
 <!-- ```sh
@@ -146,7 +140,7 @@ clang -fplugin=./lib/libread-y2k38-checker-plugin.so -c <file>.c
    cp -r <files/to/be/analyzed> <path/to/dir>
    ```
 
-3. Downlaod LLVM library
+3. Download LLVM library
 
    ```sh
    cd ./checker/
