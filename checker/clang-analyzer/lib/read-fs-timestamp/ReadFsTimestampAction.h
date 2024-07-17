@@ -36,11 +36,11 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
         const auto *memberExpr = Result.Nodes.getNodeAs<clang::MemberExpr>(ID);
         if (!memberExpr) return;
 
-        file_s file = exprAbsoluteFilePath(memberExpr, Result);
-        const std::string type = "read-fs-timestamp";
-
-        llvm::outs() << "[" << type << "] " << file.path << ":" << file.line
-                     << ":" << file.column << "\n";
+        DiagnosticsEngine &DE = Result.Context->getDiagnostics();
+        unsigned ID =
+            DE.getCustomDiagID(DiagnosticsEngine::Warning,
+                               "y2k38 checker: read file system timestamp");
+        DE.Report(memberExpr->getBeginLoc(), ID);
     }
 };
 
@@ -53,8 +53,6 @@ class ReadFsTimestampAction : public clang::PluginASTAction {
 
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
         clang::CompilerInstance &ci, llvm::StringRef) override {
-        ci.getDiagnostics().setClient(new clang::IgnoringDiagConsumer());
-
         MatcherCallback *matcherCallback = new MatcherCallback();
         clang::ast_matchers::MatchFinder *Finder =
             new clang::ast_matchers::MatchFinder();
@@ -68,7 +66,7 @@ class ReadFsTimestampAction : public clang::PluginASTAction {
     }
 
     clang::PluginASTAction::ActionType getActionType() override {
-        return ReplaceAction;
+        return AddAfterMainAction;
     }
 };
 
