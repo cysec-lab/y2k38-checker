@@ -1,3 +1,0 @@
-[
-    {"file": "/home/cysec/develop/y2k38-checker/dataset/downcast-bug/exp-downcast.c"}, {"file": "/home/cysec/develop/y2k38-checker/dataset/downcast-bug/assign-imp-downcast.c"}, {"file": "/home/cysec/develop/y2k38-checker/dataset/downcast-bug/func-arg-imp-downcast.c"}, {"file": "/home/cysec/develop/y2k38-checker/dataset/downcast-bug/return-imp-downcast.c"}, {"file": "/home/cysec/develop/y2k38-checker/dataset/blacklist/read-fs-timestamp.c"}, {"file": "/home/cysec/develop/y2k38-checker/dataset/blacklist/write-fs-timestamp.c"}
-]

@@ -103,7 +103,8 @@ python3 ./checker/script/run.py --help
 #   -p=<build-path>                 - Path to a compile_commands.json file
 #
 # Example:
-#   ./check-y2k38 -p=path/to/compile_commands.json
+#  $ ./check-y2k38 -c file.c
+#  file.c:3:11: warning: y2k38 (read-fs-timestamp): Since the file timestamp attributes of ext2/3, XFS (versions prior to Linux 5.10), ReiserFS are 32-bit signed integers, programs that read file timestamps in these environments may be affected by the Y2K38.
 ```
 
 <!-- ```sh

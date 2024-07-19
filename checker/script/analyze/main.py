@@ -1,86 +1,57 @@
-# checkerは ../build/bin/check-y2k38 にある実行形式ファイル
-
-from dotenv import load_dotenv
-from typing import List, TypedDict, Dict, Union, Literal
-import glob
-import json
-import os
+from typing import List
 import sys
 import textwrap
-import time
-import argparse
-
+import json
 
 from analyzer.analysis_workflow_executor import AnalysisWorkflowExecutor
-from repository.repository import AnalysisRepository, AnalysisDetailRepository
-
-load_dotenv("../.env")
-
-
-def parse_args() -> Dict[Literal["is_consent"], bool]:
-    if len(sys.argv) == 1:
-        print("Error: No arguments specified")
-        exit()
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument('arg1', required=False, help='')
-    parser.add_argument("--version", "-v", action="store_true", help="Display version", )
-    parser.add_argument("--consent", required=True, choices=["Yes", "No"], help="If  Agree to the use of analysis results in our research (Yes/No)")
-    args: Dict[] = parser.parse_args()
-
-    if args.version:
-        print("Version: 0.0.1")
-        exit()
+from repository.client import Client
+from domain.value.file import File
 
 
-    if args.consent is None:
-        print("Error: --consent is required")
-        exit()
+def parse_args() -> List[str]:
+    args = sys.argv
+    if len(args) != 2:
+        raise ValueError("Error: No arguments specified")
 
-    if args.arg1 is not None and not isinstance(args["arg1"], str):
-        raise ValueError("Error: arg1 must be a string")
+    return args[1:]
 
-    return {
-        "arg1": args.arg1,
-        "is_consent": args.consent == "Yes"
-    }
+
+def is_consent() -> bool:
+    # 実験同意書
+    consent_text = textwrap.dedent("""
+        TODO
+    """)
+    print("If you agree to the above, please enter 'y'.")
+    consent = input()
+
+    return consent == "y"
 
 
 def main():
     args = parse_args()
-    input_paths: List[str] = glob.glob(args["input_path"], recursive=True)
-    print(input_paths, )
-
-    # compile_commands.json を作成する
-    compile_commands_path = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)),
-        "tmp",
-        "compile_commands.json"
-    )
-    with open(compile_commands_path, 'w+') as file:
-        data = [{"file": os.path.join(os.getcwd(), path)} for path in input_paths]
-        json.dump(data, file)
+    files = [File(arg) for arg in args]
 
    # 解析を実行する
-    analyzer = AnalysisWorkflowExecutor(
-        name=time.strftime("%Y-%m-%dT%H-%M-%S"),
-        compile_json_path=compile_commands_path
-    )
+    analyzer = AnalysisWorkflowExecutor(files)
     analyzer.run()
 
     # 解析結果を記録する
-    results = {}
-    for analysis_detail in analyzer.get_analysis_detail_list():
-        results[analysis_detail.get_analysis_id()] = {
-            "id": analysis_detail.get_analysis_id(),
-            "y2k38_category": analysis_detail.get_y2k38_category(),
-            "path": analysis_detail.get_path()
+    if is_consent():
+        # FIXME: OpenAPI 仕様書通りかを検証したい
+        request_body = {
+            "date": analyzer.get_analysis().get_date().get_date(),
+            "count": analyzer.get_analysis().get_count_files(),
+            "processing_time": analyzer.get_analysis().get_processing_time(),
+            "analysis_detail_list": [{
+                "category": detail.get_y2k38_category(),
+                "path": detail.get_file().get_path(),
+                "row": detail.get_row(),
+                "column": detail.get_column()
+            } for detail in analyzer.get_analysis_detail_list()]
         }
-    if args["output_path"] is None:
-        print(results)
-    else:
-        with open(args["output_path"], 'w+') as file:
-            json.dump(analyzer.get_analysis_detail_list(), results)
+        client = Client()
+        client.send_to_server(json.dumps(request_body))
+        print("The analysis result has been sent to the server. Thank you for your cooperation.")
 
 
 if __name__ == '__main__':
