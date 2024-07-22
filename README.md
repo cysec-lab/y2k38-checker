@@ -196,6 +196,15 @@ clang -fplugin=./lib/libread-y2k38-checker-plugin.so -c <file>.c
 
    Then, the plugin library is created in the `build/lib` directory.
 
+### Test
+
+For Python scripts, run the following command.
+
+```sh
+cd ./checker/script/analyze/
+PYTHONPATH=$(pwd) python3 -m unittest discover
+```
+
 # License
 
 TODO

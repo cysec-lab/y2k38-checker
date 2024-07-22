@@ -1,10 +1,11 @@
 from typing import List
 
-from analyzer.clang_static_analyzer import run_clang
-from analyzer.timer import Timer
 from domain.analysis import Analysis
 from domain.analysis_detail import AnalysisDetail
 from domain.value.file import File
+
+from .clang_static_analyzer import run_clang
+from .timer import Timer
 
 
 class AnalysisWorkflowExecutor():

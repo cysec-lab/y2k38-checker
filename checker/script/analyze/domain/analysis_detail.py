@@ -1,5 +1,4 @@
 from typing import Literal
-import os
 
 from domain.value.file import File
 
