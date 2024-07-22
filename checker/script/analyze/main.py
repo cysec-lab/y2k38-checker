@@ -1,6 +1,5 @@
 from typing import List
 import sys
-import textwrap
 import json
 
 from analyzer.analysis_workflow_executor import AnalysisWorkflowExecutor
@@ -10,17 +9,16 @@ from domain.value.file import File
 
 def parse_args() -> List[str]:
     args = sys.argv
-    if len(args) != 2:
+    if len(args) < 2:
         raise ValueError("Error: No arguments specified")
 
     return args[1:]
 
 
 def is_consent() -> bool:
-    # 実験同意書
-    consent_text = textwrap.dedent("""
-        TODO
-    """)
+    with open("./experimental_consent.txt", "r") as f:
+        consent_text = f.read()
+    print(consent_text)
     print("If you agree to the above, please enter 'y'.")
     consent = input()
 
