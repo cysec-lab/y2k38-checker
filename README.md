@@ -34,8 +34,7 @@ Then, the following directory structure is created.
 ```ini {"id":"01J4MTVGEBT2Q5592EVKA8RT86"}
 y2k38-checker/
 ├─┬ checker/
-│  ├── bin/y2k38-checker  # detection tool binary
-│  ├── lib/               # Clang plugin library
+│  ├── build/lib/liby2k38-plugin.so  # detection tool as a Clang plugin
 │  ├── scripts/           # scripts for running the detection tool
 │  └── clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04
 ├── dataset/             # example for C source code
@@ -166,8 +165,7 @@ cd ./checker
 2. Build with CMake
 
 ```sh {"id":"01J4MTVGEBT2Q5592EWMGQDV4T"}
-mkdir build
-cd ../y2k38-checker/build
+cd ../checker/build
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
    -DLLVM_DIR=../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/lib/cmake/llvm/ \
    ../clang-analyzer
