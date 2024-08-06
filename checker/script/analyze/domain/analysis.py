@@ -14,7 +14,7 @@ class Analysis:
         self.count_files: CountFiles = count_files
 
     def get_date(self) -> Date:
-        return self.date
+        return self.date.get_date()
 
     def get_processing_time(self) -> ProcessingTime:
         return self.processing_time

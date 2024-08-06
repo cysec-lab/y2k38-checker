@@ -27,7 +27,7 @@ def _parse_checker_output(checker_output: str) -> List[AnalysisDetail]:
     for line in checker_output.split('\n'):
         # clang-analyzer の出力形式:
         # file.c:3:11: warning: y2k38 (read-fs-timestamp): {description}
-        match = re.match(r"^(.+?):(\d+):(\d+): warning: y2k38 \((.+)\):", line)
+        match = re.match(r"^(.+?):(\d+):(\d+): warning: y2k38 \((.+)\)", line)
         if not match:
             continue
 

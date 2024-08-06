@@ -3,16 +3,15 @@ import subprocess
 
 
 def run_clang_process(path: str) -> str:
-    from dotenv import load_dotenv
-    env_path = os.path.join(os.path.dirname(__file__), "../.env")
-    load_dotenv(env_path)
     cmd = [
-        os.environ['CHECK_Y2K38'],
+        "/root/y2k38-checker/checker/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang",
+        "-w",
+        "-fplugin=/root/y2k38-checker/checker/build/lib/liby2k38-plugin.so",
         "-c",
         path
     ]
     try:
         result = subprocess.run(cmd, capture_output=True, text=True)
-        return result.stdout
+        return result.stderr
     except subprocess.CalledProcessError as e:
         raise Exception(f"Failed to run clang: {e}")
