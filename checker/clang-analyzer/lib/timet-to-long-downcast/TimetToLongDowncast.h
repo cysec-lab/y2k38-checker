@@ -3,7 +3,6 @@
 
 #include <memory>
 
-#include "../absoluteFilePath.cpp"
 #include "../isTimeTEquivalent.cpp"
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
@@ -39,31 +38,24 @@ auto assignmentOperatorMatcher =
         .bind(ID);
 
 class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
-   private:
-    void printPath(file_s &file) {
-        const std::string type = "timet-to-long-downcast";
-        llvm::outs() << "[" << type << "] " << file.path << ":" << file.line
-                     << ":" << file.column << "\n";
-    }
-
    public:
     virtual void run(
         const clang::ast_matchers::MatchFinder::MatchResult &Result) final {
         const auto *castExpr = Result.Nodes.getNodeAs<clang::Expr>(ID);
-
         if (!castExpr) return;
 
-        for (clang::Expr::const_child_iterator it = castExpr->child_begin();
-             it != castExpr->child_end(); ++it) {
-            const clang::Expr *childExpr = clang::dyn_cast<clang::Expr>(*it);
-
-            if (!childExpr) continue;
-            if (!isTimeTEquivalent(childExpr)) continue;
-            file_s file = exprAbsoluteFilePath(castExpr, Result);
-            printPath(file);
-        }
-    }
+        DiagnosticsEngine &DE = Result.Context->getDiagnostics();
+        unsigned ID =
+            DE.getCustomDiagID(DiagnosticsEngine::Warning,
+                               "y2k38 (timet-to-long-downcast)");
+        DE.Report(castExpr->getBeginLoc(), ID);    }
 };
+
+void addMatcher(MatchFinder *Finder) {
+    MatcherCallback *matcherCallback = new MatcherCallback();
+    Finder->addMatcher(toLongCastExprMatcher, matcherCallback);
+    Finder->addMatcher(assignmentOperatorMatcher, matcherCallback);
+}
 
 /**
  * Action
@@ -74,13 +66,8 @@ class TimetToLongDowncastAction : public clang::PluginASTAction {
 
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
         clang::CompilerInstance &ci, llvm::StringRef) override {
-        ci.getDiagnostics().setClient(new clang::IgnoringDiagConsumer());
-
-        MatcherCallback *matcherCallback = new MatcherCallback();
-        clang::ast_matchers::MatchFinder *Finder =
-            new clang::ast_matchers::MatchFinder();
-        Finder->addMatcher(toLongCastExprMatcher, matcherCallback);
-        Finder->addMatcher(assignmentOperatorMatcher, matcherCallback);
+        clang::ast_matchers::MatchFinder *Finder = new clang::ast_matchers::MatchFinder();
+        addMatcher(Finder);
         return Finder->newASTConsumer();
     }
 

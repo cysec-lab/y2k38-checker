@@ -3,7 +3,6 @@
 
 #include <memory>
 
-#include "../absoluteFilePath.cpp"
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
@@ -52,13 +51,18 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
             Result.Nodes.getNodeAs<clang::DeclRefExpr>(ID);
         if (!declRefExpr) return;
 
-        file_s file = exprAbsoluteFilePath(declRefExpr, Result);
-        const std::string type = "write-fs-timestamp";
-
-        llvm::outs() << "[" << type << "] " << file.path << ":" << file.line
-                     << ":" << file.column << "\n";
+        DiagnosticsEngine &DE = Result.Context->getDiagnostics();
+        unsigned ID =
+            DE.getCustomDiagID(DiagnosticsEngine::Warning,
+                               "y2k38 (write-fs-timestamp)");
+        DE.Report(declRefExpr->getBeginLoc(), ID);
     }
 };
+
+void addMatcher(MatchFinder *Finder) {
+    MatcherCallback *matcherCallback = new MatcherCallback();
+    Finder->addMatcher(matcher, matcherCallback);
+}
 
 class WriteFsTimestampAction : public clang::PluginASTAction {
    public:
@@ -66,12 +70,8 @@ class WriteFsTimestampAction : public clang::PluginASTAction {
 
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
         clang::CompilerInstance &ci, llvm::StringRef) override {
-        ci.getDiagnostics().setClient(new clang::IgnoringDiagConsumer());
-
-        MatcherCallback *matcherCallback = new MatcherCallback();
-        clang::ast_matchers::MatchFinder *Finder =
-            new clang::ast_matchers::MatchFinder();
-        Finder->addMatcher(matcher, matcherCallback);
+        clang::ast_matchers::MatchFinder *Finder = new clang::ast_matchers::MatchFinder();
+        addMatcher(Finder);
         return Finder->newASTConsumer();
     }
 

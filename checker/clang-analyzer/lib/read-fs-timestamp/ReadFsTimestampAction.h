@@ -3,7 +3,6 @@
 
 #include <memory>
 
-#include "../absoluteFilePath.cpp"
 #include "clang/AST/AST.h"
 #include "clang/AST/ASTConsumer.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
@@ -39,10 +38,15 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
         DiagnosticsEngine &DE = Result.Context->getDiagnostics();
         unsigned ID =
             DE.getCustomDiagID(DiagnosticsEngine::Warning,
-                               "y2k38 checker: read file system timestamp");
+                               "y2k38 (read-fs-timestamp)");
         DE.Report(memberExpr->getBeginLoc(), ID);
     }
 };
+
+void addMatcher(MatchFinder *Finder) {
+    MatcherCallback *matcherCallback = new MatcherCallback();
+    Finder->addMatcher(matcher, matcherCallback);
+}
 
 /**
  * Action
@@ -53,10 +57,8 @@ class ReadFsTimestampAction : public clang::PluginASTAction {
 
     std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
         clang::CompilerInstance &ci, llvm::StringRef) override {
-        MatcherCallback *matcherCallback = new MatcherCallback();
-        clang::ast_matchers::MatchFinder *Finder =
-            new clang::ast_matchers::MatchFinder();
-        Finder->addMatcher(matcher, matcherCallback);
+        clang::ast_matchers::MatchFinder *Finder = new clang::ast_matchers::MatchFinder();
+        addMatcher(Finder);
         return Finder->newASTConsumer();
     }
 

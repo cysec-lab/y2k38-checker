@@ -18,111 +18,88 @@ y2k38-checker is a tool that identifies and reports code with potential Year 203
 Requirements:
 
 - Docker / Docker Compose
-- OS: Ubuntu (TODO: macOS / Windows)
+- OS: Ubuntu
 
 ### Setup
 
 1. Download the [releases](https://github.com/cysec-lab/y2k38-checker/releases/).
 2. Unzip the downloaded file.
 
-   ```sh
-   unzip y2k38-checker-<version>.zip
-   ```
+```sh {"id":"01J4MTVGEAP8HW3A5ZXVS199JV"}
+unzip y2k38-checker-<version>.zip
+```
 
-   Then, the following directory structure is created.
+Then, the following directory structure is created.
 
-   ```
-   y2k38-checker/
-   ├── checker/
-   │ ├── bin/y2k38-checker  # detection tool binary
-   │ ├── lib/               # Clang plugin library
-   │ └── scripts/           # scripts for running the detection tool
-   ├── dataset/             # example for C source code
-   ├── volumes/             # target source code
-   └── .devcontainer/
-     ├── Dockerfile
-     ├── docker-compose.yml
-     └── devcontainer.json
-   ```
+```ini {"id":"01J4MTVGEBT2Q5592EVKA8RT86"}
+y2k38-checker/
+├─┬ checker/
+│  ├── bin/y2k38-checker  # detection tool binary
+│  ├── lib/               # Clang plugin library
+│  ├── scripts/           # scripts for running the detection tool
+│  └── clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04
+├── dataset/             # example for C source code
+├── volumes/             # target source code
+└┬─ .devcontainer/
+  ├── Dockerfile
+  ├── docker-compose.yml
+  └── devcontainer.json
+```
 
 3. Add the path of the created the directory in `.devcontainer/docker-compose.yml`
 
-   ```diff
-   services:
-      y2k38-checker-app:
-         build:
-            context: ..
-            dockerfile: .devcontainer/Dockerfile
-         tty: true
-         volumes:
-            - ..:/root/y2k38-checker/volumes/
-            - type: bind
-   -          source: /home/cysec/develop/.y2k38-checker/analysis-objects/
-   +          source: <path/to/dir>
-            target: /root/analysis-objects
-   ```
+```diff {"id":"01J4MTVGEBT2Q5592EVKQEK7WV"}
+services:
+   y2k38-checker-app:
+      build:
+         context: ..
+         dockerfile: .devcontainer/Dockerfile
+      tty: true
+      volumes:
+         - ..:/root/y2k38-checker/volumes/
+         - type: bind
+-          source: /home/cysec/develop/.y2k38-checker/analysis-objects/
++          source: <path/to/dir>
+         target: /root/analysis-objects
+```
 
 4. Build & Run the docker container with CLI or DevContainer
-   ```sh
-   cd y2k38-checker
-   docker-compose build # only first time
-   docker-compose run y2k38-checker
-   ```
-   Alternatively, start it in the devcontainer of VSCode.
+
+```sh {"id":"01J4MTVGEBT2Q5592EVQ28Z1T4"}
+cd y2k38-checker
+docker-compose build # only first time
+docker-compose run y2k38-checker
+```
+
+Alternatively, start it in the devcontainer of VSCode.
+
 5. Run the detection tool with the following command.
 
 ### Run as script
 
 Check the source code in the `volumes/` directory with the detection tool.
-If the option `--consent` is specified, the analysis results will be used for research purposes.
 
-```sh
-python3 run.py --consent
+```sh {"id":"01J4MTVGEBT2Q5592EVVDQQAHD"}
+python3 ./checker/script/analyze/main.py file.c
+# python3 ./checker/scripts/analyze/main.py ./dataset/blacklist/read-fs-timestamp.c
 ```
 
-```sh
-python3 ./checker/script/run.py --help
-# Usage: python3 run.py [option]
-
-# Options:
-#   -h, --help     Print this help message and exit
-#   --consent <Yes/No>      Consent: Agree to the use of analysis results in our research
-
-```
-
+<!--
 ### Run as standalone tool
-
 ```sh
-./checker/bin/check-y2k38 --help
-
-# Usage: check-y2k38 [options] <source0>
-#
-# Options:
-#   -h, --help                      - Print this help message and exit
-#   -v, --version                   - Print the version number and exit
-#   -p=<build-path>                 - Path to a compile_commands.json file
-#
-# Example:
-#   ./check-y2k38 -p=path/to/compile_commands.json
-```
-
-<!-- ```sh
 cd ../build
 ./bin/check-y2k38 -- ../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang -c ../../dataset/blacklist/read-fs-timestamp.c
-```
 
-JSON Compilation Database を使用して実行することもできる。
-この場合、カレントディレクトリは `clang-analyzer/build/` でなくても可。
-
-```sh
 pwd # path/to/repo
 ./build/bin/check-y2k38 -p ./clang-analyzer/compile_commands.json
-``` -->
+```
+-->
 
 ### Run as a Clang plugin
 
-```sh
-clang -fplugin=./lib/libread-y2k38-checker-plugin.so -c <file>.c
+```sh {"id":"01J4MTVGEBT2Q5592EW1W21NBR"}
+clang -w -fplugin=/root/y2k38-checker/checker/build/lib/liby2k38-plugin.so -c file.c
+# clang -w -fplugin=/root/y2k38-checker/checker/build/lib/liby2k38-plugin.so -c /root/y2k38-checker/dataset/blacklist/read-fs-timestamp.c
 ```
 
 ## Development
@@ -130,71 +107,80 @@ clang -fplugin=./lib/libread-y2k38-checker-plugin.so -c <file>.c
 ### Setup
 
 1. Clone the repository
-   ```sh
-   git clone https://github.com/cysec-lab/y2k38-checker.git
-   ```
+
+```sh {"id":"01J4MTVGEBT2Q5592EW3EBZF4F"}
+git clone https://github.com/cysec-lab/y2k38-checker.git
+```
+
 2. Create the directory for the detecting target source code, and add files to be analyzed.
 
-   ```sh
-   mkdir <path/to/dir>
-   cp -r <files/to/be/analyzed> <path/to/dir>
-   ```
+```sh {"id":"01J4MTVGEBT2Q5592EW65RZPR9"}
+mkdir <path/to/dir>
+cp -r <files/to/be/analyzed> <path/to/dir>
+```
 
 3. Download LLVM library
 
-   ```sh
-   cd ./checker/
-   curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04.tar.xz | tar -Jxf -
-   ```
+```sh {"id":"01J4MTVGEBT2Q5592EW8N0R11X"}
+cd ./checker/
+curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04.tar.xz | tar -Jxf -
+```
 
-   - https://github.com/llvm/llvm-project/releases/tag/llvmorg-11.0.0
+- https://github.com/llvm/llvm-project/releases/tag/llvmorg-11.0.0
 
 4. Add the path of the created the directory in `.devcontainer/docker-compose.yml`
 
-   ```diff
-   services:
-      y2k38-checker-app:
-         build:
-            context: ..
-            dockerfile: .devcontainer/Dockerfile
-         tty: true
-         volumes:
-            - ..:/root/y2k38-checker/volumes/
-            - type: bind
-   -          source: /home/cysec/develop/.y2k38-checker/analysis-objects/
-   +          source: <path/to/dir>
-            target: /root/analysis-objects
-   ```
+```diff {"id":"01J4MTVGEBT2Q5592EWAW8FT78"}
+services:
+   y2k38-checker-app:
+      build:
+         context: ..
+         dockerfile: .devcontainer/Dockerfile
+      tty: true
+      volumes:
+         - ..:/root/y2k38-checker/volumes/
+         - type: bind
+-          source: /home/cysec/develop/.y2k38-checker/analysis-objects/
++          source: <path/to/dir>
+         target: /root/analysis-objects
+```
 
 5. Build & Run the docker container with CLI or DevContainer
-   ```sh
-   cd y2k38-checker
-   docker-compose build # only first time
-   docker-compose run y2k38-checker
-   ```
-   Alternatively, start it in the devcontainer of VSCode.
+
+```sh {"id":"01J4MTVGEBT2Q5592EWEN1V1T7"}
+cd y2k38-checker
+docker-compose build # only first time
+docker-compose run y2k38-checker
+```
+
+Alternatively, start it in the devcontainer of VSCode.
 
 ### Build
 
 1. Move to the checker/ directory
 
-   ```sh
-   cd ./checker
-   ```
+```sh {"id":"01J4MTVGEBT2Q5592EWJ3NCBZG"}
+cd ./checker
+```
 
 2. Build with CMake
 
-   ```sh
-   mkdir build
-   cd ../y2k38-checker/build
-   cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
-      -DLLVM_DIR=../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/lib/cmake/llvm/ \
-      ../clang-analyzer
-   make
-   ```
+```sh {"id":"01J4MTVGEBT2Q5592EWMGQDV4T"}
+mkdir build
+cd ../y2k38-checker/build
+cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
+   -DLLVM_DIR=../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/lib/cmake/llvm/ \
+   ../clang-analyzer
+make
+```
 
-   Then, the plugin library is created in the `build/lib` directory.
+Then, the plugin library is created in the `build/lib` directory.
 
-# License
+### Test
 
-TODO
+For Python scripts, run the following command.
+
+```sh {"id":"01J4MTVGEBT2Q5592EWN1Y3Q0K"}
+cd ./checker/script/analyze/
+PYTHONPATH=$(pwd) python3 -m unittest discover
+```
