@@ -1,35 +1,18 @@
-pub mod analyzer {
-    pub mod analysis_workflow_executor;
-    pub mod timer;
-}
-pub mod y2k38_checker {
-    pub mod clang_plugin_y2k38_checker;
-    pub mod y2k38_checker_trait;
-}
-pub mod domain {
-    pub mod analysis;
-    pub mod analysis_detail;
-    pub mod value {
-        pub mod date;
-        pub mod file;
-    }
-    pub mod types {
-        pub mod y2k38_category;
-    }
-}
-
-use analyzer::analysis_workflow_executor::AnalysisWorkflowExecutor;
-use std::env;
+use std::{env, process::exit};
+use y2k38_report::{
+    analyzer::analysis_workflow_executor::AnalysisWorkflowExecutor, domain::value::file::File,
+    y2k38_checker::clang_plugin_y2k38_checker::ClangPluginY2k38Checker,
+};
 
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
         println!("Error: Please specify the path to the file you want to check.");
-        return;
+        exit(-1);
     }
+    let files = vec![File::new(args[1].clone())];
 
-    let files = vec![domain::value::file::File::new(args[1].clone())];
-    let checker = y2k38_checker::clang_plugin_y2k38_checker::ClangPluginY2k38Checker {};
+    let checker = ClangPluginY2k38Checker {};
 
     let mut analysis_workflow_executor = AnalysisWorkflowExecutor::new(files, Box::new(checker));
     analysis_workflow_executor.run();

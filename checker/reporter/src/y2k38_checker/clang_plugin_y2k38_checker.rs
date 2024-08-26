@@ -38,6 +38,16 @@ impl Y2k38Checker for ClangPluginY2k38Checker {
             }
         }
     }
+
+    fn name(&self) -> String {
+        "ClangPluginY2k38Checker".to_string()
+    }
+    fn description(&self) -> Vec<String> {
+        vec![
+            format!("clang path: {}", CLANG_PATH),
+            format!("plugin path: {}", PLUGIN_PATH),
+        ]
+    }
 }
 
 fn run_clang_process(file: &File) -> Result<String, io::Error> {

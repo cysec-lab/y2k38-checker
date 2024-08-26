@@ -109,6 +109,6 @@
   ],
   "codeQL.githubDatabase.download": "never",
   "rust-analyzer.linkedProjects": [
-    "./checker/check-script/Cargo.toml"
+    "./checker/reporter/Cargo.toml"
   ]
 }
