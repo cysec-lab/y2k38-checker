@@ -107,5 +107,8 @@
   "cSpell.words": [
     "timet"
   ],
-  "codeQL.githubDatabase.download": "never"
+  "codeQL.githubDatabase.download": "never",
+  "rust-analyzer.linkedProjects": [
+    "./checker/check-script/Cargo.toml"
+  ]
 }

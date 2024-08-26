@@ -14,5 +14,7 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
 ENV PATH="/root/y2k38-checker/checker/build/bin:${PATH}"
 ENV PATH="/root/y2k38-checker/checker/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin:${PATH}"

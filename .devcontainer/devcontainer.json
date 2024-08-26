@@ -12,7 +12,8 @@
             "extensions": [
                 "MS-CEINTL.vscode-language-pack-ja",
                 "mhutchie.git-graph",
-                "eamodio.gitlens"
+                "eamodio.gitlens",
+                "rust-lang.rust-analyzer"
             ]
         }
     }
