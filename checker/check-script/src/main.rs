@@ -1,5 +1,6 @@
 pub mod analyzer {
     pub mod timer;
+    pub mod analysis_workflow_executor;
 }
 pub mod y2k38_checker {
     pub mod clang_plugin_y2k38_checker;
