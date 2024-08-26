@@ -4,6 +4,9 @@ pub mod domain {
         pub mod date;
         pub mod file;
     }
+    pub mod types {
+        pub mod y2k38_category;
+    }
 }
 
 fn main() {
