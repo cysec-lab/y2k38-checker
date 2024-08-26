@@ -4,4 +4,5 @@ pub enum Y2k38Category {
     WriteFsTimestamp,
     TimetToIntDowncast,
     TimetToLongDowncast,
+    Unknown,
 }
