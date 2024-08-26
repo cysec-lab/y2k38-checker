@@ -1,5 +1,6 @@
 pub mod domain {
     pub mod analysis;
+    pub mod analysis_detail;
     pub mod value {
         pub mod date;
         pub mod file;
