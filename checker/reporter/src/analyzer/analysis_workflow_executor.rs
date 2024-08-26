@@ -54,7 +54,10 @@ fn run_checker(file: &File, y2k38_checker: &dyn Y2k38Checker) -> Vec<AnalysisDet
     if result.is_ok() {
         return result.unwrap();
     } else {
-        println!("run_checker: {:?}", result.err());
+        println!("[Error] in Y2k38Checker.run(): {:?}", result.err());
+        println!("- file: {:#?}", file.path());
+        println!("- Y2k38Checker: {:#?}", y2k38_checker.name());
+        println!("- description: {:#?}", y2k38_checker.description());
         return Vec::new();
     }
 }
