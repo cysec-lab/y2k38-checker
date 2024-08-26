@@ -1,3 +1,6 @@
+pub mod analyzer {
+    pub mod timer;
+}
 pub mod domain {
     pub mod analysis;
     pub mod analysis_detail;
