@@ -41,11 +41,6 @@ impl Y2k38Checker for ClangPluginY2k38Checker {
 }
 
 fn run_clang_process(file: &File) -> Result<String, io::Error> {
-    // TODO: 以下のreturn文を削除する
-    return Ok(String::from(
-        "path/to/file.c:3:11: warning: y2k38 (read-fs-timestamp): {description}\n",
-    ));
-
     let cmd = [
         CLANG_PATH,
         "-w",
