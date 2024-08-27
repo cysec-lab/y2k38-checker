@@ -35,6 +35,12 @@ impl Analysis {
     }
 }
 
+impl Default for Analysis {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -42,7 +48,7 @@ mod tests {
     #[test]
     fn test_new_analysis() {
         let analysis = Analysis::new();
-        assert!(analysis.date.date().len() > 0);
+        assert!(!analysis.date.date().is_empty());
         assert_eq!(analysis.processing_time, None);
         assert_eq!(analysis.count_files, None);
     }

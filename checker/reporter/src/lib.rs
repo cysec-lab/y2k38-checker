@@ -4,6 +4,7 @@ pub mod analyzer {
 }
 pub mod y2k38_checker {
     pub mod clang_plugin_y2k38_checker;
+    pub mod y2k38_checker_mock;
     pub mod y2k38_checker_trait;
 }
 pub mod domain {

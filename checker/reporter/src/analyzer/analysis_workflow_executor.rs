@@ -8,17 +8,17 @@ use super::timer::Timer;
 pub struct AnalysisWorkflowExecutor {
     files: Vec<File>,
     analysis: Analysis,
-    analysis_detail: Vec<AnalysisDetail>,
+    analysis_details: Vec<AnalysisDetail>,
     y2k38_checker: Box<dyn Y2k38Checker>,
 }
 
 impl AnalysisWorkflowExecutor {
     pub fn new(files: Vec<File>, y2k38_checker: Box<dyn Y2k38Checker>) -> Self {
         AnalysisWorkflowExecutor {
-            files: files,
+            files,
             analysis: Analysis::new(),
-            analysis_detail: Vec::new(),
-            y2k38_checker: y2k38_checker,
+            analysis_details: Vec::new(),
+            y2k38_checker,
         }
     }
 
@@ -26,13 +26,11 @@ impl AnalysisWorkflowExecutor {
         let mut timer = Timer::new();
         timer.start();
 
-        let analysis_detail_list: Vec<AnalysisDetail> = self
+        self.analysis_details = self
             .files
             .iter()
             .flat_map(|file| run_checker(file, &*self.y2k38_checker))
             .collect();
-
-        self.analysis_detail = analysis_detail_list;
 
         timer.stop();
         self.analysis.set_processing_time(timer.time());
@@ -45,20 +43,20 @@ impl AnalysisWorkflowExecutor {
         &self.analysis
     }
     pub fn analysis_detail(&self) -> &Vec<AnalysisDetail> {
-        &self.analysis_detail
+        &self.analysis_details
     }
 }
 
 fn run_checker(file: &File, y2k38_checker: &dyn Y2k38Checker) -> Vec<AnalysisDetail> {
     let result = y2k38_checker.run(file, false);
-    if result.is_ok() {
-        return result.unwrap();
+    if let Ok(analysis_details) = result {
+        analysis_details
     } else {
         println!("[Error] in Y2k38Checker.run(): {:?}", result.err());
         println!("- file: {:#?}", file.path());
         println!("- Y2k38Checker: {:#?}", y2k38_checker.name());
         println!("- description: {:#?}", y2k38_checker.description());
-        return Vec::new();
+        Vec::new()
     }
 }
 
@@ -76,6 +74,6 @@ mod tests {
         let mut executor = AnalysisWorkflowExecutor::new(vec![file], Box::new(checker));
         executor.run();
 
-        assert!(executor.analysis_detail().len() > 0);
+        assert!(!executor.analysis_detail().is_empty());
     }
 }

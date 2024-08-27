@@ -31,11 +31,9 @@ impl Y2k38Checker for ClangPluginY2k38Checker {
                 if is_stdout {
                     println!("Clang Output:{}", stderr_output);
                 }
-                return Ok(parse_clang_output(&stderr_output));
+                Ok(parse_clang_output(&stderr_output))
             }
-            Err(e) => {
-                return Err(e);
-            }
+            Err(e) => Err(e),
         }
     }
 
@@ -87,7 +85,7 @@ fn parse_clang_output(output: &str) -> Vec<AnalysisDetail> {
         if let Some(captures) = re.captures(line) {
             let parsed1 = &captures[1].to_string();
             let file = File::new(parsed1.clone());
-            file.is_exist();
+            file.exists();
 
             let parsed2 = &captures[2];
             let row = parsed2.parse::<u32>().unwrap();
@@ -177,6 +175,6 @@ mod tests {
         ));
         let checker = ClangPluginY2k38Checker {};
         let result = checker.run(&file, false);
-        assert!(result.unwrap().len() > 0);
+        assert!(!result.unwrap().is_empty());
     }
 }

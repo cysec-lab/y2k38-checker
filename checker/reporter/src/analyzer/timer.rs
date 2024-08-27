@@ -28,6 +28,12 @@ impl Timer {
     }
 }
 
+impl Default for Timer {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -44,7 +50,7 @@ mod tests {
 
         let elapsed_time = timer.time;
         assert!(
-            elapsed_time >= 1.0 && elapsed_time < 1.2,
+            (1.0..1.2).contains(&elapsed_time),
             "Elapsed time should be around 1 second"
         );
     }
