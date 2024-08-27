@@ -1,7 +1,7 @@
 use std::{env, process::exit};
 use y2k38_report::{
     analyzer::analysis_workflow_executor::AnalysisWorkflowExecutor, domain::value::file::File,
-    y2k38_checker::clang_plugin_y2k38_checker::ClangPluginY2k38Checker,
+    y2k38_checker,
 };
 
 fn main() {
@@ -12,7 +12,10 @@ fn main() {
     }
     let files = vec![File::new(args[1].clone())];
 
+    use y2k38_checker::clang_plugin_y2k38_checker::ClangPluginY2k38Checker;
     let checker = ClangPluginY2k38Checker {};
+    // use y2k38_checker::y2k38_checker_mock::Y2k38CheckerMock;
+    // let checker = Y2k38CheckerMock {};
 
     let mut analysis_workflow_executor = AnalysisWorkflowExecutor::new(files, Box::new(checker));
     analysis_workflow_executor.run();

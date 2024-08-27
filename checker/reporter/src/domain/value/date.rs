@@ -17,6 +17,12 @@ impl Date {
     }
 }
 
+impl Default for Date {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

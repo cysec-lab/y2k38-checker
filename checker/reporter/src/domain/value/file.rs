@@ -12,7 +12,7 @@ impl File {
     pub fn path(&self) -> &str {
         &self.path
     }
-    pub fn is_exist(&self) -> bool {
+    pub fn exists(&self) -> bool {
         Path::new(self.path()).exists()
     }
 }
@@ -37,7 +37,7 @@ mod tests {
         fs::File::create(test_file_path).expect("Failed to create test file");
         let file = File::new(test_file_path.to_string());
 
-        assert!(file.is_exist());
+        assert!(file.exists());
 
         fs::remove_file(test_file_path).expect("Failed to delete test file");
     }
