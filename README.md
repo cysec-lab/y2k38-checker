@@ -25,17 +25,17 @@ Requirements:
 1. Download the [releases](https://github.com/cysec-lab/y2k38-checker/releases/).
 2. Unzip the downloaded file.
 
-```sh {"id":"01J4MTVGEAP8HW3A5ZXVS199JV"}
+```sh
 unzip y2k38-checker-<version>.zip
 ```
 
 Then, the following directory structure is created.
 
-```ini {"id":"01J4MTVGEBT2Q5592EVKA8RT86"}
+```ini
 y2k38-checker/
 ├─┬ checker/
 │  ├── build/lib/liby2k38-plugin.so  # detection tool as a Clang plugin
-│  ├── scripts/           # scripts for running the detection tool
+│  ├── reporter/                      # Rust CLI runner
 │  └── clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04
 ├── dataset/             # example for C source code
 ├── volumes/             # target source code
@@ -47,7 +47,7 @@ y2k38-checker/
 
 3. Add the path of the created the directory in `.devcontainer/docker-compose.yml`
 
-```diff {"id":"01J4MTVGEBT2Q5592EVKQEK7WV"}
+```diff
 services:
    y2k38-checker-app:
       build:
@@ -64,7 +64,7 @@ services:
 
 4. Build & Run the docker container with CLI or DevContainer
 
-```sh {"id":"01J4MTVGEBT2Q5592EVQ28Z1T4"}
+```sh
 cd y2k38-checker
 docker-compose build # only first time
 docker-compose run y2k38-checker
@@ -74,29 +74,26 @@ Alternatively, start it in the devcontainer of VSCode.
 
 5. Run the detection tool with the following command.
 
-### Run as script
+### Run
 
 Check the source code in the `volumes/` directory with the detection tool.
 
-```sh {"id":"01J4MTVGEBT2Q5592EVVDQQAHD"}
-python3 ./checker/script/analyze/main.py file.c
-# python3 ./checker/scripts/analyze/main.py ./dataset/blacklist/read-fs-timestamp.c
-```
-
-<!--
-### Run as standalone tool
 ```sh
-cd ../build
-./bin/check-y2k38 -- ../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang -c ../../dataset/blacklist/read-fs-timestamp.c
-
-pwd # path/to/repo
-./build/bin/check-y2k38 -p ./clang-analyzer/compile_commands.json
+cd checker/reporter
+cargo run -- <file.c>
+# cargo run -- ../../dataset/blacklist/read-fs-timestamp.c
 ```
--->
+
+The Clang binary and plugin paths default to the bundled LLVM 11 installation.
+Override them via environment variables if needed:
+
+```sh
+CLANG_PATH=/path/to/clang PLUGIN_PATH=/path/to/liby2k38-plugin.so cargo run -- <file.c>
+```
 
 ### Run as a Clang plugin
 
-```sh {"id":"01J4MTVGEBT2Q5592EW1W21NBR"}
+```sh
 clang -w -fplugin=/root/y2k38-checker/checker/build/lib/liby2k38-plugin.so -c file.c
 # clang -w -fplugin=/root/y2k38-checker/checker/build/lib/liby2k38-plugin.so -c /root/y2k38-checker/dataset/blacklist/read-fs-timestamp.c
 ```
@@ -107,20 +104,20 @@ clang -w -fplugin=/root/y2k38-checker/checker/build/lib/liby2k38-plugin.so -c fi
 
 1. Clone the repository
 
-```sh {"id":"01J4MTVGEBT2Q5592EW3EBZF4F"}
+```sh
 git clone https://github.com/cysec-lab/y2k38-checker.git
 ```
 
 2. Create the directory for the detecting target source code, and add files to be analyzed.
 
-```sh {"id":"01J4MTVGEBT2Q5592EW65RZPR9"}
+```sh
 mkdir <path/to/dir>
 cp -r <files/to/be/analyzed> <path/to/dir>
 ```
 
 3. Download LLVM library
 
-```sh {"id":"01J4MTVGEBT2Q5592EW8N0R11X"}
+```sh
 cd ./checker/
 curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04.tar.xz | tar -Jxf -
 ```
@@ -129,7 +126,7 @@ curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/cl
 
 4. Add the path of the created the directory in `.devcontainer/docker-compose.yml`
 
-```diff {"id":"01J4MTVGEBT2Q5592EWAW8FT78"}
+```diff
 services:
    y2k38-checker-app:
       build:
@@ -146,7 +143,7 @@ services:
 
 5. Build & Run the docker container with CLI or DevContainer
 
-```sh {"id":"01J4MTVGEBT2Q5592EWEN1V1T7"}
+```sh
 cd y2k38-checker
 docker-compose build # only first time
 docker-compose run y2k38-checker
@@ -156,15 +153,17 @@ Alternatively, start it in the devcontainer of VSCode.
 
 ### Build
 
+#### Clang plugin
+
 1. Move to the checker/ directory
 
-```sh {"id":"01J4MTVGEBT2Q5592EWJ3NCBZG"}
+```sh
 cd ./checker
 ```
 
 2. Build with CMake
 
-```sh {"id":"01J4MTVGEBT2Q5592EWMGQDV4T"}
+```sh
 cd ../checker/build
 cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
    -DLLVM_DIR=../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/lib/cmake/llvm/ \
@@ -174,11 +173,18 @@ make
 
 Then, the plugin library is created in the `build/lib` directory.
 
+#### Rust reporter
+
+```sh
+cd checker/reporter
+cargo build
+```
+
 ### Test
 
-For Python scripts, run the following command.
+Run Rust unit tests:
 
-```sh {"id":"01J4MTVGEBT2Q5592EWN1Y3Q0K"}
-cd ./checker/script/analyze/
-PYTHONPATH=$(pwd) python3 -m unittest discover
+```sh
+cd checker/reporter
+cargo test
 ```
