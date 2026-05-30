@@ -3,6 +3,7 @@
 
 #include "clang/ASTMatchers/ASTMatchFinder.h"
 #include "clang/Basic/Diagnostic.h"
+#include "clang/Basic/DiagnosticIDs.h"
 #include "clang/Frontend/CompilerInstance.h"
 #include "clang/Frontend/FrontendActions.h"
 
@@ -26,8 +27,8 @@ class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
         if (!node) return;
 
         clang::DiagnosticsEngine &DE = Result.Context->getDiagnostics();
-        unsigned diagID = DE.getCustomDiagID(
-            clang::DiagnosticsEngine::Warning, category_);
+        unsigned diagID = DE.getDiagnosticIDs()->getCustomDiagID(
+            clang::DiagnosticIDs::Warning, category_);
         DE.Report(node->getBeginLoc(), diagID);
     }
 };
