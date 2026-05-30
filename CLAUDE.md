@@ -85,7 +85,7 @@ recipe so that **"passes locally" implies "passes in CI"**:
 
 | Job | Recipe | Notes |
 |-----|--------|-------|
-| Format & Lint | `just fmt-check` | rustfmt + clippy (`-D warnings`) + ruff |
+| Format & Lint | `just fmt-check` | rustfmt + clippy (`-D warnings`) |
 | Test | `just test-unit` | Rust unit tests; no LLVM required |
 | Build | `just setup-llvm` + `just build` | Clang plugin + Rust reporter; LLVM 11 cached |
 | Integration | `just test` | Real plugin; `continue-on-error` (hardcoded paths) |

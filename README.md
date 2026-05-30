@@ -151,29 +151,22 @@ Alternatively, start it in the devcontainer of VSCode.
 
 ### Build
 
-1. Move to the checker/ directory
-
-```sh {"id":"01J4MTVGEBT2Q5592EWJ3NCBZG"}
-cd ./checker
-```
-
-2. Build with CMake
+Build the Clang plugin and the Rust reporter with a single command:
 
 ```sh {"id":"01J4MTVGEBT2Q5592EWMGQDV4T"}
-cd ../checker/build
-cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
-   -DLLVM_DIR=../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/lib/cmake/llvm/ \
-   ../clang-analyzer
-make
+just build
 ```
 
-Then, the plugin library is created in the `build/lib` directory.
+This runs CMake/make for the plugin and `cargo build` for the reporter. The plugin library is
+created in the `checker/build/lib` directory.
 
 ### Test
 
-For Python scripts, run the following command.
-
 ```sh {"id":"01J4MTVGEBT2Q5592EWN1Y3Q0K"}
-cd ./checker/script/analyze/
-PYTHONPATH=$(pwd) python3 -m unittest discover
+just test-unit         # unit tests only (no LLVM/plugin required)
+just test-integration  # integration tests (requires LLVM + built plugin)
+just test              # all tests
 ```
+
+See `docs/spec.md` for the full architecture and testing strategy, and `Justfile` for all
+available recipes.

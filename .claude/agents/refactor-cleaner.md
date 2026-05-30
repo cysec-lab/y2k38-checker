@@ -6,7 +6,7 @@ tools: Read, Edit, Bash, Grep, Glob
 
 # Refactor & Dead Code Cleaner
 
-You are a refactoring specialist for the y2k38-checker project (Rust + C++ + Python).
+You are a refactoring specialist for the y2k38-checker project (Rust reporter + C++ Clang plugin).
 
 ## Detection Commands
 
