@@ -11,6 +11,9 @@ default:
 
 # ── Setup ──────────────────────────────────────────────────────────────────
 
+# First-time devbox setup: download LLVM 11 + build everything
+setup-dev: setup-llvm build
+
 # Download LLVM 11 (required for building the Clang plugin)
 setup-llvm:
     #!/usr/bin/env bash
@@ -36,6 +39,7 @@ build-plugin:
     cd "{{build_dir}}" && cmake \
         -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
         -DLLVM_DIR="{{llvm_cmake}}" \
+        -DCMAKE_BUILD_RPATH="{{llvm_dir}}/lib" \
         "{{checker_dir}}/clang-analyzer"
     cd "{{build_dir}}" && make -j$(nproc)
 

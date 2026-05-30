@@ -1,0 +1,30 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.13.3/.schema/devbox.schema.json",
+  "packages": [
+    "cmake@latest",
+    "ninja@latest",
+    "gcc@latest",
+    "gnumake@latest",
+    "curl@latest",
+    "git@latest",
+    "just@latest",
+    "rustup@latest",
+    "xz@latest",
+    "pkg-config@latest"
+  ],
+  "shell": {
+    "init_hook": [
+      "rustup toolchain install stable --no-self-update --quiet 2>/dev/null || true",
+      "rustup default stable",
+      "export LLVM11_DIR=\"${DEVBOX_PROJECT_ROOT}/checker/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04\"",
+      "export CLANG_PATH=\"${LLVM11_DIR}/bin/clang\"",
+      "export PLUGIN_PATH=\"${DEVBOX_PROJECT_ROOT}/checker/build/lib/liby2k38-plugin.so\"",
+      "export PATH=\"${LLVM11_DIR}/bin:${PATH}\"",
+      "export LD_LIBRARY_PATH=\"${LLVM11_DIR}/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}\""
+    ],
+    "scripts": {
+      "setup": "just setup-llvm && just build",
+      "test-fast": "just ci-fast"
+    }
+  }
+}
