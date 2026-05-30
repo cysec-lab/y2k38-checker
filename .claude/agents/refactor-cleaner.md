@@ -15,9 +15,6 @@ You are a refactoring specialist for the y2k38-checker project (Rust reporter + 
 cd checker/reporter && cargo check 2>&1 | grep "unused"
 cd checker/reporter && cargo clippy 2>&1 | grep "dead_code\|unused"
 
-# Python
-ruff check checker/script --select F401,F811
-
 # C++
 cd checker/build && make 2>&1 | grep "unused"
 ```
