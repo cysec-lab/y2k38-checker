@@ -3,16 +3,23 @@
 
 #include <memory>
 
-#include "../Y2k38CheckBase.h"
 #include "clang/AST/AST.h"
+#include "clang/AST/ASTConsumer.h"
 #include "clang/ASTMatchers/ASTMatchFinder.h"
 #include "clang/ASTMatchers/ASTMatchers.h"
+#include "clang/Basic/Diagnostic.h"
+#include "clang/Frontend/CompilerInstance.h"
+#include "clang/Frontend/FrontendActions.h"
+#include "clang/Tooling/Tooling.h"
 
 using namespace clang;
 using namespace clang::ast_matchers;
 
 namespace writefstimestamp {
 
+/**
+ * Matcher
+ */
 static const char *ID = "write-fs-timestamp-id";
 auto matcher =
     declRefExpr(to(anyOf(functionDecl(hasName("utime"),
@@ -31,16 +38,46 @@ auto matcher =
                                       isExpansionInFileMatching("time.h")))))
         .bind(ID);
 
-inline void addMatcher(MatchFinder *Finder) {
-    Finder->addMatcher(
-        matcher,
-        new y2k38::MatcherCallback<clang::DeclRefExpr>(ID, "y2k38 (write-fs-timestamp)"));
+// 定義ファイル指定ない版
+// auto matcher =
+//     declRefExpr(to(functionDecl(anyOf(hasName("utime"), hasName("utimes")))))
+//         .bind(ID);
+
+class MatcherCallback : public clang::ast_matchers::MatchFinder::MatchCallback {
+   public:
+    virtual void run(
+        const clang::ast_matchers::MatchFinder::MatchResult &Result) final {
+        const auto *declRefExpr =
+            Result.Nodes.getNodeAs<clang::DeclRefExpr>(ID);
+        if (!declRefExpr) return;
+
+        DiagnosticsEngine &DE = Result.Context->getDiagnostics();
+        unsigned ID =
+            DE.getCustomDiagID(DiagnosticsEngine::Warning,
+                               "y2k38 (write-fs-timestamp)");
+        DE.Report(declRefExpr->getBeginLoc(), ID);
+    }
+};
+
+void addMatcher(MatchFinder *Finder) {
+    MatcherCallback *matcherCallback = new MatcherCallback();
+    Finder->addMatcher(matcher, matcherCallback);
 }
 
-class WriteFsTimestampAction : public y2k38::ActionBase<WriteFsTimestampAction> {
+class WriteFsTimestampAction : public clang::PluginASTAction {
    public:
-    static void registerMatchers(clang::ast_matchers::MatchFinder *Finder) {
+    WriteFsTimestampAction() {}
+
+    std::unique_ptr<clang::ASTConsumer> CreateASTConsumer(
+        clang::CompilerInstance &ci, llvm::StringRef) override {
+        clang::ast_matchers::MatchFinder *Finder = new clang::ast_matchers::MatchFinder();
         addMatcher(Finder);
+        return Finder->newASTConsumer();
+    }
+
+    bool ParseArgs(const clang::CompilerInstance &ci,
+                   const std::vector<std::string> &args) override {
+        return true;
     }
 
     clang::PluginASTAction::ActionType getActionType() override {
