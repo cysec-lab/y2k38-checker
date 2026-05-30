@@ -25,16 +25,22 @@ just fmt            # format in-place
 just fmt-check      # CI: check without modifying
 
 # Test
-just test           # all tests (requires Docker environment or just setup-llvm + just build)
-just test-unit      # unit tests only — no LLVM/plugin required
-just test-python    # Python tests only
+just test-unit         # unit tests (Rust + Python) — no LLVM/plugin required
+just test-integration  # integration tests only (#[ignore]'d; needs LLVM + plugin)
+just test              # everything incl. integration (Docker env or setup-llvm + build)
 
 # Run the checker
 just check path/to/file.c
 
-# Full CI suite locally
-just ci
+# CI suites (each CI job runs the matching recipe — local == CI)
+just ci-fast        # fmt-check + test-unit (no LLVM; mirrors the fmt + test CI jobs)
+just ci             # full suite: fmt-check + build + test
 ```
+
+> Integration tests are annotated `#[ignore]` because they shell out to the
+> real Clang plugin via hardcoded `/root/y2k38-checker` paths. Plain
+> `cargo test` (and `just test-unit`) skips them; `cargo test -- --ignored`
+> (or `just test-integration`) runs only those.
 
 > **Note**: Integration tests (`test_run`, `test_health_check`, etc.) use hardcoded Docker paths
 > (`/root/y2k38-checker/...`). Run them inside the Docker dev container or via `just ci`.

@@ -67,20 +67,25 @@ fmt-check-python:
 
 # ── Test ───────────────────────────────────────────────────────────────────
 
-# Run only tests that do NOT require LLVM/plugin (used by CI `test` job)
+# Run only tests that do NOT require LLVM/plugin (used by CI `test` job).
+# Integration tests are marked `#[ignore]` and are skipped by plain `cargo test`.
 test-unit: test-unit-rust test-python
 
 test-unit-rust:
-    cd "{{reporter_dir}}" && cargo test -- test_parse_clang_output test_to_y2k38_category_enum
+    cd "{{reporter_dir}}" && cargo test
 
 test-python:
     cd "{{script_dir}}/analyze" && PYTHONPATH=$(pwd) python3 -m unittest discover
+
+# Run ONLY the ignored integration tests (requires LLVM 11 + built plugin)
+test-integration:
+    cd "{{reporter_dir}}" && cargo test -- --ignored
 
 # Run ALL tests incl. integration (requires LLVM 11 + built plugin)
 test: test-rust test-python
 
 test-rust:
-    cd "{{reporter_dir}}" && cargo test
+    cd "{{reporter_dir}}" && cargo test -- --include-ignored
 
 # ── Run ────────────────────────────────────────────────────────────────────
 

@@ -75,6 +75,7 @@ fn run_clang_process(file: &File) -> Result<String, io::Error> {
 
 // clang-analyzer の出力形式:
 // file.c:3:11: warning: y2k38 (read-fs-timestamp): {description}
+// OK: compile-time constant pattern; a malformed regex is a programmer error.
 static WARNING_RE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"^(.+?):(\d+):(\d+): warning: y2k38 \((.+)\)").unwrap());
 
@@ -154,6 +155,7 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "integration: requires LLVM 11 + built plugin at hardcoded /root paths"]
     fn test_run_clang_process() {
         let file = File::new(String::from(
             "/root/y2k38-checker/dataset/blacklist/read-fs-timestamp.c",
@@ -163,12 +165,14 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "integration: requires LLVM 11 + built plugin at hardcoded /root paths"]
     fn test_health_check() {
         let checker = ClangPluginY2k38Checker {};
         assert!(checker.health_check());
     }
 
     #[test]
+    #[ignore = "integration: requires LLVM 11 + built plugin at hardcoded /root paths"]
     fn test_run() {
         let file = File::new(String::from(
             "/root/y2k38-checker/dataset/blacklist/read-fs-timestamp.c",

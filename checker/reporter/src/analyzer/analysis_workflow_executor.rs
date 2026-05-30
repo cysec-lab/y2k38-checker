@@ -66,6 +66,7 @@ mod tests {
     use crate::y2k38_checker::clang_plugin_y2k38_checker::ClangPluginY2k38Checker;
 
     #[test]
+    #[ignore = "integration: requires LLVM 11 + built plugin at hardcoded /root paths"]
     fn test_run() {
         let file = File::new(String::from(
             "/root/y2k38-checker/dataset/blacklist/read-fs-timestamp.c",
