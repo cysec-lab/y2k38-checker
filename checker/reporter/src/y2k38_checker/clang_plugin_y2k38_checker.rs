@@ -1,6 +1,7 @@
 use regex::Regex;
 use std::io;
 use std::process::{Command, Output, Stdio};
+use std::sync::LazyLock;
 
 use crate::domain::{
     analysis_detail::AnalysisDetail, types::y2k38_category::Y2k38Category, value::file::File,
@@ -65,24 +66,23 @@ fn run_clang_process(file: &File) -> Result<String, io::Error> {
     if output.status.success() {
         Ok(String::from_utf8_lossy(&output.stderr).to_string())
     } else {
-        Err(io::Error::new(
-            io::ErrorKind::Other,
-            format!(
-                "Failed to run clang: {}",
-                String::from_utf8_lossy(&output.stderr)
-            ),
-        ))
+        Err(io::Error::other(format!(
+            "Failed to run clang: {}",
+            String::from_utf8_lossy(&output.stderr)
+        )))
     }
 }
+
+// clang-analyzer の出力形式:
+// file.c:3:11: warning: y2k38 (read-fs-timestamp): {description}
+static WARNING_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^(.+?):(\d+):(\d+): warning: y2k38 \((.+)\)").unwrap());
 
 fn parse_clang_output(output: &str) -> Vec<AnalysisDetail> {
     let mut analysis_details: Vec<AnalysisDetail> = Vec::new();
 
     for line in output.lines() {
-        // clang-analyzer の出力形式:
-        // file.c:3:11: warning: y2k38 (read-fs-timestamp): {description}
-        let re = Regex::new(r"^(.+?):(\d+):(\d+): warning: y2k38 \((.+)\)").unwrap();
-        if let Some(captures) = re.captures(line) {
+        if let Some(captures) = WARNING_RE.captures(line) {
             let parsed1 = &captures[1].to_string();
             let file = File::new(parsed1.clone());
             file.exists();

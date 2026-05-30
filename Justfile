@@ -72,7 +72,8 @@ test: test-rust test-python
 
 # Run only unit tests that do not require LLVM/plugin
 test-unit:
-    cd "{{reporter_dir}}" && cargo test test_parse_clang_output test_to_y2k38_category_enum
+    cd "{{reporter_dir}}" && cargo test -- test_parse_clang_output test_to_y2k38_category_enum
+    cd "{{script_dir}}/analyze" && PYTHONPATH=$(pwd) python3 -m unittest discover
 
 # Run all Rust tests (requires LLVM 11 + built plugin at hardcoded Docker paths)
 test-rust:
