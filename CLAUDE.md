@@ -81,6 +81,28 @@ docker-compose -f .devcontainer/docker-compose.yml up -d
 Set `Y2K38_ANALYSIS_OBJECTS_DIR` in your shell (or `.env`) to the directory you want mounted as
 `/root/analysis-objects` inside the container.
 
+## CI
+
+GitHub Actions (`.github/workflows/ci.yml`) runs four jobs, each invoking the matching `just`
+recipe so that **"passes locally" implies "passes in CI"**:
+
+| Job | Recipe | Notes |
+|-----|--------|-------|
+| Format & Lint | `just fmt-check` | rustfmt + clippy (`-D warnings`) + ruff |
+| Test | `just test-unit` | Rust unit + Python; no LLVM required |
+| Build | `just setup-llvm` + `just build` | Clang plugin + Rust reporter; LLVM 11 cached |
+| Integration | `just test` | Real plugin; `continue-on-error` (hardcoded paths) |
+
+Reproduce the fast jobs locally with `just ci-fast`.
+
+## Agents
+
+Specialized agents live in `.claude/agents/`:
+
+- **code-reviewer** — correctness/safety/consistency review before a PR
+- **planner** — design the approach before adding a new check or feature
+- **refactor-cleaner** — find and safely remove dead code
+
 ## Rules & Docs
 
 - Git workflow: `.claude/rules/git-workflow.md`
