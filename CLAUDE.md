@@ -42,9 +42,6 @@ just ci             # full suite: fmt-check + build + test
 > `cargo test` (and `just test-unit`) skips them; `cargo test -- --ignored`
 > (or `just test-integration`) runs only those.
 
-> **Note**: Integration tests (`test_run`, `test_health_check`, etc.) use hardcoded Docker paths
-> (`/root/y2k38-checker/...`). Run them inside the Docker dev container or via `just ci`.
-
 ## Architecture
 
 Three components work together:

@@ -156,9 +156,18 @@ Download LLVM 11: `just setup-llvm` (see `Justfile`)
 - `test_to_y2k38_category_enum` — verifies string-to-enum mapping
 
 ### Integration tests (require LLVM + built plugin)
+
+These are annotated `#[ignore]` so a plain `cargo test` skips them. They shell out to the real
+Clang plugin via the hardcoded `/root/y2k38-checker` paths (known tech debt).
+
 - `test_run_clang_process` — invokes real clang subprocess
 - `test_health_check` — verifies clang binary is reachable
-- `test_run` / `test_run` in executor — end-to-end with dataset files
+- `test_run` (checker + executor) — end-to-end with dataset files
 
-Run unit tests only: `just test-unit`
-Run all tests (inside Docker): `just test`
+### Running tests
+
+| Command | Scope |
+|---------|-------|
+| `just test-unit` | Unit tests (Rust + Python); no LLVM required |
+| `just test-integration` | `#[ignore]`'d integration tests only (`cargo test -- --ignored`) |
+| `just test` | Everything, incl. integration (inside Docker / after `just setup-llvm` + `just build`) |
