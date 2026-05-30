@@ -1,0 +1,120 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "claude/**", "feature/**"]
+  pull_request:
+    branches: [main]
+
+env:
+  LLVM_VERSION: "11.0.0"
+  LLVM_TARGET: "x86_64-linux-gnu-ubuntu-20.04"
+  LLVM_DIR_NAME: "clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04"
+  CARGO_TERM_COLOR: always
+
+jobs:
+  fmt:
+    name: Format & Lint
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - uses: astral-sh/setup-ruff@v3
+
+      - name: cargo fmt --check
+        run: cd checker/reporter && cargo fmt -- --check
+
+      - name: cargo clippy
+        run: cd checker/reporter && cargo clippy -- -D warnings
+
+      - name: ruff check
+        run: ruff check checker/script
+
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache LLVM 11
+        id: cache-llvm
+        uses: actions/cache@v4
+        with:
+          path: checker/${{ env.LLVM_DIR_NAME }}
+          key: llvm-${{ env.LLVM_VERSION }}-${{ env.LLVM_TARGET }}
+
+      - name: Download LLVM 11
+        if: steps.cache-llvm.outputs.cache-hit != 'true'
+        run: |
+          cd checker
+          curl -L \
+            "https://github.com/llvm/llvm-project/releases/download/llvmorg-${{ env.LLVM_VERSION }}/${{ env.LLVM_DIR_NAME }}.tar.xz" \
+            | tar -Jxf -
+
+      - name: Install CMake & Ninja
+        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Build Clang plugin
+        run: |
+          mkdir -p checker/build
+          cd checker/build
+          cmake \
+            -DCMAKE_EXPORT_COMPILE_COMMANDS=True \
+            -DLLVM_DIR="../${{ env.LLVM_DIR_NAME }}/lib/cmake/llvm/" \
+            ../clang-analyzer
+          make -j$(nproc)
+
+      - name: Build Rust reporter
+        run: cd checker/reporter && cargo build --release
+
+      - name: Upload plugin artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: clang-plugin
+          path: checker/build/lib/liby2k38-plugin.so
+          retention-days: 1
+
+  test:
+    name: Test
+    runs-on: ubuntu-22.04
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache LLVM 11
+        uses: actions/cache@v4
+        with:
+          path: checker/${{ env.LLVM_DIR_NAME }}
+          key: llvm-${{ env.LLVM_VERSION }}-${{ env.LLVM_TARGET }}
+
+      # Integration tests use hardcoded /root/y2k38-checker paths (Docker paths).
+      # Symlink the workspace to the expected root so those tests pass in CI.
+      - name: Create path symlink for integration tests
+        run: |
+          sudo mkdir -p /root
+          sudo ln -sf "$GITHUB_WORKSPACE" /root/y2k38-checker
+
+      - name: Download plugin artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: clang-plugin
+          path: checker/build/lib/
+
+      - name: Fix plugin permissions
+        run: chmod 755 checker/build/lib/liby2k38-plugin.so
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: cargo test
+        run: cd checker/reporter && cargo test
+
+      - name: Python unittest
+        run: |
+          cd checker/script/analyze
+          PYTHONPATH=$(pwd) python3 -m unittest discover

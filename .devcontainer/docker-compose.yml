@@ -7,5 +7,5 @@ services:
     volumes:
       - ..:/root/y2k38-checker
       - type: bind
-        source: /home/cysec/develop/.y2k38-checker/analysis-objects/ # 環境に合わせて変える
+        source: ${Y2K38_ANALYSIS_OBJECTS_DIR:-./volumes}
         target: /root/analysis-objects
