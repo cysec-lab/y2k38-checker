@@ -55,7 +55,7 @@ fmt-rust:
 fmt-python:
     ruff format "{{script_dir}}"
 
-# Check formatting without modifying (used by CI)
+# Check formatting + lint without modifying (used by CI)
 fmt-check: fmt-check-rust fmt-check-python
 
 fmt-check-rust:
@@ -67,21 +67,20 @@ fmt-check-python:
 
 # ── Test ───────────────────────────────────────────────────────────────────
 
-# Run all tests (requires built Clang plugin)
-test: test-rust test-python
+# Run only tests that do NOT require LLVM/plugin (used by CI `test` job)
+test-unit: test-unit-rust test-python
 
-# Run only unit tests that do not require LLVM/plugin
-test-unit:
+test-unit-rust:
     cd "{{reporter_dir}}" && cargo test -- test_parse_clang_output test_to_y2k38_category_enum
-    cd "{{script_dir}}/analyze" && PYTHONPATH=$(pwd) python3 -m unittest discover
 
-# Run all Rust tests (requires LLVM 11 + built plugin at hardcoded Docker paths)
-test-rust:
-    cd "{{reporter_dir}}" && cargo test
-
-# Run Python unit tests
 test-python:
     cd "{{script_dir}}/analyze" && PYTHONPATH=$(pwd) python3 -m unittest discover
+
+# Run ALL tests incl. integration (requires LLVM 11 + built plugin)
+test: test-rust test-python
+
+test-rust:
+    cd "{{reporter_dir}}" && cargo test
 
 # ── Run ────────────────────────────────────────────────────────────────────
 
@@ -89,7 +88,10 @@ test-python:
 check FILE:
     cd "{{reporter_dir}}" && cargo run --release -- "{{FILE}}"
 
-# ── CI (local simulation) ──────────────────────────────────────────────────
+# ── CI ───────────────────────────────────────────────────────────────────────
 
-# Run the full CI suite locally
+# Fast CI suite (no LLVM): exactly what the `fmt` + `test` CI jobs run
+ci-fast: fmt-check test-unit
+
+# Full CI suite locally (requires `just setup-llvm` first)
 ci: fmt-check build test
