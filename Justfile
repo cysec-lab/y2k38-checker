@@ -2,7 +2,6 @@ root          := justfile_directory()
 checker_dir   := root / "checker"
 reporter_dir  := checker_dir / "reporter"
 build_dir     := checker_dir / "build"
-script_dir    := checker_dir / "script"
 llvm_name     := "clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04"
 llvm_dir      := checker_dir / llvm_name
 llvm_cmake    := llvm_dir / "lib/cmake/llvm"
@@ -47,44 +46,27 @@ build-reporter:
 # ── Format ─────────────────────────────────────────────────────────────────
 
 # Format all code in-place
-fmt: fmt-rust fmt-python
-
-fmt-rust:
+fmt:
     cd "{{reporter_dir}}" && cargo fmt
 
-fmt-python:
-    ruff format "{{script_dir}}"
-
 # Check formatting + lint without modifying (used by CI)
-fmt-check: fmt-check-rust fmt-check-python
-
-fmt-check-rust:
+fmt-check:
     cd "{{reporter_dir}}" && cargo fmt -- --check
     cd "{{reporter_dir}}" && cargo clippy -- -D warnings
-
-fmt-check-python:
-    ruff check "{{script_dir}}"
 
 # ── Test ───────────────────────────────────────────────────────────────────
 
 # Run only tests that do NOT require LLVM/plugin (used by CI `test` job).
 # Integration tests are marked `#[ignore]` and are skipped by plain `cargo test`.
-test-unit: test-unit-rust test-python
-
-test-unit-rust:
+test-unit:
     cd "{{reporter_dir}}" && cargo test
-
-test-python:
-    cd "{{script_dir}}/analyze" && PYTHONPATH=$(pwd) python3 -m unittest discover
 
 # Run ONLY the ignored integration tests (requires LLVM 11 + built plugin)
 test-integration:
     cd "{{reporter_dir}}" && cargo test -- --ignored
 
 # Run ALL tests incl. integration (requires LLVM 11 + built plugin)
-test: test-rust test-python
-
-test-rust:
+test:
     cd "{{reporter_dir}}" && cargo test -- --include-ignored
 
 # ── Run ────────────────────────────────────────────────────────────────────
@@ -93,10 +75,10 @@ test-rust:
 check FILE:
     cd "{{reporter_dir}}" && cargo run --release -- "{{FILE}}"
 
-# ── CI ───────────────────────────────────────────────────────────────────────
-
-# Fast CI suite (no LLVM): exactly what the `fmt` + `test` CI jobs run
-ci-fast: fmt-check test-unit
+# ── CI (local simulation) ──────────────────────────────────────────────────
 
 # Full CI suite locally (requires `just setup-llvm` first)
 ci: fmt-check build test
+
+# Fast CI suite (no LLVM): exactly what the `fmt` + `test` CI jobs run
+ci-fast: fmt-check test-unit

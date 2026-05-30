@@ -25,7 +25,7 @@ just fmt            # format in-place
 just fmt-check      # CI: check without modifying
 
 # Test
-just test-unit         # unit tests (Rust + Python) — no LLVM/plugin required
+just test-unit         # unit tests — no LLVM/plugin required
 just test-integration  # integration tests only (#[ignore]'d; needs LLVM + plugin)
 just test              # everything incl. integration (Docker env or setup-llvm + build)
 
@@ -44,16 +44,13 @@ just ci             # full suite: fmt-check + build + test
 
 ## Architecture
 
-Three components work together:
+Two components work together:
 
 1. **Clang plugin** (`checker/clang-analyzer/`) — C++ AST visitors that emit `y2k38 (<category>)`
    warnings via Clang's diagnostic system. Built to `checker/build/lib/liby2k38-plugin.so`.
 
 2. **Rust reporter** (`checker/reporter/`) — Orchestrates analysis, shells out to clang with the
    plugin loaded, parses stderr, and outputs structured results.
-
-3. **Python scripts** (`checker/script/`) — Legacy runner (predates Rust reporter). Kept for
-   reference; new features go into the Rust reporter.
 
 See `docs/spec.md` for full architecture, data flow, and check list specification.
 
@@ -89,7 +86,7 @@ recipe so that **"passes locally" implies "passes in CI"**:
 | Job | Recipe | Notes |
 |-----|--------|-------|
 | Format & Lint | `just fmt-check` | rustfmt + clippy (`-D warnings`) + ruff |
-| Test | `just test-unit` | Rust unit + Python; no LLVM required |
+| Test | `just test-unit` | Rust unit tests; no LLVM required |
 | Build | `just setup-llvm` + `just build` | Clang plugin + Rust reporter; LLVM 11 cached |
 | Integration | `just test` | Real plugin; `continue-on-error` (hardcoded paths) |
 

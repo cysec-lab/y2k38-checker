@@ -70,14 +70,6 @@ fn test_name() {
 }
 ```
 
-## Python Tests
-
-Use `unittest.TestCase`. File naming: `test_<module>.py`. Run with:
-
-```bash
-cd checker/script/analyze && PYTHONPATH=$(pwd) python3 -m unittest discover
-```
-
 ## Dataset Tests
 
 `dataset/blacklist/` — each file MUST produce at least one warning for its named check.

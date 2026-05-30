@@ -74,25 +74,14 @@ Alternatively, start it in the devcontainer of VSCode.
 
 5. Run the detection tool with the following command.
 
-### Run as script
+### Run via the reporter
 
-Check the source code in the `volumes/` directory with the detection tool.
+Check a C source file with the Rust reporter (which runs the Clang plugin and formats the results):
 
 ```sh {"id":"01J4MTVGEBT2Q5592EVVDQQAHD"}
-python3 ./checker/script/analyze/main.py file.c
-# python3 ./checker/scripts/analyze/main.py ./dataset/blacklist/read-fs-timestamp.c
+just check file.c
+# just check ./dataset/blacklist/read-fs-timestamp.c
 ```
-
-<!--
-### Run as standalone tool
-```sh
-cd ../build
-./bin/check-y2k38 -- ../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang -c ../../dataset/blacklist/read-fs-timestamp.c
-
-pwd # path/to/repo
-./build/bin/check-y2k38 -p ./clang-analyzer/compile_commands.json
-```
--->
 
 ### Run as a Clang plugin
 
@@ -121,6 +110,12 @@ cp -r <files/to/be/analyzed> <path/to/dir>
 3. Download LLVM library
 
 ```sh {"id":"01J4MTVGEBT2Q5592EW8N0R11X"}
+just setup-llvm
+```
+
+This downloads the pre-built LLVM 11 into `checker/`. Equivalent manual command:
+
+```sh
 cd ./checker/
 curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04.tar.xz | tar -Jxf -
 ```

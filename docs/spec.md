@@ -142,8 +142,7 @@ Used for regression testing.
 |-----------|-------------|
 | Clang plugin | LLVM/Clang 11, CMake ≥ 3.12, C++14 compiler |
 | Rust reporter | Rust ≥ 1.65 (edition 2021) |
-| Python scripts | Python ≥ 3.8 |
-| Formatting | `rustfmt`, `cargo clippy`, `ruff` |
+| Formatting | `rustfmt`, `cargo clippy` |
 
 Download LLVM 11: `just setup-llvm` (see `Justfile`)
 

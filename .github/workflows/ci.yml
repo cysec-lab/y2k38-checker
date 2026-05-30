@@ -24,8 +24,6 @@ jobs:
         with:
           components: rustfmt, clippy
       - uses: extractions/setup-just@v2
-      - name: Install ruff
-        run: pipx install ruff
       - name: just fmt-check
         run: just fmt-check
 
