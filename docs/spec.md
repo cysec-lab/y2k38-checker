@@ -21,14 +21,12 @@ y2k38-checker/
 │   │   └── tools/             # Standalone check-y2k38 binary (legacy)
 │   ├── build/                 # CMake build output
 │   │   └── lib/liby2k38-plugin.so  # Compiled Clang plugin
-│   ├── reporter/              # Rust binary (orchestrator + reporter)
-│   │   └── src/
-│   │       ├── main.rs
-│   │       ├── analyzer/      # AnalysisWorkflowExecutor, Timer
-│   │       ├── y2k38_checker/ # Checker trait + ClangPlugin impl + Mock
-│   │       └── domain/        # Value objects: File, AnalysisDetail, Y2k38Category
-│   └── script/                # Python scripts (legacy analysis runner)
-│       └── analyze/
+│   └── reporter/              # Rust binary (orchestrator + reporter)
+│       └── src/
+│           ├── main.rs
+│           ├── analyzer/      # AnalysisWorkflowExecutor, Timer
+│           ├── y2k38_checker/ # Checker trait + ClangPlugin impl + Mock
+│           └── domain/        # Value objects: File, AnalysisDetail, Y2k38Category
 └── dataset/                   # Sample C files (blacklist = should trigger, whitelist = should not)
 ```
 
@@ -110,9 +108,9 @@ Built with CMake against LLVM/Clang 11. Produces `liby2k38-plugin.so`.
 Each check is an independent `ASTFrontendAction` subclass registered under a common plugin entry
 point (`y2k38-all`). New checks are added by:
 
-1. Creating `lib/<check-name>/` with `*Action.{h,cpp}`.
+1. Creating `lib/<check-name>/` with `*Action.{h,cpp}` (use `y2k38::MatcherCallback<T>` and `y2k38::ActionBase<D>` from `Y2k38CheckBase.h`).
 2. Adding the action to `Y2k38AllAction`.
-3. Adding a `CMakeLists.txt` entry.
+3. Adding a one-line `CMakeLists.txt` that calls `add_y2k38_check(<name> <source>)`.
 
 ### Rust Reporter (`reporter/`)
 
@@ -123,6 +121,10 @@ Key types:
 - `ClangPluginY2k38Checker` — concrete impl that shells out to clang
 - `AnalysisWorkflowExecutor` — iterates files, collects `AnalysisDetail` results
 - `AnalysisDetail` — `(Y2k38Category, File, row: u32, column: u32)`
+
+Environment variables (override defaults at runtime):
+- `CLANG_PATH` — clang binary (default: bundled LLVM 11)
+- `PLUGIN_PATH` — plugin `.so` (default: `checker/build/lib/liby2k38-plugin.so`)
 
 ### Dataset (`dataset/`)
 

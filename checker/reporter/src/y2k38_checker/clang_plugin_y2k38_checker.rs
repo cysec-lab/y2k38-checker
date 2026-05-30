@@ -9,15 +9,23 @@ use crate::domain::{
 
 use super::y2k38_checker_trait::Y2k38Checker;
 
-const CLANG_PATH: &str =
+const DEFAULT_CLANG_PATH: &str =
     "/root/y2k38-checker/checker/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang";
-const PLUGIN_PATH: &str = "/root/y2k38-checker/checker/build/lib/liby2k38-plugin.so";
+const DEFAULT_PLUGIN_PATH: &str = "/root/y2k38-checker/checker/build/lib/liby2k38-plugin.so";
+
+fn clang_path() -> String {
+    std::env::var("CLANG_PATH").unwrap_or_else(|_| DEFAULT_CLANG_PATH.to_string())
+}
+
+fn plugin_path() -> String {
+    std::env::var("PLUGIN_PATH").unwrap_or_else(|_| DEFAULT_PLUGIN_PATH.to_string())
+}
 
 pub struct ClangPluginY2k38Checker {}
 
 impl Y2k38Checker for ClangPluginY2k38Checker {
     fn health_check(&self) -> bool {
-        let output = Command::new(CLANG_PATH)
+        let output = Command::new(clang_path())
             .arg("--version")
             .output()
             .expect("Failed to run clang --version");
@@ -43,17 +51,19 @@ impl Y2k38Checker for ClangPluginY2k38Checker {
     }
     fn description(&self) -> Vec<String> {
         vec![
-            format!("clang path: {}", CLANG_PATH),
-            format!("plugin path: {}", PLUGIN_PATH),
+            format!("clang path: {}", clang_path()),
+            format!("plugin path: {}", plugin_path()),
         ]
     }
 }
 
 fn run_clang_process(file: &File) -> Result<String, io::Error> {
+    let clang = clang_path();
+    let plugin = plugin_path();
     let cmd = [
-        CLANG_PATH,
+        clang.as_str(),
         "-w",
-        &format!("-fplugin={}", PLUGIN_PATH),
+        &format!("-fplugin={}", plugin),
         "-c",
         file.path(),
     ];
