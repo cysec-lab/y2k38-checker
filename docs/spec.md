@@ -169,6 +169,6 @@ Clang plugin via the hardcoded `/root/y2k38-checker` paths (known tech debt).
 
 | Command | Scope |
 |---------|-------|
-| `just test-unit` | Unit tests (Rust + Python); no LLVM required |
+| `just test-unit` | Unit tests (Rust); no LLVM required |
 | `just test-integration` | `#[ignore]`'d integration tests only (`cargo test -- --ignored`) |
-| `just test` | Everything, incl. integration (inside Docker / after `just setup-llvm` + `just build`) |
+| `just test` | Everything, incl. integration (after `just setup-llvm` + `just build`) |

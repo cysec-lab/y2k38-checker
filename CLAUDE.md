@@ -27,7 +27,7 @@ just fmt-check      # CI: check without modifying
 # Test
 just test-unit         # unit tests — no LLVM/plugin required
 just test-integration  # integration tests only (#[ignore]'d; needs LLVM + plugin)
-just test              # everything incl. integration (Docker env or setup-llvm + build)
+just test              # everything incl. integration (needs setup-llvm + build)
 
 # Run the checker
 just check path/to/file.c
@@ -66,17 +66,21 @@ See `docs/spec.md` for full architecture, data flow, and check list specificatio
 ## Platform Constraint
 
 The Clang plugin is **Linux x86_64 only** (pre-built LLVM 11 for `ubuntu-20.04`). macOS and
-Windows are not supported. The Docker dev container is the canonical environment.
+Windows are not supported.
 
-## Dev Container
+## Dev Environment (devbox)
+
+[devbox](https://www.jetify.com/devbox) provides a reproducible local toolchain (cmake, gcc,
+rustup, just, etc.) from nixpkgs. LLVM 11 itself still comes from the tarball via
+`just setup-llvm`.
 
 ```bash
-docker-compose -f .devcontainer/docker-compose.yml up -d
-# or open in VS Code → "Reopen in Container"
+devbox shell           # enter the environment (installs Nix + packages on first run)
+devbox run setup       # just setup-llvm && just build
+just ci-fast           # fmt-check + test-unit
 ```
 
-Set `Y2K38_ANALYSIS_OBJECTS_DIR` in your shell (or `.env`) to the directory you want mounted as
-`/root/analysis-objects` inside the container.
+`devbox.lock` pins exact package versions, so the environment is identical across machines.
 
 ## CI
 

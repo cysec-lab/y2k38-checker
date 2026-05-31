@@ -17,8 +17,8 @@ y2k38-checker is a tool that identifies and reports code with potential Year 203
 
 Requirements:
 
-- Docker / Docker Compose
-- OS: Ubuntu
+- [devbox](https://www.jetify.com/devbox) (recommended), or a local toolchain with `cmake`, a C++ compiler, `just`, and a Rust toolchain
+- OS: Linux x86_64 (the pre-built LLVM 11 plugin targets `ubuntu-20.04`)
 
 ### Setup
 
@@ -35,44 +35,22 @@ Then, the following directory structure is created.
 y2k38-checker/
 ├─┬ checker/
 │  ├── build/lib/liby2k38-plugin.so  # detection tool as a Clang plugin
-│  ├── scripts/           # scripts for running the detection tool
+│  ├── reporter/          # Rust reporter that runs the plugin and formats results
 │  └── clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04
 ├── dataset/             # example for C source code
 ├── volumes/             # target source code
-└┬─ .devcontainer/
-  ├── Dockerfile
-  ├── docker-compose.yml
-  └── devcontainer.json
+└── devbox.json          # reproducible dev environment
 ```
 
-3. Add the path of the created the directory in `.devcontainer/docker-compose.yml`
-
-```diff {"id":"01J4MTVGEBT2Q5592EVKQEK7WV"}
-services:
-   y2k38-checker-app:
-      build:
-         context: ..
-         dockerfile: .devcontainer/Dockerfile
-      tty: true
-      volumes:
-         - ..:/root/y2k38-checker/volumes/
-         - type: bind
--          source: /home/cysec/develop/.y2k38-checker/analysis-objects/
-+          source: <path/to/dir>
-         target: /root/analysis-objects
-```
-
-4. Build & Run the docker container with CLI or DevContainer
+3. Enter the dev environment and build everything.
 
 ```sh {"id":"01J4MTVGEBT2Q5592EVQ28Z1T4"}
 cd y2k38-checker
-docker-compose build # only first time
-docker-compose run y2k38-checker
+devbox shell        # installs Nix + the toolchain on first run
+devbox run setup    # downloads LLVM 11 and builds the plugin + reporter
 ```
 
-Alternatively, start it in the devcontainer of VSCode.
-
-5. Run the detection tool with the following command.
+4. Run the detection tool with the following command.
 
 ### Run via the reporter
 
@@ -107,7 +85,19 @@ mkdir <path/to/dir>
 cp -r <files/to/be/analyzed> <path/to/dir>
 ```
 
-3. Download LLVM library
+3. Enter the dev environment.
+
+```sh {"id":"01J4MTVGEBT2Q5592EWEN1V1T7"}
+cd y2k38-checker
+devbox shell
+```
+
+This installs Nix and the toolchain (cmake, gcc, rustup, just, etc.) on first run.
+`devbox.lock` pins exact package versions so the environment is identical across machines.
+Prefer not to use devbox? Install `cmake`, a C++ compiler, `just`, and a Rust toolchain
+yourself — the `just` recipes below work either way.
+
+4. Download LLVM library
 
 ```sh {"id":"01J4MTVGEBT2Q5592EW8N0R11X"}
 just setup-llvm
@@ -121,33 +111,6 @@ curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/cl
 ```
 
 - https://github.com/llvm/llvm-project/releases/tag/llvmorg-11.0.0
-
-4. Add the path of the created the directory in `.devcontainer/docker-compose.yml`
-
-```diff {"id":"01J4MTVGEBT2Q5592EWAW8FT78"}
-services:
-   y2k38-checker-app:
-      build:
-         context: ..
-         dockerfile: .devcontainer/Dockerfile
-      tty: true
-      volumes:
-         - ..:/root/y2k38-checker/volumes/
-         - type: bind
--          source: /home/cysec/develop/.y2k38-checker/analysis-objects/
-+          source: <path/to/dir>
-         target: /root/analysis-objects
-```
-
-5. Build & Run the docker container with CLI or DevContainer
-
-```sh {"id":"01J4MTVGEBT2Q5592EWEN1V1T7"}
-cd y2k38-checker
-docker-compose build # only first time
-docker-compose run y2k38-checker
-```
-
-Alternatively, start it in the devcontainer of VSCode.
 
 ### Build
 
