@@ -67,10 +67,10 @@ jobs:
           path: checker/build/lib/liby2k38-plugin.so
           retention-days: 1
 
-  # End-to-end tests exercise the real Clang plugin. They depend on the
-  # hardcoded /root/y2k38-checker paths in the Rust source (known tech debt),
-  # so the workspace is symlinked into place. This is a required gate: a
-  # failure here fails the whole CI run.
+  # End-to-end tests exercise the real Clang plugin against the dataset.
+  # Paths are derived from the crate location (CARGO_MANIFEST_DIR), so the
+  # tests run from the checkout directly. This is a required gate: a failure
+  # here fails the whole CI run.
   e2e:
     name: E2E (Clang plugin)
     runs-on: ubuntu-22.04
@@ -86,11 +86,6 @@ jobs:
           path: checker/${{ env.LLVM_DIR_NAME }}
           key: llvm-${{ env.LLVM_VERSION }}-${{ env.LLVM_TARGET }}
 
-      - name: Symlink workspace to hardcoded path
-        run: |
-          sudo mkdir -p /root
-          sudo ln -sfn "$GITHUB_WORKSPACE" /root/y2k38-checker
-
       - name: Download plugin artifact
         uses: actions/download-artifact@v4
         with:
@@ -101,4 +96,4 @@ jobs:
         run: chmod 755 checker/build/lib/liby2k38-plugin.so
 
       - name: just test-integration (e2e only)
-        run: sudo -E env "PATH=$PATH" just test-integration
+        run: just test-integration

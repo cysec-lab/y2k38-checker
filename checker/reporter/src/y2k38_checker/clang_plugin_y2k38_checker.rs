@@ -9,9 +9,18 @@ use crate::domain::{
 
 use super::y2k38_checker_trait::Y2k38Checker;
 
-const DEFAULT_CLANG_PATH: &str =
-    "/root/y2k38-checker/checker/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang";
-const DEFAULT_PLUGIN_PATH: &str = "/root/y2k38-checker/checker/build/lib/liby2k38-plugin.so";
+// Default paths are derived from the crate location at build time, so the
+// checker works from any checkout instead of a fixed /root layout. Override
+// with CLANG_PATH / PLUGIN_PATH when the binary runs outside the source tree.
+// CARGO_MANIFEST_DIR is `<repo>/checker/reporter`; `..` is `<repo>/checker`.
+const DEFAULT_CLANG_PATH: &str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang"
+);
+const DEFAULT_PLUGIN_PATH: &str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/../build/lib/liby2k38-plugin.so"
+);
 
 fn clang_path() -> String {
     std::env::var("CLANG_PATH").unwrap_or_else(|_| DEFAULT_CLANG_PATH.to_string())
@@ -165,28 +174,30 @@ mod tests {
     }
 
     #[test]
-    #[ignore = "integration: requires LLVM 11 + built plugin at hardcoded /root paths"]
+    #[ignore = "integration: requires LLVM 11 + built plugin (run `just test-integration`)"]
     fn test_run_clang_process() {
-        let file = File::new(String::from(
-            "/root/y2k38-checker/dataset/blacklist/read-fs-timestamp.c",
-        ));
+        let file = File::new(String::from(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../dataset/blacklist/read-fs-timestamp.c"
+        )));
         let output = run_clang_process(&file);
         assert!(output.is_ok());
     }
 
     #[test]
-    #[ignore = "integration: requires LLVM 11 + built plugin at hardcoded /root paths"]
+    #[ignore = "integration: requires LLVM 11 + built plugin (run `just test-integration`)"]
     fn test_health_check() {
         let checker = ClangPluginY2k38Checker {};
         assert!(checker.health_check());
     }
 
     #[test]
-    #[ignore = "integration: requires LLVM 11 + built plugin at hardcoded /root paths"]
+    #[ignore = "integration: requires LLVM 11 + built plugin (run `just test-integration`)"]
     fn test_run() {
-        let file = File::new(String::from(
-            "/root/y2k38-checker/dataset/blacklist/read-fs-timestamp.c",
-        ));
+        let file = File::new(String::from(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../dataset/blacklist/read-fs-timestamp.c"
+        )));
         let checker = ClangPluginY2k38Checker {};
         let result = checker.run(&file, false);
         assert!(!result.unwrap().is_empty());

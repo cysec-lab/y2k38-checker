@@ -166,7 +166,9 @@ Download LLVM 11: `just setup-llvm` (see `Justfile`)
 ### Integration tests (require LLVM + built plugin)
 
 These are annotated `#[ignore]` so a plain `cargo test` skips them. They shell out to the real
-Clang plugin via the hardcoded `/root/y2k38-checker` paths (known tech debt).
+Clang plugin, deriving the clang/plugin/dataset paths from the crate location
+(`CARGO_MANIFEST_DIR`) so they run from any checkout. Override clang/plugin with the
+`CLANG_PATH` / `PLUGIN_PATH` environment variables.
 
 - `test_run_clang_process` — invokes real clang subprocess
 - `test_health_check` — verifies clang binary is reachable

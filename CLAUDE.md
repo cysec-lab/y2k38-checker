@@ -41,8 +41,10 @@ just ci             # full suite: fmt-check + build + test
 ```
 
 > Integration tests are annotated `#[ignore]` because they shell out to the
-> real Clang plugin via hardcoded `/root/y2k38-checker` paths. Plain
-> `cargo test` (and `just test-unit`) skips them; `cargo test -- --ignored`
+> real Clang plugin (LLVM 11 + a built plugin). Default clang/plugin/dataset
+> paths are derived from the crate location (`CARGO_MANIFEST_DIR`), so they
+> run from any checkout; override clang/plugin with `CLANG_PATH` / `PLUGIN_PATH`.
+> Plain `cargo test` (and `just test-unit`) skips them; `cargo test -- --ignored`
 > (or `just test-integration`) runs only those.
 
 ## Architecture
