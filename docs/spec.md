@@ -105,12 +105,17 @@ narrow `time_t` to `int`.
 
 Built with CMake against LLVM/Clang 11. Produces `liby2k38-plugin.so`.
 
-Each check is an independent `ASTFrontendAction` subclass registered under a common plugin entry
-point (`y2k38-all`). New checks are added by:
+Each check lives in its own namespace under `lib/<check-name>/` and is registered into a common
+plugin entry point (`y2k38-all`). New checks are added by:
 
-1. Creating `lib/<check-name>/` with `*Action.{h,cpp}` (use `y2k38::MatcherCallback<T>` and `y2k38::ActionBase<D>` from `Y2k38CheckBase.h`).
-2. Adding the action to `Y2k38AllAction`.
-3. Adding a one-line `CMakeLists.txt` that calls `add_y2k38_check(<name> <source>)`.
+1. Creating `lib/<check-name>/<Name>Action.{h,cpp}` with a namespace that defines:
+   - an AST matcher (e.g. `matcher`),
+   - a `MatcherCallback : public MatchFinder::MatchCallback` that emits the diagnostic, and
+   - a free function `void addMatcher(MatchFinder *Finder)` that binds the matcher to the callback.
+2. Calling `<namespace>::addMatcher(Finder)` from `Y2k38AllAction::CreateASTConsumer`
+   (`lib/y2k38-all/Y2k38AllAction.h`).
+3. Adding a one-line `CMakeLists.txt` that calls `add_y2k38_check(<name> <source>)`
+   (see `lib/CMakeLists.txt`).
 
 ### Rust Reporter (`reporter/`)
 
@@ -130,11 +135,13 @@ Environment variables (override defaults at runtime):
 
 ```
 dataset/
-├── blacklist/   # C files that MUST trigger at least one warning
-└── whitelist/   # C files that MUST trigger zero warnings
+├── blacklist/     # C files that MUST trigger at least one warning
+└── downcast-bug/  # time_t downcast examples
 ```
 
-Used for regression testing.
+Used for regression testing. A `whitelist/` (C files that MUST trigger zero warnings) is the
+convention for new checks — see `.claude/rules/test-design.md` — and should be added alongside
+the corresponding blacklist file.
 
 ---
 
