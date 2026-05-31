@@ -1,135 +1,104 @@
 # y2k38-checker
 
-[Paper](https://ipsj.ixsq.nii.ac.jp/ej/?action=pages_view_main&active_action=repository_view_main_item_detail&item_id=228078&item_no=1&page_id=13&block_id=8)
+[![CI](https://github.com/cysec-lab/y2k38-checker/actions/workflows/ci.yml/badge.svg)](https://github.com/cysec-lab/y2k38-checker/actions/workflows/ci.yml)
+![Platform](https://img.shields.io/badge/platform-Linux%20x86__64-lightgrey)
+![License](https://img.shields.io/github/license/cysec-lab/y2k38-checker)
 
-y2k38-checker is a tool that identifies and reports code with potential Year 2038 problem issues in C language source code.
+Clang static analyzer plugin that detects [Year 2038 (Y2K38)](https://en.wikipedia.org/wiki/Year_2038_problem) vulnerabilities in C source code.
 
-## Check List
+> **Reference:** [IPSJ Paper](https://ipsj.ixsq.nii.ac.jp/ej/?action=pages_view_main&active_action=repository_view_main_item_detail&item_id=228078&item_no=1&page_id=13&block_id=8)
 
-| Check list ID          | Description                                                                                                                                                                                                     |
-| ---------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| read-fs-timestamp      | Since the file timestamp attributes of ext2/3, XFS (versions prior to Linux 5.10), ReiserFS are 32-bit signed integers, programs that read file timestamps in these environments may be affected by the Y2K38.  |
-| write-fs-timestamp     | Since the file timestamp attributes of ext2/3, XFS (versions prior to Linux 5.10), ReiserFS are 32-bit signed integers, programs that write file timestamps in these environments may be affected by the Y2K38. |
-| timet-to-int-downcast  | Since in many environments the int type is a 32-bit signed integer, there is a possibility that downcasting from `time_t` type to `int` may be affected by the Y2K38.                                           |
-| timet-to-long-downcast | Since in many environments the int type is a 32-bit signed integer, there is a possibility that downcasting from `time_t` to `long` may be affected by the Y2K38.                                               |
+---
 
-## How to use
+## Quick Start
 
-Requirements:
-
-- [devbox](https://www.jetify.com/devbox) (recommended), or a local toolchain with `cmake`, a C++ compiler, `just`, and a Rust toolchain
-- OS: Linux x86_64 (the pre-built LLVM 11 plugin targets `ubuntu-20.04`)
-
-### Setup
-
-1. Download the [releases](https://github.com/cysec-lab/y2k38-checker/releases/).
-2. Unzip the downloaded file.
-
-```sh {"id":"01J4MTVGEAP8HW3A5ZXVS199JV"}
-unzip y2k38-checker-<version>.zip
-```
-
-Then, the following directory structure is created.
-
-```ini {"id":"01J4MTVGEBT2Q5592EVKA8RT86"}
-y2k38-checker/
-├─┬ checker/
-│  ├── build/lib/liby2k38-plugin.so  # detection tool as a Clang plugin
-│  ├── reporter/          # Rust reporter that runs the plugin and formats results
-│  └── clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04
-├── dataset/             # example for C source code
-├── volumes/             # target source code
-└── devbox.json          # reproducible dev environment
-```
-
-3. Enter the dev environment and build everything.
-
-```sh {"id":"01J4MTVGEBT2Q5592EVQ28Z1T4"}
+```sh
+git clone https://github.com/cysec-lab/y2k38-checker.git
 cd y2k38-checker
-devbox shell        # installs Nix + the toolchain on first run
-devbox run setup    # downloads LLVM 11 and builds the plugin + reporter
-```
-
-4. Run the detection tool with the following command.
-
-### Run via the reporter
-
-Check a C source file with the Rust reporter (which runs the Clang plugin and formats the results):
-
-```sh {"id":"01J4MTVGEBT2Q5592EVVDQQAHD"}
+devbox shell          # installs Nix + toolchain on first run
+devbox run setup      # downloads LLVM 11 and builds everything (~700 MB, one-time)
 just check file.c
-# just check ./dataset/blacklist/read-fs-timestamp.c
 ```
 
-### Run as a Clang plugin
+**Example output:**
 
-```sh {"id":"01J4MTVGEBT2Q5592EW1W21NBR"}
-clang -w -fplugin=/root/y2k38-checker/checker/build/lib/liby2k38-plugin.so -c file.c
-# clang -w -fplugin=/root/y2k38-checker/checker/build/lib/liby2k38-plugin.so -c /root/y2k38-checker/dataset/blacklist/read-fs-timestamp.c
 ```
+dataset/blacklist/read-fs-timestamp.c
+- category: ReadFsTimestamp
+- row: 9
+- column: 24
+
+dataset/blacklist/read-fs-timestamp.c
+- category: ReadFsTimestamp
+- row: 10
+- column: 24
+```
+
+---
+
+## What it detects
+
+| Check ID | Trigger | Risk |
+|---|---|---|
+| `read-fs-timestamp` | Reading `st_atime` / `st_mtime` / `st_ctime` from `struct stat` | ext2/3, XFS (<Linux 5.10), ReiserFS store timestamps as 32-bit integers |
+| `write-fs-timestamp` | Calling `utime` / `utimes` / `utimensat` / `futimes` / `futimens` | Same filesystem constraint; writes may silently overflow |
+| `timet-to-int-downcast` | Casting `time_t` → `int` | `int` is 32-bit on most platforms; overflows after 2038-01-19 |
+| `timet-to-long-downcast` | Casting `time_t` → `long` | `long` is 32-bit on 32-bit platforms and Windows |
+
+---
+
+## Usage
+
+### via the reporter (recommended)
+
+Runs the Clang plugin and formats the results:
+
+```sh
+just check path/to/file.c
+```
+
+### via the Clang plugin directly
+
+```sh
+clang -w -fplugin=checker/build/lib/liby2k38-plugin.so -c path/to/file.c
+```
+
+---
 
 ## Development
 
-### Setup
+### Requirements
 
-1. Clone the repository
+- **OS:** Linux x86_64
+- **[devbox](https://www.jetify.com/devbox)** — provides cmake, gcc, Rust toolchain, just, and more via Nix. `devbox.lock` pins exact versions for reproducibility.
+- **LLVM 11** — downloaded automatically by `just setup-llvm` (pre-built for `ubuntu-20.04`).
 
-```sh {"id":"01J4MTVGEBT2Q5592EW3EBZF4F"}
-git clone https://github.com/cysec-lab/y2k38-checker.git
-```
-
-2. Create the directory for the detecting target source code, and add files to be analyzed.
-
-```sh {"id":"01J4MTVGEBT2Q5592EW65RZPR9"}
-mkdir <path/to/dir>
-cp -r <files/to/be/analyzed> <path/to/dir>
-```
-
-3. Enter the dev environment.
-
-```sh {"id":"01J4MTVGEBT2Q5592EWEN1V1T7"}
-cd y2k38-checker
-devbox shell
-```
-
-This installs Nix and the toolchain (cmake, gcc, rustup, just, etc.) on first run.
-`devbox.lock` pins exact package versions so the environment is identical across machines.
-Prefer not to use devbox? Install `cmake`, a C++ compiler, `just`, and a Rust toolchain
-yourself — the `just` recipes below work either way.
-
-4. Download LLVM library
-
-```sh {"id":"01J4MTVGEBT2Q5592EW8N0R11X"}
-just setup-llvm
-```
-
-This downloads the pre-built LLVM 11 into `checker/`. Equivalent manual command:
+### Build & Test
 
 ```sh
-cd ./checker/
-curl -L https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04.tar.xz | tar -Jxf -
+devbox shell          # enter the dev environment
+just setup-dev        # first time: download LLVM 11 + build plugin + reporter
+just test-unit        # fast unit tests — no LLVM required
+just test             # full suite including integration tests
+just ci-fast          # what CI runs locally: fmt-check + test-unit
+just --list           # all available recipes
 ```
 
-- https://github.com/llvm/llvm-project/releases/tag/llvmorg-11.0.0
+No devbox? Install `cmake`, a C++ compiler, `just`, and a Rust toolchain manually — the `just` recipes work either way.
 
-### Build
+### Architecture
 
-Build the Clang plugin and the Rust reporter with a single command:
-
-```sh {"id":"01J4MTVGEBT2Q5592EWMGQDV4T"}
-just build
+```
+C source file
+  │  (subprocess)
+  ▼
+clang -fplugin=liby2k38-plugin.so   ← Clang plugin (C++, checker/clang-analyzer/)
+  │  stderr: "file:row:col: warning: y2k38 (<category>)"
+  ▼
+Rust reporter (checker/reporter/)   ← parses warnings, formats output
+  │
+  ▼
+Vec<{ category, file, row, column }>
 ```
 
-This runs CMake/make for the plugin and `cargo build` for the reporter. The plugin library is
-created in the `checker/build/lib` directory.
-
-### Test
-
-```sh {"id":"01J4MTVGEBT2Q5592EWN1Y3Q0K"}
-just test-unit         # unit tests only (no LLVM/plugin required)
-just test-integration  # integration tests (requires LLVM + built plugin)
-just test              # all tests
-```
-
-See `docs/spec.md` for the full architecture and testing strategy, and `Justfile` for all
-available recipes.
+See [`docs/spec.md`](docs/spec.md) for the full specification, data flow, and testing strategy.
