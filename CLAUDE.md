@@ -95,7 +95,7 @@ recipe so that **"passes locally" implies "passes in CI"**:
 | Format & Lint | `just fmt-check` | rustfmt + clippy (`-D warnings`) |
 | Test | `just test-unit` | Rust unit tests; no LLVM required |
 | Build | `just setup-llvm` + `just build` | Clang plugin + Rust reporter; LLVM 11 cached |
-| Integration | `just test` | Real plugin; `continue-on-error` (hardcoded paths) |
+| E2E | `just test` | Real plugin end-to-end; required gate (workspace symlinked to hardcoded paths) |
 
 Reproduce the fast jobs locally with `just ci-fast`.
 

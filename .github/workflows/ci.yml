@@ -68,15 +68,14 @@ jobs:
           path: checker/build/lib/liby2k38-plugin.so
           retention-days: 1
 
-  # Integration tests exercise the real Clang plugin. They depend on the
+  # End-to-end tests exercise the real Clang plugin. They depend on the
   # hardcoded /root/y2k38-checker paths in the Rust source (known tech debt),
-  # so the workspace is symlinked into place. Non-blocking until the paths
-  # are made configurable.
-  integration:
-    name: Integration (Clang plugin)
+  # so the workspace is symlinked into place. This is a required gate: a
+  # failure here fails the whole CI run.
+  e2e:
+    name: E2E (Clang plugin)
     runs-on: ubuntu-22.04
     needs: build
-    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -102,5 +101,5 @@ jobs:
       - name: Fix plugin permissions
         run: chmod 755 checker/build/lib/liby2k38-plugin.so
 
-      - name: just test (incl. integration)
+      - name: just test (incl. e2e)
         run: sudo -E env "PATH=$PATH" just test
