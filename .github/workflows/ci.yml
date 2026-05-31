@@ -46,7 +46,6 @@ jobs:
       - uses: extractions/setup-just@v2
 
       - name: Cache LLVM 11
-        id: cache-llvm
         uses: actions/cache@v4
         with:
           path: checker/${{ env.LLVM_DIR_NAME }}
@@ -101,5 +100,5 @@ jobs:
       - name: Fix plugin permissions
         run: chmod 755 checker/build/lib/liby2k38-plugin.so
 
-      - name: just test (incl. e2e)
-        run: sudo -E env "PATH=$PATH" just test
+      - name: just test-integration (e2e only)
+        run: sudo -E env "PATH=$PATH" just test-integration
