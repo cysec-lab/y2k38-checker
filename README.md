@@ -4,7 +4,7 @@
 ![Platform](https://img.shields.io/badge/platform-Linux%20x86__64-lightgrey)
 ![License](https://img.shields.io/github/license/cysec-lab/y2k38-checker)
 
-Clang static analyzer plugin that detects [Year 2038 (Y2K38)](https://en.wikipedia.org/wiki/Year_2038_problem) vulnerabilities in C source code.
+Clang static analyzer plugin that detects [Year 2038 (Y2K38)](https://en.wikipedia.org/wiki/Year_2038_problem) bugs in C source code.
 
 > **Reference:** [IPSJ Paper](https://ipsj.ixsq.nii.ac.jp/ej/?action=pages_view_main&active_action=repository_view_main_item_detail&item_id=228078&item_no=1&page_id=13&block_id=8)
 
