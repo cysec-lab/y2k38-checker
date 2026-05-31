@@ -15,8 +15,8 @@ unmerged worktree. See `.claude/rules/git-workflow.md` for the full safe cleanup
 # First-time setup (downloads ~700 MB LLVM 11)
 just setup-llvm
 
-# First-time setup + build in one step (setup-llvm then build)
-just setup-dev
+# First-time setup + build in one step (preflight → setup-llvm → build)
+just setup-dev      # `devbox run setup` is a thin wrapper around this
 
 # Build everything
 just build          # Clang plugin (cmake) + Rust reporter (cargo)

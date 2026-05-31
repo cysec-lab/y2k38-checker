@@ -23,7 +23,7 @@
       "export LD_LIBRARY_PATH=\"${LLVM11_DIR}/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}\""
     ],
     "scripts": {
-      "setup": "just setup-llvm && just build",
+      "setup": "just setup-dev",
       "test-fast": "just ci-fast"
     }
   }

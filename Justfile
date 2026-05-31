@@ -13,8 +13,28 @@ default:
 
 # ── Setup ──────────────────────────────────────────────────────────────────
 
-# First-time devbox setup: download LLVM 11 + build everything
-setup-dev: setup-llvm build
+# First-time devbox setup: verify toolchain, download LLVM 11, build everything
+setup-dev: preflight setup-llvm build
+
+# Verify required host tools are present before setup (fail early with a clear message)
+preflight:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    missing=()
+    for tool in curl tar xz sha256sum cmake make cargo; do
+        command -v "$tool" >/dev/null 2>&1 || missing+=("$tool")
+    done
+    if ! command -v c++ >/dev/null 2>&1 \
+        && ! command -v g++ >/dev/null 2>&1 \
+        && ! command -v clang++ >/dev/null 2>&1; then
+        missing+=("a C++ compiler (c++/g++/clang++)")
+    fi
+    if [ ${#missing[@]} -ne 0 ]; then
+        echo "preflight: missing required tools: ${missing[*]}" >&2
+        echo "Install them, or run inside 'devbox shell' which provides the full toolchain." >&2
+        exit 1
+    fi
+    echo "preflight: all required tools present."
 
 # Download LLVM 11 (required for building the Clang plugin)
 setup-llvm:

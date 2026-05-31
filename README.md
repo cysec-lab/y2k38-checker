@@ -77,14 +77,14 @@ clang -w -fplugin=checker/build/lib/liby2k38-plugin.so -c path/to/file.c
 
 ```sh
 devbox shell          # enter the dev environment
-just setup-dev        # first time: download LLVM 11 + build plugin + reporter
+just setup-dev        # first time: preflight + LLVM 11 + build (same as `devbox run setup`)
 just test-unit        # fast unit tests — no LLVM required
-just test             # full suite including integration tests
+just test-integration # e2e suite — requires LLVM 11 + built plugin
 just ci-fast          # what CI runs locally: fmt-check + test-unit
 just --list           # all available recipes
 ```
 
-No devbox? Install `cmake`, a C++ compiler, `just`, and a Rust toolchain manually — the `just` recipes work either way.
+No devbox? Install `just` plus the tools `just preflight` checks for — `curl`, `tar`, `xz`, `sha256sum`, `cmake`, `make`, a C++ compiler, and a Rust toolchain (`cargo`) — and the `just` recipes work either way.
 
 ### Architecture
 
