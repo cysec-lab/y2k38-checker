@@ -5,6 +5,8 @@ build_dir     := checker_dir / "build"
 llvm_name     := "clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04"
 llvm_dir      := checker_dir / llvm_name
 llvm_cmake    := llvm_dir / "lib/cmake/llvm"
+llvm_url      := "https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/" + llvm_name + ".tar.xz"
+llvm_sha256   := "829f5fb0ebda1d8716464394f97d5475d465ddc7bea2879c0601316b611ff6db"
 
 default:
     @just --list
@@ -22,10 +24,17 @@ setup-llvm:
         echo "LLVM 11 already present at {{llvm_dir}}"
         exit 0
     fi
+    cd "{{checker_dir}}"
+    tarball="{{llvm_name}}.tar.xz"
+    # Remove the tarball on exit (success or failure) so a bad/partial
+    # download never lingers; the extracted dir is what we keep.
+    trap 'rm -f "$tarball"' EXIT
     echo "Downloading LLVM 11 (~700 MB)..."
-    cd "{{checker_dir}}" && curl -L \
-        "https://github.com/llvm/llvm-project/releases/download/llvmorg-11.0.0/{{llvm_name}}.tar.xz" \
-        | tar -Jxf -
+    curl -fL --retry 5 --retry-delay 2 --retry-connrefused -o "$tarball" "{{llvm_url}}"
+    echo "Verifying checksum..."
+    echo "{{llvm_sha256}}  $tarball" | sha256sum -c -
+    echo "Extracting..."
+    tar -Jxf "$tarball"
     echo "Done."
 
 # ── Build ──────────────────────────────────────────────────────────────────
