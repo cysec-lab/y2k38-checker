@@ -73,7 +73,9 @@ fn run_clang_process(file: &File) -> Result<String, io::Error> {
         clang.as_str(),
         "-w",
         &format!("-fplugin={}", plugin),
-        "-c",
+        // AST-only analysis: run the frontend (and our plugin's visitors)
+        // without codegen, so no .o artifact is written to the cwd.
+        "-fsyntax-only",
         file.path(),
     ];
 
