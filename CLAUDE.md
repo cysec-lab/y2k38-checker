@@ -81,7 +81,7 @@ rustup, just, etc.) from nixpkgs. LLVM 11 itself still comes from the tarball vi
 
 ```bash
 devbox shell           # enter the environment (installs Nix + packages on first run)
-devbox run setup       # just setup-llvm && just build
+devbox run setup       # thin wrapper around `just setup-dev` (preflight → setup-llvm → build)
 just ci-fast           # fmt-check + test-unit
 ```
 
@@ -97,7 +97,7 @@ recipe so that **"passes locally" implies "passes in CI"**:
 | Format & Lint | `just fmt-check` | rustfmt + clippy (`-D warnings`) |
 | Test | `just test-unit` | Rust unit tests; no LLVM required |
 | Build | `just setup-llvm` + `just build` | Clang plugin + Rust reporter; LLVM 11 cached |
-| E2E | `just test-integration` | Real plugin e2e tests only; required gate (workspace symlinked to hardcoded paths) |
+| E2E | `just test-integration` | Real plugin e2e tests only; required gate (paths derived from `CARGO_MANIFEST_DIR`) |
 
 Reproduce the fast jobs locally with `just ci-fast`.
 
