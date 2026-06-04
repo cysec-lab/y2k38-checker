@@ -1,6 +1,7 @@
 use regex::Regex;
 use std::io;
 use std::process::{Command, Output, Stdio};
+use std::sync::LazyLock;
 
 use crate::domain::{
     analysis_detail::AnalysisDetail, types::y2k38_category::Y2k38Category, value::file::File,
@@ -8,15 +9,32 @@ use crate::domain::{
 
 use super::y2k38_checker_trait::Y2k38Checker;
 
-const CLANG_PATH: &str =
-    "/root/y2k38-checker/checker/clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang";
-const PLUGIN_PATH: &str = "/root/y2k38-checker/checker/build/lib/liby2k38-plugin.so";
+// Default paths are derived from the crate location at build time, so the
+// checker works from any checkout instead of a fixed /root layout. Override
+// with CLANG_PATH / PLUGIN_PATH when the binary runs outside the source tree.
+// CARGO_MANIFEST_DIR is `<repo>/checker/reporter`; `..` is `<repo>/checker`.
+const DEFAULT_CLANG_PATH: &str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/../clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04/bin/clang"
+);
+const DEFAULT_PLUGIN_PATH: &str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/../build/lib/liby2k38-plugin.so"
+);
+
+fn clang_path() -> String {
+    std::env::var("CLANG_PATH").unwrap_or_else(|_| DEFAULT_CLANG_PATH.to_string())
+}
+
+fn plugin_path() -> String {
+    std::env::var("PLUGIN_PATH").unwrap_or_else(|_| DEFAULT_PLUGIN_PATH.to_string())
+}
 
 pub struct ClangPluginY2k38Checker {}
 
 impl Y2k38Checker for ClangPluginY2k38Checker {
     fn health_check(&self) -> bool {
-        let output = Command::new(CLANG_PATH)
+        let output = Command::new(clang_path())
             .arg("--version")
             .output()
             .expect("Failed to run clang --version");
@@ -42,18 +60,22 @@ impl Y2k38Checker for ClangPluginY2k38Checker {
     }
     fn description(&self) -> Vec<String> {
         vec![
-            format!("clang path: {}", CLANG_PATH),
-            format!("plugin path: {}", PLUGIN_PATH),
+            format!("clang path: {}", clang_path()),
+            format!("plugin path: {}", plugin_path()),
         ]
     }
 }
 
 fn run_clang_process(file: &File) -> Result<String, io::Error> {
+    let clang = clang_path();
+    let plugin = plugin_path();
     let cmd = [
-        CLANG_PATH,
+        clang.as_str(),
         "-w",
-        &format!("-fplugin={}", PLUGIN_PATH),
-        "-c",
+        &format!("-fplugin={}", plugin),
+        // AST-only analysis: run the frontend (and our plugin's visitors)
+        // without codegen, so no .o artifact is written to the cwd.
+        "-fsyntax-only",
         file.path(),
     ];
 
@@ -65,24 +87,24 @@ fn run_clang_process(file: &File) -> Result<String, io::Error> {
     if output.status.success() {
         Ok(String::from_utf8_lossy(&output.stderr).to_string())
     } else {
-        Err(io::Error::new(
-            io::ErrorKind::Other,
-            format!(
-                "Failed to run clang: {}",
-                String::from_utf8_lossy(&output.stderr)
-            ),
-        ))
+        Err(io::Error::other(format!(
+            "Failed to run clang: {}",
+            String::from_utf8_lossy(&output.stderr)
+        )))
     }
 }
+
+// clang-analyzer の出力形式:
+// file.c:3:11: warning: y2k38 (read-fs-timestamp): {description}
+// OK: compile-time constant pattern; a malformed regex is a programmer error.
+static WARNING_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^(.+?):(\d+):(\d+): warning: y2k38 \((.+)\)").unwrap());
 
 fn parse_clang_output(output: &str) -> Vec<AnalysisDetail> {
     let mut analysis_details: Vec<AnalysisDetail> = Vec::new();
 
     for line in output.lines() {
-        // clang-analyzer の出力形式:
-        // file.c:3:11: warning: y2k38 (read-fs-timestamp): {description}
-        let re = Regex::new(r"^(.+?):(\d+):(\d+): warning: y2k38 \((.+)\)").unwrap();
-        if let Some(captures) = re.captures(line) {
+        if let Some(captures) = WARNING_RE.captures(line) {
             let parsed1 = &captures[1].to_string();
             let file = File::new(parsed1.clone());
             file.exists();
@@ -154,25 +176,30 @@ mod tests {
     }
 
     #[test]
+    #[ignore = "integration: requires LLVM 11 + built plugin (run `just test-integration`)"]
     fn test_run_clang_process() {
-        let file = File::new(String::from(
-            "/root/y2k38-checker/dataset/blacklist/read-fs-timestamp.c",
-        ));
+        let file = File::new(String::from(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../dataset/blacklist/read-fs-timestamp.c"
+        )));
         let output = run_clang_process(&file);
         assert!(output.is_ok());
     }
 
     #[test]
+    #[ignore = "integration: requires LLVM 11 + built plugin (run `just test-integration`)"]
     fn test_health_check() {
         let checker = ClangPluginY2k38Checker {};
         assert!(checker.health_check());
     }
 
     #[test]
+    #[ignore = "integration: requires LLVM 11 + built plugin (run `just test-integration`)"]
     fn test_run() {
-        let file = File::new(String::from(
-            "/root/y2k38-checker/dataset/blacklist/read-fs-timestamp.c",
-        ));
+        let file = File::new(String::from(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../dataset/blacklist/read-fs-timestamp.c"
+        )));
         let checker = ClangPluginY2k38Checker {};
         let result = checker.run(&file, false);
         assert!(!result.unwrap().is_empty());

@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "claude/**", "feature/**"]
+  pull_request:
+    branches: [main]
+
+env:
+  LLVM_VERSION: "11.0.0"
+  LLVM_TARGET: "x86_64-linux-gnu-ubuntu-20.04"
+  LLVM_DIR_NAME: "clang+llvm-11.0.0-x86_64-linux-gnu-ubuntu-20.04"
+  CARGO_TERM_COLOR: always
+
+# Every job runs the SAME `just` recipe a developer runs locally, so
+# "passes locally" implies "passes in CI". See Justfile.
+jobs:
+  fmt:
+    name: Format & Lint
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - uses: extractions/setup-just@v2
+      - name: just fmt-check
+        run: just fmt-check
+
+  test:
+    name: Test
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: extractions/setup-just@v2
+      - name: just test-unit
+        run: just test-unit
+
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: extractions/setup-just@v2
+
+      - name: Cache LLVM 11
+        uses: actions/cache@v4
+        with:
+          path: checker/${{ env.LLVM_DIR_NAME }}
+          key: llvm-${{ env.LLVM_VERSION }}-${{ env.LLVM_TARGET }}
+
+      - name: Install CMake & Ninja
+        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build
+
+      - name: just setup-llvm (cached)
+        run: just setup-llvm
+
+      - name: just build
+        run: just build
+
+      - name: Upload plugin artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: clang-plugin
+          path: checker/build/lib/liby2k38-plugin.so
+          retention-days: 1
+
+  # End-to-end tests exercise the real Clang plugin against the dataset.
+  # Paths are derived from the crate location (CARGO_MANIFEST_DIR), so the
+  # tests run from the checkout directly. This is a required gate: a failure
+  # here fails the whole CI run.
+  e2e:
+    name: E2E (Clang plugin)
+    runs-on: ubuntu-22.04
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: extractions/setup-just@v2
+
+      - name: Restore LLVM 11 cache
+        uses: actions/cache@v4
+        with:
+          path: checker/${{ env.LLVM_DIR_NAME }}
+          key: llvm-${{ env.LLVM_VERSION }}-${{ env.LLVM_TARGET }}
+
+      - name: Download plugin artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: clang-plugin
+          path: checker/build/lib/
+
+      - name: Fix plugin permissions
+        run: chmod 755 checker/build/lib/liby2k38-plugin.so
+
+      - name: just test-integration (e2e only)
+        run: just test-integration

@@ -66,10 +66,12 @@ mod tests {
     use crate::y2k38_checker::clang_plugin_y2k38_checker::ClangPluginY2k38Checker;
 
     #[test]
+    #[ignore = "integration: requires LLVM 11 + built plugin (run `just test-integration`)"]
     fn test_run() {
-        let file = File::new(String::from(
-            "/root/y2k38-checker/dataset/blacklist/read-fs-timestamp.c",
-        ));
+        let file = File::new(String::from(concat!(
+            env!("CARGO_MANIFEST_DIR"),
+            "/../../dataset/blacklist/read-fs-timestamp.c"
+        )));
         let checker = ClangPluginY2k38Checker {};
         let mut executor = AnalysisWorkflowExecutor::new(vec![file], Box::new(checker));
         executor.run();
